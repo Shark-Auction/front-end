@@ -1,9 +1,14 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AppLayout from "./core/layout/AppLayout";
+
 function App() {
-  return (
-    <>
-      <div className="w-[500px] bg-red-500">A</div>
-    </>
-  )
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <AppLayout />,
+    },
+  ]);
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
