@@ -42,7 +42,7 @@ const LandingPage = () => {
           <p className="text-3xl font-bold">Heading 1</p>
           <p className="text-lg">Description (Introduce about website)</p>
         </div>
-        <div className="grid grid-cols-3">
+        <div className="grid md:grid-cols-3 gap-5">
           <CardContent
             icon={<IoIosPeople className="text-9xl" />}
             title="Trusting Organization and Community"
@@ -64,7 +64,7 @@ const LandingPage = () => {
         </div>
         <div>
           <p className="text-3xl font-bold text-center mb-10">How the app work?</p>
-          <div className="grid grid-cols-4">
+          <div className="md:grid md:grid-cols-4">
             <CardStepWork
               step={1}
               title="Sign up"
@@ -108,7 +108,7 @@ const CardContent = ({ title, icon, description }: CardContentProps) => {
 
 const CardStepWork = ({ step, title, description }: CardStepWorkProps) => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 p-5">
       <div className="flex items-center gap-4">
         <div className="bg-primaryColor px-4 py-1 rounded-full">
           <p className="text-white text-3xl">{step}</p>
