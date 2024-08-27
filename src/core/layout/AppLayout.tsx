@@ -16,14 +16,14 @@ const AppLayout = () => {
     }
   }, []);
   return (
-    <Layout className="w-screen min-h-screen">
+    <Layout className="min-h-screen">
       <Header
         className="fixed w-full z-[10] text-black flex items-center 
       bg-primaryColor md:h-[90px] md:rounded-es-md md:rounded-ee-md shadow-xl" 
       >
         <AppHeader />
       </Header>
-      <Content style={{ marginTop: headerHeight }} className="mx-auto container">
+      <Content style={{ marginTop: headerHeight }} className="mb-10">
         <Outlet />
       </Content>
       <Footer className="!w-full">

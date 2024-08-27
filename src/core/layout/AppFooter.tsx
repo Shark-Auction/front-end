@@ -116,15 +116,15 @@ const AppFooter = () => {
 
       <div className="md:w-[100%/3] flex flex-col md:items-center gap-5">
         <p className="font-semibold text-2xl text-center">FOLLOW US</p>
-        <Button className="md:w-[250px] px-16 py-6 shadow-lg rounded-3xl justify-center flex !border-none bg-blue-500">
+        <Button className="md:w-[250px] px-16 py-6 shadow-lg rounded-3xl justify-center flex !border-none bg-blue-500 hover:!bg-blue-500">
           <FaFacebook className="text-3xl w-[30%] text-white" />
           <p className="text-xl w-[70%] text-left text-white">Facebook</p>
         </Button>
-        <Button className="md:w-[250px] px-16 py-6 shadow-lg rounded-3xl justify-center flex !border-none bg-gradient-to-r from-purple-500 to-pink-500">
+        <Button className="md:w-[250px] px-16 py-6 shadow-lg rounded-3xl justify-center flex !border-none bg-gradient-to-r from-purple-500 to-pink-500 hover:!bg-gradient-to-r">
           <FaInstagram className="text-3xl text-white w-[30%]" />
           <p className="text-xl w-[70%] text-left text-white">Instagram</p>
         </Button>
-        <Button className="md:w-[250px] px-16 py-6 shadow-lg rounded-3xl justify-center flex !border-none bg-black">
+        <Button className="md:w-[250px] px-16 py-6 shadow-lg rounded-3xl justify-center flex !border-none bg-black hover:!bg-black">
           <FaTiktok className="text-3xl w-[30%] text-white" />
           <p className="text-xl w-[70%] text-left text-white">Tiktok</p>
         </Button>
