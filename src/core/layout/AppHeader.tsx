@@ -42,6 +42,7 @@ const AppHeader = () => {
       <div className="hidden md:flex justify-between items-center md:w-[400px]">
         {itemsLink.map((element) => (
           <Link
+            key={element.title}
             to={element.link}
             className="md:text-lg relative group hover:text-black"
           >
