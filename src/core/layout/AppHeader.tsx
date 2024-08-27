@@ -44,7 +44,7 @@ const AppHeader = () => {
           <Link
             key={element.title}
             to={element.link}
-            className="md:text-lg relative group hover:text-black"
+            className="md:text-xl relative group hover:text-black"
           >
             {element.title}
             {underlineStyle}
