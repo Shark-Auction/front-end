@@ -1,16 +1,14 @@
 import { Button, Dropdown, Image, MenuProps } from "antd";
 import { IoMenuSharp } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
+import Underline from "../../components/UI/underline";
 
 const AppHeader = () => {
   const navigate = useNavigate()
-  const underlineStyle = (
-    <span className="absolute left-1/2 bottom-0 w-0 h-[2px] bg-black transition-all duration-400 group-hover:w-full group-hover:left-0"></span>
-  );
   const itemsLink = [
     {
       title: "Auction",
-      link: "/",
+      link: "/u/auction",
     },
     {
       title: "Category",
@@ -35,7 +33,7 @@ const AppHeader = () => {
           src="/src/assets/logo_exe.png"
           alt="logo"
         />
-        <p className="hidden md:block md:text-3xl">
+        <p onClick={() => navigate('/u/home')} className="hidden md:block md:text-3xl cursor-pointer">
           <strong>Shark Auction</strong>
         </p>
       </div>
@@ -48,7 +46,7 @@ const AppHeader = () => {
             className="md:text-xl relative group hover:text-black"
           >
             {element.title}
-            {underlineStyle}
+            <Underline />
           </Link>
         ))}
         <Button onClick={() => navigate('/auth/login')} className="px-5 shadow-lg">

@@ -5,6 +5,8 @@ import { CardCategory } from "./components/CardCategory";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import Underline from "../../../components/UI/underline";
 
 interface ProductProps {
   id: string;
@@ -70,10 +72,10 @@ const HomePage = () => {
   useEffect(() => {
     setPageSize(isMobile ? 10 : 20);
   }, [isMobile]);
-  
+
   return (
     <div className="flex flex-col gap-10">
-      <div className="w-full h-[500px] hidden md:block">
+      <div className="w-full h-[500px] hidden md:block shadow-shadowLight">
         <img
           className="w-full h-full object-cover"
           src="/src/assets/background_home.jpeg"
@@ -111,12 +113,18 @@ const HomePage = () => {
           ))}
         </div>
         <div className="flex justify-center">
-          <Pagination
+          {/* <Pagination
             current={currentPage}
             pageSize={pageSize}
             total={totalItems}
             onChange={onPageChange}
-          />
+          /> */}
+          <Link
+            to={"/u/auction"}
+            className="text-xl text-primaryColor relative group"
+          >
+            More Auction <Underline color="primaryColor" />
+          </Link>
         </div>
       </Skeleton>
     </div>

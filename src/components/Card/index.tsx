@@ -22,7 +22,7 @@ const CardElement = ({
     key={id}
     cover={<img alt={name} src={image} />}
     actions={[
-      <ButtonPrimary className="!text-lg !font-normal !w-3/4">
+      <ButtonPrimary className="!text-base !font-normal !w-3/4">
         Bidding
       </ButtonPrimary>,
     ]}

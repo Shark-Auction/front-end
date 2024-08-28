@@ -11,6 +11,7 @@ import LoginPage from "./pages/Auth/Login";
 import RegisterPage from "./pages/Auth/Register";
 import HomePage from "./pages/UserPage/Home";
 import UserPage from "./pages/UserPage";
+import AuctionPage from "./pages/UserPage/Auction";
 
 function App() {
   const router = createBrowserRouter([
@@ -30,6 +31,10 @@ function App() {
               path: "home",
               element: <HomePage />,
             },
+            {
+              path: "auction",
+              element: <AuctionPage />
+            }
           ],
         },
       ],
