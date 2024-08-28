@@ -2,6 +2,7 @@ import { IoIosPeople } from "react-icons/io";
 import ButtonPrimary from "../../components/Button";
 import { IoShieldCheckmarkOutline } from "react-icons/io5";
 import { MdOutlinePayments } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 interface CardContentProps {
   icon: React.ReactElement;
@@ -16,6 +17,7 @@ interface CardStepWorkProps {
 }
 
 const LandingPage = () => {
+  const navigate = useNavigate()
   return (
     <>
       <div className="relative w-full h-[30vh] md:h-[80vh] overflow-hidden">
@@ -30,7 +32,7 @@ const LandingPage = () => {
               Discover new values from old things via the auction world.
             </h1>
             <p className="text-lg">Where you can find what you want.</p>
-            <ButtonPrimary onClick={() => console.log("as")}>
+            <ButtonPrimary onClick={() => navigate('/u/home')}>
               Join Now
             </ButtonPrimary>
           </div>

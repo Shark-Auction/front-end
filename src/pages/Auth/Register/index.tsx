@@ -88,7 +88,7 @@ const RegisterPage = () => {
           rules={[
             {
               required: true,
-              message: "Please input your password!",
+              message: "Must not be empty!",
             },
           ]}
           hasFeedback
@@ -104,7 +104,7 @@ const RegisterPage = () => {
           rules={[
             {
               required: true,
-              message: "Please confirm your password!",
+              message: "Must not be empty!",
             },
             ({ getFieldValue }) => ({
               validator(_, value) {

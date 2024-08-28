@@ -15,7 +15,7 @@ const ButtonPrimary: React.FC<ButtonPrimaryProps> = ({
       {...rest}
       className={`border-none !w-fit px-10 py-3 shadow-xl bg-primaryColor hover:!bg-primaryColor hover:!text-black ${className}`}
     >
-      <p className="text-xl font-semibold">{children}</p>
+      {children}
     </Button>
   );
 };
