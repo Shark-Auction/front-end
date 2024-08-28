@@ -7,16 +7,16 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["*"],
-      "@components/*": ["components/*"],
-      "@axios/*": ["config/axios/*"],
-      "@layout/*": ["core/layout/*"],
-      "@store/*": ["core/store/*"],
-      "@hooks/*": ["hooks/*"],
-      "@model/*": ["model/*"],
-      "@pages/*": ["pages/*"],
-      "@service/*": ["service/*"],
-      "@utils/*": ["utils/*"]
+      "@/*": ["./*"],
+      "@components/*": ["./components/*"],
+      "@axios/*": ["./config/axios/*"],
+      "@layout/*": ["./core/layout/*"],
+      "@store/*": ["./core/store/*"],
+      "@hooks/*": ["./hooks/*"],
+      "@model/*": ["./model/*"],
+      "@pages/*": ["./pages/*"],
+      "@service/*": ["./service/*"],
+      "@utils/*": ["./utils/*"]
     }
   },
 }

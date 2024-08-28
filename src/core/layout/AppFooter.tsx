@@ -50,7 +50,7 @@ const AppFooter = () => {
           <Image
             preview={false}
             className="!relative !w-[70px] !object-contain"
-            src="src/assets/logo_exe.png"
+            src="/src/assets/logo_exe.png"
             alt="logo"
           />
           <p className="text-3xl">

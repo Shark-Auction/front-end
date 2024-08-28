@@ -9,6 +9,8 @@ import "./App.css";
 import AuthPage from "./pages/Auth";
 import LoginPage from "./pages/Auth/Login";
 import RegisterPage from "./pages/Auth/Register";
+import HomePage from "./pages/UserPage/Home";
+import UserPage from "./pages/UserPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -19,6 +21,16 @@ function App() {
         {
           path: "",
           element: <LandingPage />,
+        },
+        {
+          path: "u",
+          element: <UserPage />,
+          children: [
+            {
+              path: "home",
+              element: <HomePage />,
+            },
+          ],
         },
       ],
     },
@@ -36,8 +48,8 @@ function App() {
         },
         {
           path: "register",
-          element: <RegisterPage />
-        }
+          element: <RegisterPage />,
+        },
       ],
     },
   ]);
