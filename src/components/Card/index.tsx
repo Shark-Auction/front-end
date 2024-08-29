@@ -8,6 +8,7 @@ interface CardElementProps {
   status: string;
   id: string;
   image: string;
+  onClick?: any;
 }
 
 const CardElement = ({
@@ -17,16 +18,21 @@ const CardElement = ({
   status,
   id,
   image,
+  onClick,
 }: CardElementProps) => (
   <Card
+    hoverable={true}
     key={id}
     cover={<img alt={name} src={image} />}
     actions={[
-      <ButtonPrimary className="!text-base !font-normal !w-3/4">
+      <ButtonPrimary
+        onClick={onClick}
+        className="!text-base !font-normal"
+      >
         Bidding
       </ButtonPrimary>,
     ]}
-    className="shadow-shadowHeavy"
+    className="shadow-shadowHeavy max-w-full md:max-w-sm lg:max-w-xs"
   >
     <div className="flex flex-col gap-2">
       <div className="overflow-hidden">
@@ -35,9 +41,9 @@ const CardElement = ({
         </p>
       </div>
       <p className="text-orange-500">{currentPrice}</p>
-      <div className="flex justify-between">
-        <p>{remainDay}</p>
-        <p>{status}</p>
+      <div className="flex justify-between flex-col sm:flex-col md:flex-col lg:flex-row">
+        <p className="text-sm text-ellipsis overflow-hidden whitespace-nowrap">{remainDay}</p>
+        <p className="text-sm text-ellipsis overflow-hidden whitespace-nowrap">{status}</p>
       </div>
     </div>
   </Card>
