@@ -1,11 +1,11 @@
-import { Pagination, Skeleton } from "antd";
+import { Skeleton } from "antd";
 import CardElement from "../../../components/Card";
 import Carousel from "../../../components/Carousel";
 import { CardCategory } from "./components/CardCategory";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Underline from "../../../components/UI/underline";
 
 interface ProductProps {
@@ -18,27 +18,16 @@ interface ProductProps {
 }
 
 const HomePage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
   const [dataProduct, setDataProduct] = useState<ProductProps[]>([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [pageSize, setPageSize] = useState(0);
-  const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
 
   const data = new Array(20).fill(null).map((_, index) => ({
     icon: "/src/assets/logo_exe.png",
     name: `Category ${index + 1}`,
   }));
-
-  const paginatedData: ProductProps[] = dataProduct.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
-
-  const onPageChange = (page: any) => {
-    setCurrentPage(page);
-    setLoading(true);
-  };
 
   const fetchData = async () => {
     try {
@@ -47,7 +36,6 @@ const HomePage = () => {
         "https://65335392d80bd20280f6684e.mockapi.io/api/v1/Product"
       );
       setDataProduct(response.data);
-      setTotalItems(response.data.length);
     } catch (error: any) {
       toast.error("Failed to fetch data");
     } finally {
@@ -67,7 +55,7 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchData();
-  }, [currentPage, pageSize]);
+  }, [pageSize]);
 
   useEffect(() => {
     setPageSize(isMobile ? 10 : 20);
@@ -101,7 +89,7 @@ const HomePage = () => {
       </div>
       <Skeleton loading={loading}>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-5">
-          {paginatedData.map((element) => (
+          {dataProduct.map((element) => (
             <CardElement
               image={element.image}
               id={element.id}
@@ -109,16 +97,11 @@ const HomePage = () => {
               remainDay={element.remainDay}
               currentPrice={element.currentPrice}
               status={element.status}
+              onClick={() => navigate(`/u/auction/${element.id}`)}
             />
           ))}
         </div>
         <div className="flex justify-center">
-          {/* <Pagination
-            current={currentPage}
-            pageSize={pageSize}
-            total={totalItems}
-            onChange={onPageChange}
-          /> */}
           <Link
             to={"/u/auction"}
             className="text-xl text-primaryColor relative group"

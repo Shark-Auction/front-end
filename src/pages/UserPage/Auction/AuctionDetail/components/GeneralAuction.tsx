@@ -29,8 +29,8 @@ export const GeneralAuction = ({
     "https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg",
   ];
   return (
-    <div className="w-full border shadow-shadowLight flex gap-10">
-      <div className="w-2/4 h-[600px]">
+    <div className="w-full border shadow-shadowLight flex flex-col md:flex-row gap-10">
+      <div className="w-full md:w-2/4 h-[600px]">
         <ImageSlide image={image} />
       </div>
       <div className="py-5 px-3 flex flex-col gap-5">
@@ -45,7 +45,7 @@ export const GeneralAuction = ({
           <p className={`${textCss} text-gray-500`}>Step:</p>
           <p className={`${textCss} text-red-500 font-semibold`}>{step} VND</p>
         </div>
-        <div className="flex gap-10">
+        <div className="flex flex-col md:flex-row gap-5 md:gap-10">
           <div className="flex items-center gap-4">
             <TbHammer className="text-3xl" />
             <p className="text-xl font-semibold">{numberOfBidding}</p>
@@ -63,7 +63,7 @@ export const GeneralAuction = ({
             BIDDING NOW
           </ButtonPrimary>
         </div>
-        
+
       </div>
     </div>
   );
