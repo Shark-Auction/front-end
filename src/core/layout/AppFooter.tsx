@@ -84,7 +84,7 @@ const AppFooter = () => {
           <p className="font-semibold text-2xl">ABOUT US</p>
           <div className="flex flex-col gap-2">
             {itemsAboutUs.map((e) => (
-              <Link to={e.link} className="hover:text-black">
+              <Link key={e.link} to={e.link} className="hover:text-black">
                 {e.title}
               </Link>
             ))}
@@ -95,7 +95,7 @@ const AppFooter = () => {
           <p className="font-semibold text-2xl">SUPPORT</p>
           <div className="flex flex-col gap-2">
             {itemsSupport.map((e) => (
-              <Link to={e.link} className="hover:text-black">
+              <Link key={e.link} to={e.link} className="hover:text-black">
                 {e.title}
               </Link>
             ))}
@@ -106,7 +106,7 @@ const AppFooter = () => {
           <p className="font-semibold text-2xl">CONTACT</p>
           <div className="flex flex-col gap-2">
             {itemsContact.map((e) => (
-              <Link to={e.link} className="hover:text-black">
+              <Link key={e.link} to={e.link} className="hover:text-black">
                 {e.title}
               </Link>
             ))}
