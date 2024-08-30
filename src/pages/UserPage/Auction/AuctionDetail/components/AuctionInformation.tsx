@@ -4,45 +4,45 @@ export const AuctionInformation = () => {
   const itemsProductInformation: DescriptionsProps["items"] = [
     {
       key: "category",
-      label: <p className="text-xl text-gray-500">Category</p>,
-      children: <p className="text-xl text-black">Category</p>,
+      label: <p className="md:text-xl text-gray-500">Category</p>,
+      children: <p className="md:text-xl text-black">Category</p>,
     },
     {
       key: "category",
-      label: <p className="text-xl text-gray-500">Brand</p>,
-      children: <p className="text-xl text-black">Brand</p>,
+      label: <p className="md:text-xl text-gray-500">Brand</p>,
+      children: <p className="md:text-xl text-black">Brand</p>,
     },
     {
       key: "category",
-      label: <p className="text-xl text-gray-500">Weight</p>,
-      children: <p className="text-xl text-black">Brand</p>,
+      label: <p className="md:text-xl text-gray-500">Weight</p>,
+      children: <p className="md:text-xl text-black">Brand</p>,
     },
     {
       key: "category",
-      label: <p className="text-xl text-gray-500">Condition</p>,
-      children: <p className="text-xl text-black">Condition</p>,
+      label: <p className="md:text-xl text-gray-500">Condition</p>,
+      children: <p className="md:text-xl text-black">Condition</p>,
     },
   ];
   const itemAuctionDetail: DescriptionsProps["items"] = [
     {
       key: "category",
-      label: <p className="text-xl text-gray-500">Category</p>,
-      children: <p className="text-xl text-black">Category</p>,
+      label: <p className="md:text-xl text-gray-500">Category</p>,
+      children: <p className="md:text-xl text-black">Category</p>,
     },
     {
       key: "category",
-      label: <p className="text-xl text-gray-500">Brand</p>,
-      children: <p className="text-xl text-black">Brand</p>,
+      label: <p className="md:text-xl text-gray-500">Brand</p>,
+      children: <p className="md:text-xl text-black">Brand</p>,
     },
     {
       key: "category",
-      label: <p className="text-xl text-gray-500">Weight</p>,
-      children: <p className="text-xl text-black">Brand</p>,
+      label: <p className="md:text-xl text-gray-500">Weight</p>,
+      children: <p className="md:text-xl text-black">Brand</p>,
     },
     {
       key: "category",
-      label: <p className="text-xl text-gray-500">Condition</p>,
-      children: <p className="text-xl text-black">Condition</p>,
+      label: <p className="md:text-xl text-gray-500">Condition</p>,
+      children: <p className="md:text-xl text-black">Condition</p>,
     },
   ];
   return (
