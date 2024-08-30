@@ -89,7 +89,7 @@ const HomePage = () => {
       </div>
       <Skeleton loading={loading}>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-5">
-          {dataProduct.map((element) => (
+          {dataProduct.slice(0, pageSize).map((element) => (
             <CardElement
               image={element.image}
               id={element.id}

@@ -1,7 +1,8 @@
 import { TbHammer } from "react-icons/tb";
 import ImageSlide from "./ImageSlide/ImageSlide";
 import { LuClock3 } from "react-icons/lu";
-import ButtonPrimary from "../../../../../components/Button";
+import { ModalBidding } from "./Modal/ModalBidding";
+import { ModalHistory } from "./Modal/ModalHistory";
 
 interface GeneralAuctionProps {
   name: string;
@@ -12,7 +13,7 @@ interface GeneralAuctionProps {
   dateEnd: string;
 }
 
-const textCss = "text-xl";
+const textCss = "md:text-xl";
 
 export const GeneralAuction = ({
   name,
@@ -33,7 +34,7 @@ export const GeneralAuction = ({
       <div className="w-full md:w-2/4 h-[600px]">
         <ImageSlide image={image} />
       </div>
-      <div className="py-5 px-3 flex flex-col gap-5">
+      <div className="py-5 px-3 flex flex-col gap-5 w-full">
         <p className="text-2xl">
           <strong>{name}</strong>
         </p>
@@ -48,22 +49,20 @@ export const GeneralAuction = ({
         <div className="flex flex-col md:flex-row gap-5 md:gap-10">
           <div className="flex items-center gap-4">
             <TbHammer className="text-3xl" />
-            <p className="text-xl font-semibold">{numberOfBidding}</p>
+            <p className="md:text-xl font-semibold">{numberOfBidding}</p>
           </div>
           <div className="flex items-center gap-4">
             <LuClock3 className="text-3xl" />
-            <p className="text-xl font-semibold">{remainDay}</p>
+            <p className="md:text-xl font-semibold">{remainDay}</p>
           </div>
           <div className="border bg-gray-300 rounded-lg px-5">
-            <p className="text-lg font-semibold">Session end at {dateEnd}</p>
+            <p className="md:text-lg font-semibold">Session end at {dateEnd}</p>
           </div>
         </div>
         <div className="flex w-full justify-center mt-5">
-          <ButtonPrimary className="font-semibold text-xl !w-1/2 !py-5">
-            BIDDING NOW
-          </ButtonPrimary>
+          <ModalBidding step={500000} currentPrice={1000000} />
         </div>
-
+        <ModalHistory />
       </div>
     </div>
   );
