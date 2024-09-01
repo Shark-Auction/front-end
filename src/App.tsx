@@ -14,6 +14,7 @@ import UserPage from "./pages/UserPage";
 import AuctionPage from "./pages/UserPage/Auction/AuctionList";
 import AuctionDetail from "./pages/UserPage/Auction/AuctionDetail";
 import Auction from "./pages/UserPage/Auction";
+import SellerProfile from "./pages/UserPage/Seller/SellerProfile";
 
 function App() {
   const router = createBrowserRouter([
@@ -47,6 +48,10 @@ function App() {
                 },
               ],
             },
+            {
+              path: "seller/:id",
+              element: <SellerProfile />
+            }
           ],
         },
       ],
