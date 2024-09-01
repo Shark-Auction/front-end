@@ -1,7 +1,14 @@
 import { Avatar, Descriptions, DescriptionsProps, Divider } from "antd";
 import ButtonPrimary from "../../../../../components/Button";
+import { useNavigate } from "react-router-dom";
+
+interface SellerAuctionProps {
+  rating: number;
+  reputation: number;
+}
 
 export const SellerAuction = () => {
+  const navigate = useNavigate();
   const items: DescriptionsProps["items"] = [
     {
       key: "1",
@@ -30,7 +37,10 @@ export const SellerAuction = () => {
           <p className="text-xl">
             <strong>Username</strong>
           </p>
-          <ButtonPrimary className="!border-2 !border-primaryColor !bg-blue-300 !text-blue-700 text-lg">
+          <ButtonPrimary
+            onClick={() => navigate(`/u/seller/${1}`)}
+            className="!border-2 !border-primaryColor !bg-blue-300 !text-blue-700 text-lg"
+          >
             View seller
           </ButtonPrimary>
         </div>
