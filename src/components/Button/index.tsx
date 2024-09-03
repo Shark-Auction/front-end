@@ -1,7 +1,7 @@
 import { Button, ButtonProps } from "antd";
 
 interface ButtonPrimaryProps extends ButtonProps {
-  children?: React.ReactElement | string;
+  children?: React.ReactElement | string[] | string;
   className?: string;
 }
 
