@@ -15,6 +15,8 @@ import AuctionPage from "./pages/UserPage/Auction/AuctionList";
 import AuctionDetail from "./pages/UserPage/Auction/AuctionDetail";
 import Auction from "./pages/UserPage/Auction";
 import SellerProfile from "./pages/UserPage/Seller/SellerProfile";
+import AppDashboard from "./core/layout/AppDashboard";
+import AuctionManagement from "./pages/AdminPage/AuctionManagement";
 
 function App() {
   const router = createBrowserRouter([
@@ -50,8 +52,8 @@ function App() {
             },
             {
               path: "seller/:id",
-              element: <SellerProfile />
-            }
+              element: <SellerProfile />,
+            },
           ],
         },
       ],
@@ -72,6 +74,13 @@ function App() {
           path: "register",
           element: <RegisterPage />,
         },
+      ],
+    },
+    {
+      path: "/admin",
+      element: <AppDashboard />,
+      children: [
+        { path: "auction-management", element: <AuctionManagement /> },
       ],
     },
   ]);
