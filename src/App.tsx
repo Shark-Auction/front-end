@@ -17,6 +17,12 @@ import Auction from "./pages/UserPage/Auction";
 import SellerProfile from "./pages/UserPage/Seller/SellerProfile";
 import AppDashboard from "./core/layout/AppDashboard";
 import AuctionManagement from "./pages/AdminPage/AuctionManagement";
+import UserProfile from "./pages/UserPage/Profile";
+import { MyProfile } from "./pages/UserPage/Profile/components/MyProfile";
+import { ChangePassword } from "./pages/UserPage/Profile/components/ChangePassword";
+import { OrderManagement } from "./pages/UserPage/Profile/components/OrderManagement";
+import { ProductManagement } from "./pages/UserPage/Profile/components/ProductManagement";
+import { RequestProduct } from "./pages/UserPage/Profile/components/RequestProduct";
 
 function App() {
   const router = createBrowserRouter([
@@ -53,6 +59,32 @@ function App() {
             {
               path: "seller/:id",
               element: <SellerProfile />,
+            },
+            {
+              path: "profile",
+              element: <UserProfile />,
+              children: [
+                {
+                  path: "",
+                  element: <MyProfile />,
+                },
+                {
+                  path: "change-password",
+                  element: <ChangePassword />,
+                },
+                {
+                  path: "order-management",
+                  element: <OrderManagement />,
+                },
+                {
+                  path: "your-management",
+                  element: <ProductManagement />,
+                },
+                {
+                  path: "request-product",
+                  element: <RequestProduct />,  
+                },
+              ],
             },
           ],
         },
