@@ -21,14 +21,12 @@ const CardElement = ({
   onClick,
 }: CardElementProps) => (
   <Card
+    onClick={onClick}
     hoverable={true}
     key={id}
     cover={<img alt={name} src={image} />}
     actions={[
-      <ButtonPrimary
-        onClick={onClick}
-        className="!text-base !font-normal"
-      >
+      <ButtonPrimary className="!text-base !font-normal">
         Bidding
       </ButtonPrimary>,
     ]}
@@ -42,8 +40,12 @@ const CardElement = ({
       </div>
       <p className="text-orange-500">{currentPrice}</p>
       <div className="flex justify-between flex-col sm:flex-col md:flex-col lg:flex-row">
-        <p className="text-sm text-ellipsis overflow-hidden whitespace-nowrap">{remainDay}</p>
-        <p className="text-sm text-ellipsis overflow-hidden whitespace-nowrap">{status}</p>
+        <p className="text-sm text-ellipsis overflow-hidden whitespace-nowrap">
+          {remainDay}
+        </p>
+        <p className="text-sm text-ellipsis overflow-hidden whitespace-nowrap">
+          {status}
+        </p>
       </div>
     </div>
   </Card>
