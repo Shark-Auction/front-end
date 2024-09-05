@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import type { MenuProps } from "antd";
-import { Avatar, Layout, Menu, theme } from "antd";
-import { Link, Outlet } from "react-router-dom";
+import { Avatar, Dropdown, Layout, Menu, theme } from "antd";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { MdCategory, MdDashboard } from "react-icons/md";
 import { AiFillProduct } from "react-icons/ai";
+import { RootState } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../store/slice/userSlice";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -30,11 +33,27 @@ const items: MenuItem[] = [
 ];
 
 const AppDashboard: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userLogin = useSelector((state: RootState) => state.user);
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-
+  const handleLogin = () => {
+    dispatch(logout());
+    navigate("/auth/login");
+  };
+  const itemsUser: MenuProps["items"] = [
+    {
+      key: "1",
+      label: <Link to={"/u/profile"}>Thông tin</Link>,
+    },
+    {
+      key: "2",
+      label: <div onClick={handleLogin}>Đăng xuất</div>,
+    },
+  ];
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
@@ -53,11 +72,21 @@ const AppDashboard: React.FC = () => {
       <Layout>
         <Header style={{ background: colorBgContainer }}>
           <div className="w-full h-full flex justify-end items-center gap-4">
-            <Avatar className="w-12 h-12" />
-            <div className="flex flex-col leading-tight">
-              <span className="text-lg"><strong>Username</strong></span>
-              <span className="text-gray-400">Role</span>
-            </div>
+            {userLogin && (
+              <Dropdown
+                menu={{ items: itemsUser }}
+                placement="bottomLeft"
+                arrow
+                trigger={["click"]}
+              >
+                <div className="flex items-center gap-2 border border-gray-400 py-1 px-5 rounded-lg">
+                  <Avatar size={"large"} />
+                  <p className="text-sm font-bold">
+                    {userLogin["fullName"]}
+                  </p>{" "}
+                </div>
+              </Dropdown>
+            )}
           </div>
         </Header>
         <Content style={{ margin: "0 16px" }}>

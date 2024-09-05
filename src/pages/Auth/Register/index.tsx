@@ -1,8 +1,66 @@
-import { Button, DatePicker, Divider, Form, Input } from "antd";
-import { Link } from "react-router-dom";
+import {
+  Button,
+  DatePicker,
+  DatePickerProps,
+  Divider,
+  Form,
+  Input,
+} from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { UserSignUp } from "../../../model/user";
+import { toast } from "react-toastify";
+import authApi from "../../../service/api/authApi";
+import { useState } from "react";
+import dayjs from "dayjs";
 
 const RegisterPage = () => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const disabledDate = (current: any) => {
+    return current && current > new Date();
+  };
+  const dateFormat: DatePickerProps["format"] = (value) => {
+    return `${value.format("YYYY-MM-DD")}`;
+  };
+  const handleFinish = async (values: UserSignUp) => {
+    try {
+      setLoading(true);
+      const data: UserSignUp = {
+        ...values,
+        dob: dateFormat(dayjs(values.dob, "YYYY-MM-DD")),
+      };
+      await authApi.signUpApi(data);
+      toast.success(
+        <>
+          <div>Đăng ký thành công</div>
+          <div className="font-semibold">Hãy kiểm tra Email để xác thực tài khoản</div>
+        </>
+      );
+      navigate("/auth/login");
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const validateEmail = async (_: any, value: string) => {
+    try {
+      await authApi.checkEmail(value);
+      return Promise.resolve();
+    } catch (error: any) {
+      return Promise.reject(error.message);
+    }
+  };
+  const validateUserName = async (_: any, value: string) => {
+    try {
+      await authApi.checkUser(value);
+      return Promise.resolve();
+    } catch (error: any) {
+      console.log(error);
+      return Promise.reject(error.message);
+    }
+  };
   return (
     <div
       className="w-[650px] px-10 py-5 h-full flex bg-white flex-col items-center 
@@ -10,108 +68,143 @@ const RegisterPage = () => {
     >
       <div className="text-left">
         <p className="text-2xl md:text-3xl">
-          <strong>Register new account</strong>
+          <strong>Đăng ký tài khoản</strong>
         </p>
       </div>
       <Divider />
       <Form
+        onFinish={handleFinish}
         form={form}
         labelCol={{ span: 24 }}
         className="flex flex-col md:grid md:grid-cols-2 gap-x-5 w-full"
       >
         <Form.Item
           label={<p className="text-lg">Email</p>}
-          name={"username"}
+          name={"email"}
           rules={[
             {
               required: true,
-              message: "Must not be empty",
+              message: "Không được để trống",
+            },
+            {
+              validator: validateEmail,
+            },
+            {
+              type: "email",
+              message: "Không hợp lệ",
             },
           ]}
           className="md:col-span-2"
         >
-          <Input />
+          <Input placeholder="abc@gmail.com" />
         </Form.Item>
         <Form.Item
-          label={<p className="text-lg">Fullname</p>}
+          label={<p className="text-lg">Tên đăng nhập</p>}
+          name={"userName"}
+          rules={[
+            {
+              required: true,
+              message: "Không được để trống",
+            },
+            {
+              validator: validateUserName,
+            },
+          ]}
+        >
+          <Input placeholder="Tên người dùng" />
+        </Form.Item>
+        <Form.Item
+          label={<p className="text-lg">Họ và tên</p>}
           name={"fullName"}
           rules={[
             {
               required: true,
-              message: "Must not be empty",
+              message: "Không được để trống",
             },
           ]}
-          className="md:col-span-2"
         >
-          <Input />
+          <Input placeholder="NGUYEN VAN A" />
         </Form.Item>
         <Form.Item
-          label={<p className="text-lg">Phone number</p>}
-          name={"phoneNumber"}
+          label={<p className="text-lg">Số điện thoại</p>}
+          name={"phone"}
           rules={[
             {
               required: true,
-              message: "Must not be empty",
+              message: "Không được để trống",
+            },
+            {
+              pattern: /^\d{10}$/,
+              message: "Tối thiểu 10 số",
             },
           ]}
         >
-          <Input />
+          <Input placeholder="0123456789" />
         </Form.Item>
         <Form.Item
-          label={<p className="text-lg">Date of birth</p>}
-          name={"dateOfBirth"}
+          label={<p className="text-lg">Ngày sinh</p>}
+          name={"dob"}
           rules={[
             {
               required: true,
-              message: "Must not be empty",
+              message: "Không được để trống",
             },
           ]}
         >
-          <DatePicker className="w-full" />
+          <DatePicker
+            format={"YYYY-MM-DD"}
+            placeholder="YYYY-MM-DD"
+            disabledDate={disabledDate}
+            className="w-full"
+          />
         </Form.Item>
         <Form.Item
-          label={<p className="text-lg">Address</p>}
+          label={<p className="text-lg">Địa chỉ</p>}
           name={"address"}
           rules={[
             {
               required: true,
-              message: "Must not be empty",
+              message: "Không được để trống",
             },
           ]}
           className="md:col-span-2"
         >
-          <Input className="w-full" />
+          <Input placeholder="Q1, Tp.HCM, VN" className="w-full" />
         </Form.Item>
         <Form.Item
           name="password"
-          label={<p className="text-lg">Password</p>}
+          label={<p className="text-lg">Mật khẩu</p>}
           rules={[
             {
               required: true,
-              message: "Must not be empty!",
+              message: "Không được để trống",
+            },
+            {
+              min: 6,
+              message: "Tối thiểu 6 kí tự",
             },
           ]}
           hasFeedback
         >
-          <Input.Password />
+          <Input.Password placeholder="Tối thiểu 6 kí tự" />
         </Form.Item>
 
         <Form.Item
-          name="confirm"
-          label={<p className="text-lg">Confirm Password</p>}
+          name="confirmPassword"
+          label={<p className="text-lg">Xác nhận mật khẩu</p>}
           dependencies={["password"]}
           hasFeedback
           rules={[
             {
               required: true,
-              message: "Must not be empty!",
+              message: "Không được để trống",
             },
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (!value || getFieldValue("password") === value) {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error("Password not match!"));
+                return Promise.reject(new Error("Mật khẩu không trùng"));
               },
             }),
           ]}
@@ -121,16 +214,17 @@ const RegisterPage = () => {
 
         <Form.Item className="md:col-span-2">
           <Button
+            loading={loading}
             htmlType="submit"
             className="bg-black w-full py-4 text-lg text-white px-10 
             hover:!bg-black hover:!border-black hover:!text-white mt-2"
           >
-            Sign up
+            Đăng ký
           </Button>
         </Form.Item>
       </Form>
       <Link to={"/auth/login"} className="text-lg text-blue-500 font-semibold">
-        I already have account
+        Tôi đã có tài khoản
       </Link>
     </div>
   );

@@ -1,7 +1,33 @@
 import { Button, Divider, Form, Input } from "antd";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { LoginInformation } from "../../../model/user";
+import authApi from "../../../service/api/authApi";
+import { useDispatch } from "react-redux";
+import { login } from "../../../core/store/slice/userSlice";
 
 const LoginPage = () => {
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch()
+  const handleFinish = async (values: LoginInformation) => {
+    try {
+      setLoading(true);
+      const response = await authApi.signIn(values);
+      toast.success('Đăng nhập thành công')
+      dispatch(login(response.data))
+      if(response.data.roleName === 'user') {
+        navigate('/u/home')
+      } else {
+        navigate('/admin')
+      }
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
   return (
     <div
       className="w-[500px] p-10 h-full flex bg-white flex-col items-center 
@@ -9,55 +35,56 @@ const LoginPage = () => {
     >
       <div className="text-center">
         <p className="text-2xl md:text-3xl">
-          Welcome, <strong>Sign in</strong> your account
+          <strong>Đăng nhập</strong> vào tài khoản của bạn
         </p>
         <p className="text-xl md:text-xl mt-2">
-          Don't have account?{" "}
+          Không có tài khoản?{" "}
           <Link
             to={"/auth/register"}
             className="text-primaryColor hover:text-primaryColor font-bold"
           >
-            Sign up now
+            Đăng ký ngay
           </Link>
         </p>
       </div>
       <Divider />
       <div className="w-full">
         <div className="w-full">
-          <Form labelCol={{ span: 24 }} className="w-full flex flex-col gap-[1px]">
+          <Form onFinish={handleFinish} labelCol={{ span: 24 }} className="w-full flex flex-col gap-[1px]">
             <Form.Item
-              label={<p className="text-lg">Username</p>}
-              name={"username"}
+              label={<p className="text-lg">Tên đăng nhập</p>}
+              name={"user_name"}
               rules={[
                 {
                   required: true,
-                  message: "Must not be empty",
+                  message: "Không được để trống",
                 },
               ]}
             >
               <Input />
             </Form.Item>
             <Form.Item
-              label={<p className="text-lg">Password</p>}
+              label={<p className="text-lg">Mật khẩu</p>}
               name={"password"}
               rules={[
                 {
                   required: true,
-                  message: "Must not be empty",
+                  message: "Không được để trống",
                 },
               ]}
             >
               <Input.Password />
             </Form.Item>
             <Link to={"/auth/login"} className="text-lg text-blue-500">
-              Forget Password
+              Quên mật khẩu
             </Link>
             <Form.Item>
               <Button
+                loading={loading}
                 htmlType="submit"
                 className="bg-black w-full py-4 text-lg text-white px-10 hover:!bg-black hover:!border-black hover:!text-white mt-2"
               >
-                Sign in
+                Đăng nhập
               </Button>
             </Form.Item>
           </Form>
