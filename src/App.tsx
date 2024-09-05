@@ -23,6 +23,9 @@ import { ChangePassword } from "./pages/UserPage/Profile/components/ChangePasswo
 import { OrderManagement } from "./pages/UserPage/Profile/components/OrderManagement";
 import { ProductManagement } from "./pages/UserPage/Profile/components/ProductManagement";
 import { RequestProduct } from "./pages/UserPage/Profile/components/RequestProduct";
+import { useSelector } from "react-redux";
+import { RootState } from "./core/store/store";
+import { toast } from "react-toastify";
 
 function App() {
   const router = createBrowserRouter([
@@ -82,7 +85,7 @@ function App() {
                 },
                 {
                   path: "request-product",
-                  element: <RequestProduct />,  
+                  element: <RequestProduct />,
                 },
               ],
             },
@@ -110,7 +113,7 @@ function App() {
     },
     {
       path: "/admin",
-      element: <AppDashboard />,
+      element: <ProtectedRoute element={<AppDashboard />} />,
       children: [
         { path: "auction-management", element: <AuctionManagement /> },
       ],
@@ -118,5 +121,20 @@ function App() {
   ]);
   return <RouterProvider router={router} />;
 }
+
+interface ProtectedRouteProps {
+  element: React.ReactElement;
+}
+
+const ProtectedRoute = ({ element }: ProtectedRouteProps) => {
+  const userLogin = useSelector((state: RootState) => state.user);
+  console.log(userLogin);
+  if (!userLogin || userLogin["roleName"] !== "admin") {
+    toast.error("Từ chối truy cập");
+    return <Navigate to="/u/home" replace />;
+  }
+
+  return element;
+};
 
 export default App;
