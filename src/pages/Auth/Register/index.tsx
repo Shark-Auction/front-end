@@ -84,7 +84,7 @@ const RegisterPage = () => {
         </Form.Item>
         <Form.Item
           name="password"
-          label="Password"
+          label={<p className="text-lg">Password</p>}
           rules={[
             {
               required: true,
@@ -98,7 +98,7 @@ const RegisterPage = () => {
 
         <Form.Item
           name="confirm"
-          label="Confirm Password"
+          label={<p className="text-lg">Confirm Password</p>}
           dependencies={["password"]}
           hasFeedback
           rules={[
@@ -125,7 +125,7 @@ const RegisterPage = () => {
             className="bg-black w-full py-4 text-lg text-white px-10 
             hover:!bg-black hover:!border-black hover:!text-white mt-2"
           >
-            Sign in
+            Sign up
           </Button>
         </Form.Item>
       </Form>

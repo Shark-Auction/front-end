@@ -40,7 +40,7 @@ const UserProfile = () => {
   };
   return (
     <div className="flex md:flex-row gap-10">
-      <div className="md:w-1/4 border rounded-md shadow-shadowLight py-5 px-3 bg-white">
+      <div className="md:w-1/4 border rounded-md shadow-shadowLight py-5 px-3 bg-white !h-fit sticky top-32">
         <div className="flex items-center gap-2">
           <Avatar className="w-20 h-20" />
           <div className="flex flex-col">
@@ -61,7 +61,7 @@ const UserProfile = () => {
           items={itemsMenu}
         />
       </div>
-      <div className="md:w-3/4 border rounded-md shadow-shadowLight">
+      <div className="md:w-3/4 border rounded-md shadow-shadowLight p-5">
         <Outlet />
       </div>
     </div>
