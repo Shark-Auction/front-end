@@ -23,9 +23,11 @@ import { ChangePassword } from "./pages/UserPage/Profile/components/ChangePasswo
 import { OrderManagement } from "./pages/UserPage/Profile/components/OrderManagement";
 import { ProductManagement } from "./pages/UserPage/Profile/components/ProductManagement";
 import { RequestProduct } from "./pages/UserPage/Profile/components/RequestProduct";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./core/store/store";
 import { toast } from "react-toastify";
+import CategoryManagement from "./pages/AdminPage/CategoryManagement";
+import { logout } from "./core/store/slice/userSlice";
 
 function App() {
   const router = createBrowserRouter([
@@ -39,7 +41,12 @@ function App() {
         },
         {
           path: "u",
-          element: <UserPage />,
+          element: (
+            <ProtectedRoute
+              element={<UserPage />}
+              allowedRoles={["user", null]}
+            />
+          ),
           children: [
             {
               path: "home",
@@ -113,9 +120,15 @@ function App() {
     },
     {
       path: "/admin",
-      element: <ProtectedRoute element={<AppDashboard />} />,
+      element: (
+        <ProtectedRoute
+          allowedRoles={["admin", "staff", "shipper"]}
+          element={<AppDashboard />}
+        />
+      ),
       children: [
         { path: "auction-management", element: <AuctionManagement /> },
+        { path: "category-management", element: <CategoryManagement /> },
       ],
     },
   ]);
@@ -124,16 +137,17 @@ function App() {
 
 interface ProtectedRouteProps {
   element: React.ReactElement;
+  allowedRoles: any[]; // Define allowed roles for each route
 }
 
-const ProtectedRoute = ({ element }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ element, allowedRoles }: ProtectedRouteProps) => {
   const userLogin = useSelector((state: RootState) => state.user);
-  console.log(userLogin);
-  if (!userLogin || userLogin["roleName"] !== "admin") {
+  const dispatch = useDispatch()
+  if (!allowedRoles.includes(userLogin && userLogin["roleName"])) {
     toast.error("Từ chối truy cập");
-    return <Navigate to="/u/home" replace />;
+    dispatch(logout())
+    return <Navigate to={"/auth/login"} replace />;
   }
-
   return element;
 };
 

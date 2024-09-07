@@ -14,14 +14,14 @@ export interface Column extends ColumnProps {
 interface DashboardProps {
   columns: Column[];
   apiUri: string;
-  formItem: React.ReactElement;
+  formItem?: React.ReactElement;
   action?: boolean;
 }
 
 const Dashboard = ({
   columns,
   apiUri,
-  formItem,
+  formItem = <></>,
   action = true,
 }: DashboardProps) => {
   const [dataSource, setDataSource] = useState<any[]>([]);
@@ -48,7 +48,7 @@ const Dashboard = ({
     try {
       setIsFetching(true);
       const response = await api.get(`${apiUri}`);
-      setDataSource(response.data);
+      setDataSource(response.data.data);
     } catch (error: any) {
       toast.error(error.response.data);
     } finally {
