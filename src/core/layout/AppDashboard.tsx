@@ -81,9 +81,13 @@ const AppDashboard: React.FC = () => {
               >
                 <div className="flex items-center gap-2 border border-gray-400 py-1 px-5 rounded-lg">
                   <Avatar size={"large"} />
-                  <p className="text-sm font-bold">
-                    {userLogin["fullName"]}
-                  </p>{" "}
+                  <div className="flex flex-col">
+                    <p className="text-sm font-bold">
+                      <span>{userLogin["fullName"]}</span>
+                      <br/>
+                      <span className="font-normal text-gray-500">{userLogin["roleName"]}</span>
+                    </p>
+                  </div>
                 </div>
               </Dropdown>
             )}
