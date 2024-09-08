@@ -11,10 +11,10 @@ const CategoryManagement = () => {
       key: "id",
     },
     {
-      title: 'Ảnh',
-      dataIndex: 'imageUrl',
+      title: "Ảnh",
+      dataIndex: "imageUrl",
       key: "image",
-      render: (data) => <ImageComponent src={data} />
+      render: (data) => <ImageComponent src={data} />,
     },
     {
       title: "Tên",
