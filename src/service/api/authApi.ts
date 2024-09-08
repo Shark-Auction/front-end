@@ -13,8 +13,10 @@ const authApi = {
   signIn: async (data: LoginInformation) => {
     try {
       const response = await api.post('user/signin', data)
+      console.log(response)
       return response.data
     } catch (error: any) {
+      console.log("error")
       throw error.response.data
     }
   },
