@@ -1,21 +1,25 @@
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../core/store/store";
+import { RootState, store } from "../../core/store/store";
 import { updateAccessToken } from "../../core/store/slice/userSlice";
 
 const baseUrl = 'http://128.199.193.209:8080/api/v1/'
 
 const api = axios.create({
-  baseURL: baseUrl
+  baseURL: baseUrl,
+  headers:{ 
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  }
 })
 
 api.interceptors.request.use(
   (config) => {
-    const userLoginned = useSelector((state: RootState) => state.user)
-    if (userLoginned) {
-      config.headers.Authorization = `Bearer ${userLoginned['accessToken']}`;
+    const state: RootState = store.getState()
+    const user = state.user
+
+    if (user && user['accessToken']) {
+      config.headers.Authorization = `Bearer ${user['accessToken']}`;
     }
-    console.log(config)
     return config;
   },
   (error) => {
@@ -28,7 +32,7 @@ const refreshToken = async (refresh: any) => {
     throw new Error('No refresh token available');
   }
   const response = await axios.post(
-    `${baseUrl}/user/refresh`,
+    `${baseUrl}user/refresh`,
     { refreshToken: refresh }
   );
   const { accessToken } = response.data.data;
@@ -48,10 +52,10 @@ api.interceptors.response.use(
     ) {
       originalRequest._retry = true;
       try {
-        const dispatch = useDispatch()
-        const userLoginned = useSelector((state: RootState) => state.user)
-        const newAccessToken = await refreshToken(userLoginned && userLoginned['refreshToken']);
-        dispatch(updateAccessToken(newAccessToken))
+        const state: RootState = store.getState()
+        const user = state.user
+        const newAccessToken = await refreshToken(user && user['refreshToken']);
+        store.dispatch(updateAccessToken(newAccessToken))
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return api(originalRequest);
       } catch (error) {
