@@ -1,30 +1,82 @@
-import { Form, Input } from "antd";
+import { Form, TreeSelect, TreeSelectProps } from "antd";
 import LabelForm from "../../../../../../components/LabelForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { categoryApi } from "../../../../../../service/api/categoryApi";
 
 const ProductCategory = () => {
-  const [category, setCategory] = useState()
-  const [category1, setCategory1] = useState()
-  const handleChangeCategoryParent = (e: any) => {
-    setCategory(e)
-  }
-  const handleChangeCategory1 = (e: any) => {
-    setCategory1(e)
-  }
-  
+  const [category, setCategory] = useState<any[]>([]);
+  const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {
+    console.log("onPopupScroll", e);
+  };
+
+  const transformData = (data: any) => {
+    const map = new Map();
+    const tree: any[] = [];
+
+    // Create a map of id to node
+    data.forEach((item: any) => {
+      map.set(item.id, {
+        value: item.id,
+        title: item.name,
+        children: [],
+      });
+    });
+
+    // Build the tree structure
+    data.forEach((item: any) => {
+      if (item.parent) {
+        const parentNode = map.get(item.parent.id);
+        if (parentNode) {
+          parentNode.children.push(map.get(item.id));
+        }
+      } else {
+        tree.push(map.get(item.id));
+      }
+    });
+
+    return tree;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await categoryApi.getCategory();
+        const transformedData = transformData(response.data);
+        setCategory(transformedData);
+        console.log(transformedData);
+      } catch (error: any) {
+        toast.error(error.message);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <>
       <p className="text-xl text-primaryColor font-semibold col-span-3">
         Danh mục sản phẩm
       </p>
-      <Form.Item label={<LabelForm>Danh mục cha:</LabelForm>}>
-        <Input onChange={handleChangeCategoryParent} />
-      </Form.Item>
-      <Form.Item label={<LabelForm>Danh mục con 1:</LabelForm>}>
-        <Input disabled={category ? false : true} onChange={handleChangeCategory1} />
-      </Form.Item>
-      <Form.Item name={'categoryId'} label={<LabelForm>Danh mục con 2:</LabelForm>}>
-        <Input disabled={category1 ? false : true} />
+      <Form.Item
+        label={<LabelForm>Chọn danh mục</LabelForm>}
+        name={"categoryId"}
+        rules={[
+          {
+            required: true,
+            message: "Không được dể trống",
+          },
+        ]}
+      >
+        <TreeSelect
+          showSearch
+          style={{ width: "100%" }}
+          dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
+          placeholder="Chọn..."
+          allowClear
+          treeDefaultExpandAll
+          treeData={category}
+          onPopupScroll={onPopupScroll}
+        />
       </Form.Item>
     </>
   );

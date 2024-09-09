@@ -3,36 +3,39 @@ import { FaListAlt } from "react-icons/fa";
 import { FaUserLarge } from "react-icons/fa6";
 import { IoMdAdd } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
+import { RootState } from "../../../core/store/store";
 type MenuItem = Required<MenuProps>["items"][number];
 
 const UserProfile = () => {
   const navigate = useNavigate();
+  const loginnedUser = useSelector((state: RootState) => state.user)
   const itemsMenu: MenuItem[] = [
     {
       key: "",
       icon: <FaUserLarge className="!text-base" />,
-      label: "My profile",
+      label: "Thông tin của tôi",
     },
     {
       key: "change-password",
       icon: <MdEdit className="!text-base" />,
-      label: "Change password",
+      label: "Đổi mật khẩu",
     },
     {
       key: "your-management",
       icon: <FaListAlt className="!text-base" />,
-      label: "Product management",
+      label: "Quản lý sản phẩm",
     },
     {
       key: "order-management",
       icon: <FaListAlt className="!text-base" />,
-      label: "Order management",
+      label: "Quản lý đơn",
     },
     {
       key: "request-product",
       icon: <IoMdAdd className="!text-base" />,
-      label: "Request product",
+      label: "Yêu cầu sản phẩm",
     },
   ];
   const onClick: MenuProps["onClick"] = (e) => {
@@ -43,11 +46,11 @@ const UserProfile = () => {
       <div className="md:w-1/4 border rounded-md shadow-shadowLight py-5 px-3 bg-white !h-fit sticky top-32">
         <div className="flex items-center gap-2">
           <Avatar className="w-20 h-20" />
-          <div className="flex flex-col">
+          <div className="flex flex-col flex-grow">
             <p className="text-base">
-              <strong>Username</strong>
+              <strong>{loginnedUser ? loginnedUser['fullName'] : "NaN"}</strong>
             </p>
-            <Button type="link" className="!p-0">
+            <Button type="link" className="!p-0 !text-left flex justify-start !w-fit">
               Edit information
             </Button>
           </div>

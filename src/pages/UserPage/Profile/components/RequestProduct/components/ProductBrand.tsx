@@ -1,4 +1,4 @@
-import { Form, Input, Select, Spin } from "antd";
+import { Form, Select, Spin } from "antd";
 import LabelForm from "../../../../../../components/LabelForm";
 import { useEffect, useState } from "react";
 import { brandApi } from "../../../../../../service/api/brandApi";
@@ -50,7 +50,15 @@ const ProductBrand = () => {
       <p className="text-xl text-primaryColor font-semibold col-span-3">
         Hãng và xuất xứ sản phẩm
       </p>
-      <Form.Item name={"brandName"} label={<LabelForm>Chọn hãng</LabelForm>}>
+      <Form.Item 
+      name={"brandName"} 
+      label={<LabelForm>Chọn hãng</LabelForm>}
+      rules={[
+        {
+          required: true,
+          message: 'Không được dể trống'
+        }
+      ]}>
         {loading ? (
           <Spin />
         ) : (
@@ -67,6 +75,12 @@ const ProductBrand = () => {
       <Form.Item
         name={"originName"}
         label={<LabelForm>Chọn nơi xuất xứ</LabelForm>}
+        rules={[
+          {
+            required: true,
+            message: 'Không được dể trống'
+          }
+        ]}
       >
         {loading ? (
           <Spin />
