@@ -1,8 +1,63 @@
+import { useEffect, useState } from "react";
 import { AuctionList } from "./components/AuctionList";
 import FilterSideTab from "./components/FilterSideTab";
 import { SortingAuction } from "./components/SortingAuction";
+import { Category } from "../../../../model/category";
+import { toast } from "react-toastify";
+import { categoryApi } from "../../../../service/api/categoryApi";
+import { GetProp, MenuProps, Skeleton } from "antd";
+type MenuItem = GetProp<MenuProps, "items">[number];
 
 const AuctionPage = () => {
+  const [category, setCategory] = useState<MenuItem[]>([]);
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const handleMenuClick = (key: any) => {
+    setSelectedKey(key);
+  };
+  const parseCategoriesToMenuItems = (categories: Category[]): MenuItem[] => {
+    const menuItems: MenuItem[] = [];
+    categories.forEach((category: Category) => {
+      if (!category.parent) {
+        const children = categories
+          .filter((childCategory: Category) => childCategory.parent?.id === category.id)
+          .map((childCategory: Category) => ({
+            key: childCategory.id.toString(),
+            label: (
+              <div>
+                <p  onClick={() => handleMenuClick(childCategory.id)}>{childCategory.name}</p>
+              </div>
+            ),
+          }));
+
+        menuItems.push({
+          key: category.id.toString(),
+          label: (
+            <p onClick={() => handleMenuClick(category.id)}>{category.name}</p>
+          ),
+          children: children.length > 0 ? children : undefined,
+        });
+      }
+    });
+
+    return menuItems;
+  };
+
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        setLoading(true);
+        const response = await categoryApi.getCategory();
+        setCategory(parseCategoriesToMenuItems(response.data));
+      } catch (error: any) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCategory();
+  }, []);
   return (
     <div className="flex flex-col gap-10">
       <div className="w-full h-[500px] hidden md:block shadow-shadowLight">
@@ -12,9 +67,11 @@ const AuctionPage = () => {
         />
       </div>
       <div className="flex flex-col md:flex-row gap-10">
-        <div className="md:w-1/4 h-fit px-2 py-4 border shadow-shadowHeavy rounded-md">
-          <FilterSideTab />
-        </div>
+        <Skeleton loading={loading}>
+          <div className="md:w-1/4 h-fit px-2 py-4 border shadow-shadowHeavy rounded-md">
+            <FilterSideTab items={category} />
+          </div>
+        </Skeleton>
         <div className="md:w-3/4 flex flex-col gap-10">
           <SortingAuction />
           <div>

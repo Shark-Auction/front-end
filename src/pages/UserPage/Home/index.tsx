@@ -7,6 +7,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import Underline from "../../../components/UI/underline";
+import { categoryApi } from "../../../service/api/categoryApi";
+import { Category } from "../../../model/category";
 
 interface ProductProps {
   id: string;
@@ -19,15 +21,24 @@ interface ProductProps {
 
 const HomePage = () => {
   const [dataProduct, setDataProduct] = useState<ProductProps[]>([]);
+  const [category, setCategory] = useState<Category[]>([])
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [pageSize, setPageSize] = useState(0);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
 
-  const data = new Array(20).fill(null).map((_, index) => ({
-    icon: "/src/assets/logo_exe.png",
-    name: `Category ${index + 1}`,
-  }));
+  const fetchCategory = async () => {
+    try {
+      setLoading(true)
+      const response = await categoryApi.getCategory()
+      const filterParent = response.data.filter((item: Category) => item.parent === null)
+      setCategory(filterParent)
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const fetchData = async () => {
     try {
@@ -37,7 +48,7 @@ const HomePage = () => {
       );
       setDataProduct(response.data);
     } catch (error: any) {
-      toast.error("Failed to fetch data");
+      toast.error(error);
     } finally {
       setLoading(false);
     }
@@ -55,7 +66,8 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchData();
-  }, [pageSize]);
+    fetchCategory()
+  }, []);
 
   useEffect(() => {
     setPageSize(isMobile ? 10 : 20);
@@ -71,21 +83,23 @@ const HomePage = () => {
       </div>
       <div className="border shadow-shadowLight flex flex-col gap-5 pt-5 ">
         <div className="">
-          <p className="text-2xl text-gray-500 px-5">Category</p>
+          <p className="text-2xl text-gray-500 px-5">Danh mục</p>
         </div>
-        <div>
-          <Carousel
-            type="Category"
-            numberOfSlide={1}
-            data={data}
-            component={(item: any) => (
-              <CardCategory icon={item.icon} name={item.name} />
-            )}
-          />
-        </div>
+        <Skeleton loading={loading}>
+          <div>
+            <Carousel
+              type="Category"
+              numberOfSlide={1}
+              data={category}
+              component={(item: Category) => (
+                <CardCategory icon={item.imageUrl} name={item.name} />
+              )}
+            />
+          </div>
+        </Skeleton>
       </div>
       <div className="border-b-4 shadow-shadowLight flex justify-center py-2 border-b-primaryColor">
-        <p className="text-2xl text-primaryColor">Suggested Product</p>
+        <p className="text-2xl text-primaryColor">Đề xuất</p>
       </div>
       <Skeleton loading={loading}>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-5">

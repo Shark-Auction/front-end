@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import CardElement from "../../../../../components/Card";
 import { useNavigate } from "react-router-dom";
 import api from "../../../../../config/axios/api";
+import EmptyComponent from "../../../../../components/Empty";
 interface ProductProps {
   id: string;
   remainDay: string;
@@ -12,10 +13,11 @@ interface ProductProps {
   status: string;
   image: string;
 }
+
 export const AuctionList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [dataProduct, setDataProduct] = useState<ProductProps[]>([]);
-  const [pageSize, setPageSize] = useState(20);
+  const pageSize = 20;
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -52,28 +54,30 @@ export const AuctionList = () => {
   return (
     <div className="flex flex-col gap-10">
       <Skeleton loading={loading}>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-5">
-          {paginatedData.map((element) => (
-            <CardElement
-              key={element.id}
-              image={element.image}
-              id={element.id}
-              name={element.name}
-              remainDay={element.remainDay}
-              currentPrice={element.currentPrice}
-              status={element.status}
-              onClick={() => handleDetail(element.id)}
+        {paginatedData.length > 0 ? <>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-5">
+            {paginatedData.map((element) => (
+              <CardElement
+                key={element.id}
+                image={element.image}
+                id={element.id}
+                name={element.name}
+                remainDay={element.remainDay}
+                currentPrice={element.currentPrice}
+                status={element.status}
+                onClick={() => handleDetail(element.id)}
+              />
+            ))}
+          </div>
+          <div className="flex justify-center">
+            <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={totalItems}
+              onChange={onPageChange}
             />
-          ))}
-        </div>
-        <div className="flex justify-center">
-          <Pagination
-            current={currentPage}
-            pageSize={pageSize}
-            total={totalItems}
-            onChange={onPageChange}
-          />
-        </div>
+          </div>
+        </> : <EmptyComponent />}
       </Skeleton>
     </div>
   );

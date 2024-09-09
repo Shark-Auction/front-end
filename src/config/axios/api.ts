@@ -1,6 +1,6 @@
 import axios from "axios";
 import { RootState, store } from "../../core/store/store";
-import { updateAccessToken } from "../../core/store/slice/userSlice";
+import { logout, updateAccessToken } from "../../core/store/slice/userSlice";
 
 const baseUrl = 'http://128.199.193.209:8080/api/v1/'
 
@@ -59,6 +59,7 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return api(originalRequest);
       } catch (error) {
+        store.dispatch(logout())
         return Promise.reject(error);
       }
     }
