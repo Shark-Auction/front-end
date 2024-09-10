@@ -1,85 +1,98 @@
-  import React, { useState } from 'react';
+  import { useState } from 'react';
   import TableComponent, { ColumnsTable } from '../../../../../../../components/Table';
-  import { Image, Modal } from 'antd';
+  import { Tag } from 'antd';
+import ImageComponent from '../../../../../../../components/Image';
+import { status } from '../../../../../../../utils/render/statusRender';
+import ModalDetail from './components/ModalDetail';
+import { formatVND } from '../../../../../../../utils/format';
 
   const MyProduct = () => {
     const [selectedRow, setSelectedRow] = useState<any | null>(null);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-
+    const [isOpen, setIsOpen] = useState(false);
+    const [render, setRender] = useState(false)
     const columns: ColumnsTable[] = [
       {
         title: "#",
         key: "id",
         dataIndex: "id",
+        fixed: 'left',
+        width: 150,
+        align: 'center'
       },
       {
-        title: "Name",
+        title: "Ảnh",
+        key: "image",
+        dataIndex: "imageThumbnail",
+        render: (data) => <ImageComponent preview={false} height={150} width={150} src={data} />,
+        width: 200
+      },
+      {
+        title: "Tên",
         key: "name",
         dataIndex: "name",
       },
       {
-        title: "Remain Day",
-        key: "remainDay",
-        dataIndex: "remainDay",
+        title: 'Giá khởi điểm',
+        key: 'startingPrice',
+        dataIndex: 'startingPrice',
+        render: (data) => <p className='font-bold text-base text-orange-600'>{formatVND(data)}</p>
       },
       {
-        title: "Current Price",
-        key: "currentPrice",
-        dataIndex: "currentPrice",
+        title: "Danh mục",
+        key: "category",
+        dataIndex: "category",
+        render: (data) => (
+          <div>
+            <Tag className='w-fit'>{data.name}</Tag>
+            {data.parent != null && <Tag color='green'>{data.parent.name}</Tag>}
+          </div>
+        )
       },
       {
-        title: "Status",
+        title: "Hãng",
+        key: "brand",
+        dataIndex: "brand",
+        render: (data) => (
+          <Tag color='lime'>{data.name}</Tag>
+        )
+      },
+      {
+        title: 'Xuất xứ',
+        key: 'origin',
+        dataIndex: 'origin',
+        render: (data) => (
+          <Tag color='blue'>{data.name}</Tag>
+        )
+      },
+      {
+        title: "Trạng thái",
         key: "status",
         dataIndex: "status",
+        render: (data) => status[data]()
       },
-      {
-        title: "Image",
-        key: "image",
-        dataIndex: "image",
-        render: (data) => <Image width={200} src={data} />,
-      },
+     
     ];
 
     const handleRowClick = (record: any) => {
       setSelectedRow(record);
-      setIsModalVisible(true);
-    };
-
-    // Close modal
-    const handleModalClose = () => {
-      setIsModalVisible(false);
-      setSelectedRow(null);
+      setIsOpen(true);
     };
 
     return (
       <>
         <TableComponent 
-          apiUri='Product' 
-          columns={columns} 
+          apiUri='product/me' 
+          columns={columns}
+          expandX={1700} 
           onRow={(record) => {
             return {
               onClick: () => handleRowClick(record),
             };
           }}
+          render={render}
         />
 
-        <Modal
-          title="Product Details"
-          open={isModalVisible}
-          onCancel={handleModalClose}
-          footer={null}
-        >
-          {selectedRow && (
-            <div>
-              <p><strong>ID:</strong> {selectedRow.id}</p>
-              <p><strong>Name:</strong> {selectedRow.name}</p>
-              <p><strong>Remain Day:</strong> {selectedRow.remainDay}</p>
-              <p><strong>Current Price:</strong> {selectedRow.currentPrice}</p>
-              <p><strong>Status:</strong> {selectedRow.status}</p>
-              <Image width={200} src={selectedRow.image} />
-            </div>
-          )}
-        </Modal>
+        <ModalDetail setRender={setRender} data={selectedRow} open={isOpen} setOpen={setIsOpen} />
       </>
     );
   };
