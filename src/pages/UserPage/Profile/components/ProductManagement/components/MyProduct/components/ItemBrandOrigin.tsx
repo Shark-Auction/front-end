@@ -1,16 +1,14 @@
 import { Form, Select, Spin } from "antd";
-import LabelForm from "../../../../../../components/LabelForm";
+import LabelForm from "../../../../../../../../components/LabelForm";
 import { useEffect, useState } from "react";
-import { brandApi } from "../../../../../../service/api/brandApi";
 import { toast } from "react-toastify";
-import { originApi } from "../../../../../../service/api/originApi";
-
+import { originApi } from "../../../../../../../../service/api/originApi";
+import { brandApi } from "../../../../../../../../service/api/brandApi";
 interface SelectOption {
   value: string;
   label: string;
 }
-
-const ProductBrand = () => {
+const ItemBrandOrigin = () => {
   const [loading, setLoading] = useState(true);
   const [brand, setBrand] = useState<SelectOption[]>([]);
   const [origin, setOrigin] = useState<SelectOption[]>([]);
@@ -47,9 +45,6 @@ const ProductBrand = () => {
   }, []);
   return (
     <>
-      <p className="text-xl text-primaryColor font-semibold col-span-3">
-        Hãng và xuất xứ sản phẩm
-      </p>
       <Form.Item
         name={"brandName"}
         label={<LabelForm>Chọn hãng</LabelForm>}
@@ -100,4 +95,4 @@ const ProductBrand = () => {
   );
 };
 
-export default ProductBrand;
+export default ItemBrandOrigin;

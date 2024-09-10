@@ -5,7 +5,7 @@ export const ProductManagement = () => {
   const items: TabsProps['items'] = [
     {
       key: '1',
-      label: 'My Product',
+      label: 'Sản phẩm',
       children: <MyProduct />
     },
     {

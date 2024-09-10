@@ -1,16 +1,32 @@
-import api from "../../config/axios/api"
+import api from "../../config/axios/api";
 
 export const productApi = {
   createProduct: async (data: any) => {
     try {
-      const response = await api.post('product', data, {
+      const response = await api.post("product", data, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
-      return response.data
+      return response.data;
     } catch (error: any) {
-      throw error.response.data
+      throw error.response.data;
     }
-  }
-}
+  },
+  editProduct: async (id: number, data: any) => {
+    try {
+      const response = await api.put(`product/${id}`, data);
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+  deleteProduct: async (id: number) => {
+    try {
+      const response = await api.delete(`product/${id}`);
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+};
