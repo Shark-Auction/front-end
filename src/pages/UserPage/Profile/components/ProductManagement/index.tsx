@@ -1,5 +1,6 @@
 import { Tabs, TabsProps } from "antd"
 import MyProduct from "./components/MyProduct/MyProduct"
+import MyAuction from "./components/MyAuction/MyAuction"
 
 export const ProductManagement = () => {
   const items: TabsProps['items'] = [
@@ -10,8 +11,8 @@ export const ProductManagement = () => {
     },
     {
       key: '2',
-      label: 'My Auction',
-      children: 'My Auction'
+      label: 'Đấu giá',
+      children: <MyAuction />
     },
     {
       key: '3',

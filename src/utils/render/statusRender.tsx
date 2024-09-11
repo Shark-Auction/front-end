@@ -26,3 +26,21 @@ export const status: any = {
     return <Tag color="error">Thất bại</Tag>
   }
 }
+
+export const statusAuction: any = {
+  "Waiting": () => {
+    return <Tag color="blue">Đợi đấu giá</Tag>
+  },
+  "InProgress": () => {
+    return <Tag color="cyan">Đang đấu giá</Tag>
+  },
+  "Completed": () => {
+    return <Tag color="geekblue">Hoàn thành</Tag>
+  },
+  "Cancel": () => {
+    return <Tag color="error">Hủy</Tag>
+  },
+  "WaitingPay": () => {
+    return <Tag color="green">Đợi trả</Tag>
+  },
+}

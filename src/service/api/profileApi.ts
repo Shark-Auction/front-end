@@ -9,4 +9,12 @@ export const profileApi = {
       throw e.response.data;
     }
   },
+  getAuctionMe: async () => {
+    try {
+      const response = await api.get("auction/myauction");
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
 };

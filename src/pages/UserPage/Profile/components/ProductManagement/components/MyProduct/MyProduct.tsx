@@ -87,9 +87,13 @@ import { formatVND } from '../../../../../../../utils/format';
           onRow={(record) => {
             return {
               onClick: () => handleRowClick(record),
+              style: {
+                cursor: 'pointer'
+              }
             };
           }}
           render={render}
+          setRender={setRender}
         />
 
         <ModalDetail setRender={setRender} data={selectedRow} open={isOpen} setOpen={setIsOpen} />

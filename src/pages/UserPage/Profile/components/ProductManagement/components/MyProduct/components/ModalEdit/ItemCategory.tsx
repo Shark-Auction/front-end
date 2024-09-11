@@ -1,7 +1,7 @@
 import { Form, TreeSelect, TreeSelectProps } from 'antd'
 import { useEffect, useState } from 'react'
-import LabelForm from '../../../../../../../../components/LabelForm'
-import { categoryApi } from '../../../../../../../../service/api/categoryApi';
+import LabelForm from '../../../../../../../../../components/LabelForm'
+import { categoryApi } from '../../../../../../../../../service/api/categoryApi';
 import { toast } from 'react-toastify';
 
 const ItemCategory = () => {

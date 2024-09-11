@@ -28,6 +28,7 @@ import { RootState } from "./core/store/store";
 import { toast } from "react-toastify";
 import CategoryManagement from "./pages/AdminPage/CategoryManagement";
 import { logout } from "./core/store/slice/userSlice";
+import ErrorPage from "./pages/Error/ErrorPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -131,6 +132,10 @@ function App() {
         { path: "category-management", element: <CategoryManagement /> },
       ],
     },
+    {
+      path: '*',
+      element: <ErrorPage />
+    }
   ]);
   return <RouterProvider router={router} />;
 }
