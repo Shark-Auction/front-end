@@ -13,12 +13,19 @@ interface TableComponentProps
   extends Omit<TableProps<any>, "columns" | "dataSource"> {
   columns: ColumnsTable[];
   apiUri: string;
-  expandX?: number | string,
+  expandX?: number | string;
   render?: boolean;
   setRender?: any;
 }
 
-const TableComponent = ({ columns, apiUri, expandX = 'default',render = false, setRender, ...rest }: TableComponentProps) => {
+const TableComponent = ({
+  columns,
+  apiUri,
+  expandX = "default",
+  render = false,
+  setRender,
+  ...rest
+}: TableComponentProps) => {
   const [dataSource, setDataSource] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -26,8 +33,19 @@ const TableComponent = ({ columns, apiUri, expandX = 'default',render = false, s
       try {
         setLoading(true);
         const response = await api.get(`${apiUri}`);
-        console.log(response?.data?.data)
-        setDataSource(response?.data?.data === undefined ? response?.data : response?.data?.data);
+        setDataSource(
+          response?.data?.data === undefined
+            ? response?.data?.sort(
+                (a: any, b: any) =>
+                  new Date(b?.createdAt).getTime() -
+                  new Date(a?.createdAt).getTime()
+              )
+            : response?.data?.data?.sort(
+              (a: any, b: any) =>
+                new Date(b?.product?.createdAt).getTime() -
+                new Date(a?.product?.createdAt).getTime()
+            )
+        );
       } catch (error: any) {
         toast.error(error?.response?.data);
       } finally {
@@ -35,10 +53,14 @@ const TableComponent = ({ columns, apiUri, expandX = 'default',render = false, s
       }
     };
     fetchData();
-    if(render) {
+    if (render) {
       fetchData();
-      setRender(false)
+      setRender(false);
     }
+    return () => {
+      setDataSource([]);
+      setRender(false);
+    };
   }, [apiUri, render, setRender]);
   return (
     <Table

@@ -1,5 +1,23 @@
 import { Tag } from "antd"
 
+export const condition: any = {
+  "NOTUSE": () => {
+    return <Tag color="blue">Chưa sử dụng</Tag>
+  },
+  "HIGHNEW": () => {
+    return <Tag color="cyan">Mới, chưa mở hàng</Tag>
+  },
+  "AVERAGENEW": () => {
+    return <Tag color="geekblue">Mới, đã mở hàng</Tag>
+  },
+  "LOWNEW": () => {
+    return <Tag color="gold">Mới, đã sử dụng</Tag>
+  },
+  "OLD": () => {
+    return <Tag color="green">Cũ</Tag>
+  },
+}
+
 export const status: any = {
   "PENDING": () => {
     return <Tag color="blue">Chuẩn bị</Tag>
@@ -24,7 +42,7 @@ export const status: any = {
   },
   "AUCTIONFAIL": () => {
     return <Tag color="error">Thất bại</Tag>
-  }
+  },
 }
 
 export const statusAuction: any = {
@@ -43,4 +61,7 @@ export const statusAuction: any = {
   "WaitingPay": () => {
     return <Tag color="green">Đợi trả</Tag>
   },
+  "NaN": () => {
+    return "NaN"
+  }
 }

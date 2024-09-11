@@ -6,9 +6,11 @@ import ImageComponent from "../../../../../../../components/Image";
 import { formatDateHour, formatVND } from "../../../../../../../utils/format";
 import { Tag } from "antd";
 import { statusAuction } from "../../../../../../../utils/render/statusRender";
+import ModalDetail from "./components/ModalDetail";
+import { MyAuctionProfile } from "../../../../../../../model/profile";
 
-const MyAuction = () => {
-  const [selectedRow, setSelectedRow] = useState<any | null>(null);
+const MyAuction = ({activeKey} : {activeKey: string}) => {
+  const [selectedRow, setSelectedRow] = useState<MyAuctionProfile>();
   const [isOpen, setIsOpen] = useState(false);
   const [render, setRender] = useState(false);
   const columns: ColumnsTable[] = [
@@ -24,13 +26,13 @@ const MyAuction = () => {
       title: 'Ảnh sản phẩm',
       key: 'product',
       dataIndex: 'product',
-      render: (data) => <ImageComponent src={data.imageThumbnail} />
+      render: (data) => <ImageComponent src={data?.imageThumbnail} />
     },
     {
       title: 'Tên sản phẩm',
       key: 'product',
       dataIndex: 'product',
-      render: (data) => data.name
+      render: (data) => data?.name
     },
     {
       title: 'Ngày bắt đầu',
@@ -73,13 +75,18 @@ const MyAuction = () => {
     setSelectedRow(record);
     setIsOpen(true);
   };
+  useEffect(() => {
+    if (activeKey === '2'){
+      setRender(true)
+    }
+  }, [activeKey])
   return (
     <>
       <TableComponent
         apiUri="auction/myauction"
         expandX={1500}
         columns={columns}
-        onRow={(record) => {
+        onRow={(record: MyAuctionProfile) => {
           return {
             onClick: () => handleRowClick(record),
             style: {
@@ -90,6 +97,7 @@ const MyAuction = () => {
         render={render}
         setRender={setRender}
       />
+      <ModalDetail open={isOpen} setOpen={setIsOpen} data={selectedRow} setRender={setRender} />
     </>
   );
 };

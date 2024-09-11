@@ -1,4 +1,5 @@
 import api from "../../config/axios/api"
+import { UpdateAuctionDate } from "../../model/profile"
 
 export const auctionApi = {
   addAuction: async (data: any) => {
@@ -9,4 +10,20 @@ export const auctionApi = {
       throw error.response.data
     }
   },
+  updateAuction: async (id: number | undefined, data: UpdateAuctionDate) => {
+    try {
+      const response = await api.put(`auction/time/${id}`, data);
+      return response.data
+    } catch (error: any) {
+      throw error.response.data
+    }
+  },
+  cancelAuction: async (id: number | undefined) => {
+    try {
+      const response = await api.delete(`auction/cancel/${id}`);
+      return response.data
+    } catch (error: any) {
+      throw error.response.data
+    }
+  }
 }

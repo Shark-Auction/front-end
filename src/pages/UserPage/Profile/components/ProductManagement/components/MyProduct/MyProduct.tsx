@@ -1,13 +1,14 @@
-  import { useState } from 'react';
+  import { useEffect, useState } from 'react';
   import TableComponent, { ColumnsTable } from '../../../../../../../components/Table';
   import { Tag } from 'antd';
 import ImageComponent from '../../../../../../../components/Image';
 import { status } from '../../../../../../../utils/render/statusRender';
 import ModalDetail from './components/ModalDetail';
 import { formatVND } from '../../../../../../../utils/format';
+import { ProductProfile } from '../../../../../../../model/profile';
 
-  const MyProduct = () => {
-    const [selectedRow, setSelectedRow] = useState<any | null>(null);
+  const MyProduct = ({activeKey} : {activeKey: string}) => {
+    const [selectedRow, setSelectedRow] = useState<ProductProfile>();
     const [isOpen, setIsOpen] = useState(false);
     const [render, setRender] = useState(false)
     const columns: ColumnsTable[] = [
@@ -78,13 +79,19 @@ import { formatVND } from '../../../../../../../utils/format';
       setIsOpen(true);
     };
 
+    useEffect(() => {
+      if(activeKey === '1') {
+        setRender(true)
+      }
+    }, [activeKey])
+
     return (
       <>
         <TableComponent 
           apiUri='product/me' 
           columns={columns}
           expandX={1700} 
-          onRow={(record) => {
+          onRow={(record: ProductProfile) => {
             return {
               onClick: () => handleRowClick(record),
               style: {

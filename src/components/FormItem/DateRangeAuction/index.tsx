@@ -1,14 +1,13 @@
 import { DatePicker, Form, InputNumber } from "antd";
-import LabelForm from "../../../../../../../../../components/LabelForm";
-import { formatVND } from "../../../../../../../../../utils/format";
-import { ProductProfile } from "../../../../../../../../../model/profile";
-
+import LabelForm from "../../LabelForm";
+import { formatVND } from "../../../utils/format";
 interface AddAuctionProps {
-  data: ProductProfile;
+  data: any;
+  updateDate?: boolean;
 }
 const { RangePicker } = DatePicker;
 
-const AddAuction = ({ data }: AddAuctionProps) => {
+const DateRangeAuction = ({ data, updateDate = false }: AddAuctionProps) => {
   const validateStartDate = (_: any, value: any) => {
     const selectedStartDate = value && value[0];
     const currentDate = new Date();
@@ -56,7 +55,7 @@ const AddAuction = ({ data }: AddAuctionProps) => {
   return (
     <>
       <Form.Item
-        label={<LabelForm>Chọn khoảng ngày cho cuộc đấu giá</LabelForm>}
+        label={updateDate === false && <LabelForm>Chọn khoảng ngày cho cuộc đấu giá</LabelForm>}
         name="dateRange"
         rules={[
           { required: true, message: "Không được để trống!" },
@@ -74,38 +73,40 @@ const AddAuction = ({ data }: AddAuctionProps) => {
           disabledDate={disabled7DaysDate}
         />
       </Form.Item>
-      <Form.Item
-        label={
-          <LabelForm>
-            Bước nhảy (5% của{" "}
-            <span className="text-orange-600">
-              giá trị khởi điểm: {formatVND(data?.startingPrice)}
-            </span>
-            )
-          </LabelForm>
-        }
-        name="step"
-        rules={[
-          {
-            required: true,
-            message: "Không được dể trống",
-          },
-        ]}
-      >
-        <InputNumber<number>
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      {updateDate === false && (
+        <Form.Item
+          label={
+            <LabelForm>
+              Bước nhảy (5% của{" "}
+              <span className="text-orange-600">
+                giá trị khởi điểm: {formatVND(data?.startingPrice)}
+              </span>
+              )
+            </LabelForm>
           }
-          parser={(value) =>
-            value?.replace(/\$\s?|(,*)/g, "") as unknown as number
-          }
-          className="!w-full"
-          controls={false}
-          readOnly
-        />
-      </Form.Item>
+          name="step"
+          rules={[
+            {
+              required: true,
+              message: "Không được dể trống",
+            },
+          ]}
+        >
+          <InputNumber<number>
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) =>
+              value?.replace(/\$\s?|(,*)/g, "") as unknown as number
+            }
+            className="!w-full"
+            controls={false}
+            readOnly
+          />
+        </Form.Item>
+      )}
     </>
   );
 };
 
-export default AddAuction;
+export default DateRangeAuction;

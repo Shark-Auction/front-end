@@ -1,5 +1,5 @@
-import { Button, Form, Modal, Popconfirm, Steps } from "antd";
-import { useEffect, useState } from "react";
+import { Button, Form, Modal, Popconfirm, Steps, Tour } from "antd";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { productApi } from "../../../../../../../../service/api/productApi";
 import { ProductDetailRequest } from "../../../../../../../../model/product";
@@ -8,21 +8,43 @@ import ItemInformation from "./ModalEdit/ItemInformation";
 import ItemCategory from "./ModalEdit/ItemCategory";
 import ItemDescription from "./ModalEdit/ItemDescription";
 import ButtonPrimary from "../../../../../../../../components/Button";
-import AddAuction from "./ModalAddAuction/AddAuction";
 import { auctionApi } from "../../../../../../../../service/api/auctionApi";
+import type { TourProps } from "antd";
+import DateRangeAuction from "../../../../../../../../components/FormItem/DateRangeAuction";
+import { ProductProfile } from "../../../../../../../../model/profile";
 
 interface ModalDetailProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: any;
-  setRender: any;
+  data: ProductProfile | any;
+  setRender?: any;
 }
 
 const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
   const [form] = Form.useForm();
   const [imageDescription, setImageDescription] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [current, setCurrent] = useState(0);
+  const [openTutorial, setOpenTutorial] = useState<boolean>(false);
+
+  const tutorialSteps: TourProps["steps"] = [
+    {
+      title: "Chỉnh sửa",
+      description: "Chỉnh sửa các thông tin bạn cần chỉnh sửa tại đây",
+      target: () => ref1?.current,
+      nextButtonProps: { children: "Tiếp theo" },
+    },
+    {
+      title: "Xác nhận",
+      description:
+        'Sau khi điều chỉnh, nhấn nút "Chỉnh sửa" để hoàn tất quá trình chỉnh sửa',
+      target: () => ref2?.current,
+      prevButtonProps: { children: "Trở lại" },
+      nextButtonProps: { children: "Hoàn thành" },
+    },
+  ];
 
   const next = () => {
     setCurrent(current + 1);
@@ -89,7 +111,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
     } catch (e: any) {
       toast.error(e.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -97,17 +119,19 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
     {
       title: "Chi tiết sản phẩm",
       content: (
-        <Form
-          form={form}
-          onFinish={handleEdit}
-          labelCol={{ span: 24 }}
-          className="grid grid-cols-4 gap-x-5"
-        >
-          <ItemInformation />
-          <ItemCategory />
-          <ItemBrandOrigin />
-          <ItemDescription setImageDescription={setImageDescription} />
-        </Form>
+        <div ref={ref1}>
+          <Form
+            form={form}
+            onFinish={handleEdit}
+            labelCol={{ span: 24 }}
+            className="grid grid-cols-4 gap-x-5"
+          >
+            <ItemInformation />
+            <ItemCategory />
+            <ItemBrandOrigin />
+            <ItemDescription setImageDescription={setImageDescription} />
+          </Form>
+        </div>
       ),
     },
     {
@@ -122,7 +146,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
           className="grid grid-cols-2 gap-x-5"
           form={form}
         >
-          <AddAuction data={data} />
+          <DateRangeAuction data={data} />
         </Form>
       ),
     },
@@ -147,45 +171,71 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
 
   return (
     <Modal
-      title={<p className="text-xl">Chi tiết sản phẩm</p>}
+      title={
+        <p className="text-xl">
+          Chi tiết sản phẩm{" "}
+          <span
+            onClick={() => setOpenTutorial(true)}
+            className="text-blue-500 underline underline-offset-2 cursor-pointer"
+          >
+            (Hướng dẫn chỉnh sửa)
+          </span>
+        </p>
+      }
       open={open}
       loading={loading}
       onCancel={handleCancle}
       width={1000}
-      footer={[
+      footer={data?.status === 'PENDING' && [
         current < steps.length - 1 && (
-          <>
+          <div className="flex justify-end gap-2" key={'first-step'}>
             <Popconfirm
+              key={"delete-pop"}
               title={`Xóa sản phẩm ${data?.name}`}
               description="Bạn có muốn xóa không?"
               okText="Có"
               cancelText="Không"
               onConfirm={() => handleDelete(data?.id, data?.name)}
             >
-              <Button danger>Xóa</Button>
+              <Button type="primary" key={'delete'} className="!text-base" danger>
+                Xóa sản phẩm
+              </Button>
             </Popconfirm>
-            <Button onClick={() => form.submit()} type="primary">
-              Sửa
+            <Button
+              key={'edit'}
+              className="!text-base"
+              onClick={() => form.submit()}
+              type="primary"
+              ref={ref2}
+            >
+              Chỉnh sửa sản phẩm
             </Button>
-            <ButtonPrimary className="text-base" onClick={() => next()}>
+            <ButtonPrimary key={'auction'} className="text-base" onClick={() => next()}>
               Đăng lên trang đấu giá
             </ButtonPrimary>
-          </>
+          </div>
         ),
         current > 0 && (
-          <>
-            <Button key="back" onClick={prev}>
+          <div key={'second-step'} className="flex justify-end gap-2">
+            <Button className="!text-base" key="back" onClick={prev}>
               Trở lại
             </Button>
-            <Button type="primary" onClick={() => form.submit()}>
+            <Button className="!text-base" key={'confirm-auction'} type="primary" onClick={() => form.submit()}>
               Đăng đấu giá
             </Button>
-          </>
+          </div>
         ),
       ]}
     >
       <Steps current={current} items={items} />
       <div className="steps-content mt-5">{steps[current].content}</div>
+      {openTutorial && ref1.current && ref2.current && (
+        <Tour
+          open={openTutorial}
+          onClose={() => setOpenTutorial(false)}
+          steps={tutorialSteps}
+        />
+      )}
     </Modal>
   );
 };
