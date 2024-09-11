@@ -1,6 +1,6 @@
 import { Form, Input, InputNumber, Select } from "antd";
-import LabelForm from "../../../../../../../../components/LabelForm";
-import { selectItems } from "../../../../../../../../service/data/conditionItem";
+import LabelForm from "../../../../../../../../../components/LabelForm";
+import { selectItems } from "../../../../../../../../../service/data/conditionItem";
 
 const ItemInformation = () => {
   return (

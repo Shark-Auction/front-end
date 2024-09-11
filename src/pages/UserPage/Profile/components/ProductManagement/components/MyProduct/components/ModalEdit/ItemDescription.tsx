@@ -2,7 +2,7 @@ import { Form } from "antd";
 import React, { useCallback } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import LabelForm from "../../../../../../../../components/LabelForm";
+import LabelForm from "../../../../../../../../../components/LabelForm";
 
 interface ProductDescriptionProps {
   setImageDescription: React.Dispatch<React.SetStateAction<string[]>>;

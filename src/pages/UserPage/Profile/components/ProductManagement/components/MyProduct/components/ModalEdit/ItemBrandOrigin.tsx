@@ -1,9 +1,9 @@
 import { Form, Select, Spin } from "antd";
-import LabelForm from "../../../../../../../../components/LabelForm";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { originApi } from "../../../../../../../../service/api/originApi";
-import { brandApi } from "../../../../../../../../service/api/brandApi";
+import { brandApi } from "../../../../../../../../../service/api/brandApi";
+import { originApi } from "../../../../../../../../../service/api/originApi";
+import LabelForm from "../../../../../../../../../components/LabelForm";
 interface SelectOption {
   value: string;
   label: string;

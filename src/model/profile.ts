@@ -3,7 +3,7 @@ interface Role {
   name: string;
 }
 
-interface Seller {
+interface User {
   id: number;
   full_name: string;
   user_name: string;
@@ -43,11 +43,11 @@ interface ProductImage {
   url: string;
 }
 
-export interface Product {
+export interface ProductProfile {
   createdAt: string;
   updatedAt: string;
   id: number;
-  seller: Seller;
+  seller: User;
   name: string;
   description: string;
   category: Category;
@@ -58,4 +58,16 @@ export interface Product {
   status: 'PENDING' | 'CONFIRMING' | 'SCHEDULING' | 'AUCTIONING' | 'AUCTIONSUCCESS' | 'DELIVERING' | 'DELIVERED' | 'AUCTIONFAIL';
   product_images: ProductImage[];
   thumbnail: string;
+}
+
+export interface MyAuction {
+  id: number;
+  product: ProductProfile;
+  startTime: string;
+  endTime: string;
+  step: number;
+  totalBids: number;
+  currentPrice: number;
+  winner: User;
+  status: "Waiting" | "InProgress" | "Completed" | "Cancel" | "WaitingPay";
 }
