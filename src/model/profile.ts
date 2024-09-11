@@ -53,21 +53,38 @@ export interface ProductProfile {
   category: Category;
   brand: Brand;
   origin: Origin;
-  condition: 'NOTUSE' | 'HIGHNEW' | 'AVERAGENEW' | 'LOWNEW' | 'OLD';
+  condition: "NOTUSE" | "HIGHNEW" | "AVERAGENEW" | "LOWNEW" | "OLD";
   startingPrice: number;
-  status: 'PENDING' | 'CONFIRMING' | 'SCHEDULING' | 'AUCTIONING' | 'AUCTIONSUCCESS' | 'DELIVERING' | 'DELIVERED' | 'AUCTIONFAIL';
+  status:
+    | "PENDING"
+    | "CONFIRMING"
+    | "SCHEDULING"
+    | "AUCTIONING"
+    | "AUCTIONSUCCESS"
+    | "DELIVERING"
+    | "DELIVERED"
+    | "AUCTIONFAIL";
   product_images: ProductImage[];
   thumbnail: string;
 }
 
-export interface MyAuction {
+export interface MyAuctionProfile {
   id: number;
   product: ProductProfile;
   startTime: string;
   endTime: string;
-  step: number;
-  totalBids: number;
-  currentPrice: number;
+  step: number | 0;
+  totalBids: number | 0;
+  currentPrice: number | 0;
   winner: User;
   status: "Waiting" | "InProgress" | "Completed" | "Cancel" | "WaitingPay";
+}
+
+export interface UpdateAuctionDateData {
+  dateRange: any[]
+}
+
+export interface UpdateAuctionDate {
+  startTime: string;
+  endTime: string
 }
