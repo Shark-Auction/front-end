@@ -25,5 +25,21 @@ export const auctionApi = {
     } catch (error: any) {
       throw error.response.data
     }
-  }
+  },
+  getAuction: async () => {
+    try {
+      const response = await api.get('auction')
+      return response.data
+    } catch (error: any) {
+      throw error.response.data
+    }
+  },
+  getAuctionById: async (id: any) => {
+    try {
+      const response= await api.get(`auction/${id}`);
+      return response.data
+    } catch (error: any) {
+      throw error.response.data
+    }
+  } 
 }

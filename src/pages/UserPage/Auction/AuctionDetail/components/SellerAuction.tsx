@@ -1,13 +1,13 @@
 import { Avatar, Descriptions, DescriptionsProps, Divider } from "antd";
 import ButtonPrimary from "../../../../../components/Button";
 import { useNavigate } from "react-router-dom";
+import { UserAuction } from "../../../../../model/auction";
 
 interface SellerAuctionProps {
-  rating: number;
-  reputation: number;
+  seller: UserAuction;
 }
 
-export const SellerAuction = () => {
+export const SellerAuction = ({seller}: SellerAuctionProps) => {
   const navigate = useNavigate();
   const items: DescriptionsProps["items"] = [
     {
@@ -35,13 +35,13 @@ export const SellerAuction = () => {
         <Avatar className="w-16 h-16" />
         <div className="flex flex-col gap-2">
           <p className="text-xl">
-            <strong>Username</strong>
+            <strong>{seller.full_name}</strong>
           </p>
           <ButtonPrimary
-            onClick={() => navigate(`/u/seller/${1}`)}
+            onClick={() => navigate(`/u/seller/${seller.id}`)}
             className="!border-2 !border-primaryColor !bg-blue-300 !text-blue-700 text-lg"
           >
-            View seller
+            Xem người bán
           </ButtonPrimary>
         </div>
       </div>

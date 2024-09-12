@@ -43,9 +43,9 @@ import { ProductProfile } from '../../../../../../../model/profile';
         key: "category",
         dataIndex: "category",
         render: (data) => (
-          <div>
+          <div className='flex flex-col gap-2 w-full'>
             <Tag className='w-fit'>{data.name}</Tag>
-            {data.parent != null && <Tag color='green'>{data.parent.name}</Tag>}
+            {data.parent != null && <Tag className=' w-fit' color='green'>{data.parent.name}</Tag>}
           </div>
         )
       },
