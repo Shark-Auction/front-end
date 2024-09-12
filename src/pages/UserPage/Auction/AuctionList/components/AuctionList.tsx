@@ -1,28 +1,23 @@
-import { Pagination, Skeleton } from "antd";
+import { Pagination } from "antd";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import CardElement from "../../../../../components/Card";
 import { useNavigate } from "react-router-dom";
-import api from "../../../../../config/axios/api";
 import EmptyComponent from "../../../../../components/Empty";
-interface ProductProps {
-  id: string;
-  remainDay: string;
-  name: string;
-  currentPrice: string;
-  status: string;
-  image: string;
+import { Auction } from "../../../../../model/auction";
+import { statusAuction } from "../../../../../utils/render/statusRender";
+
+interface AuctionListProps {
+  dataProduct: Auction[];
 }
 
-export const AuctionList = () => {
+export const AuctionList = ({ dataProduct }: AuctionListProps) => {
+  const [dataSource, setDataSource] = useState<Auction[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [dataProduct, setDataProduct] = useState<ProductProps[]>([]);
   const pageSize = 20;
   const [totalItems, setTotalItems] = useState(0);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const paginatedData: ProductProps[] = dataProduct.slice(
+  const paginatedData: Auction[] = dataSource.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
@@ -31,40 +26,32 @@ export const AuctionList = () => {
     setCurrentPage(page);
   };
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get("Product");
-      setDataProduct(response.data);
-      setTotalItems(response.data.length);
-    } catch (error: any) {
-      toast.error(error.response.data.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleDetail = (id: any) => {
     navigate(`${id}`);
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    setTotalItems(dataSource.length);
+  }, [dataSource.length]);
+
+  useEffect(() => {
+    setDataSource(dataProduct)
+  }, [dataProduct])
+
   return (
     <div className="flex flex-col gap-10">
-      <Skeleton loading={loading}>
-        {paginatedData.length > 0 ? <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-5">
+      {paginatedData.length > 0 ? (
+        <>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-5">
             {paginatedData.map((element) => (
               <CardElement
                 key={element.id}
-                image={element.image}
+                image={element.product.thumbnail}
                 id={element.id}
-                name={element.name}
-                remainDay={element.remainDay}
+                name={element.product.name}
+                remainDay={element.endTime}
                 currentPrice={element.currentPrice}
-                status={element.status}
+                status={statusAuction[element.status]()}
                 onClick={() => handleDetail(element.id)}
               />
             ))}
@@ -77,8 +64,10 @@ export const AuctionList = () => {
               onChange={onPageChange}
             />
           </div>
-        </> : <EmptyComponent />}
-      </Skeleton>
+        </>
+      ) : (
+        <EmptyComponent />
+      )}
     </div>
   );
 };
