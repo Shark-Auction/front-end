@@ -44,7 +44,6 @@ const ItemCategory = () => {
         const response = await categoryApi.getCategory();
         const transformedData = transformData(response.data);
         setCategory(transformedData);
-        console.log(transformedData);
       } catch (error: any) {
         toast.error(error.message);
       }

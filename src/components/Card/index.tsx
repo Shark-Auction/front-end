@@ -55,7 +55,7 @@ const CardElement = ({
       cover={<ImageComponent width={'100%'} height={'100%'} preview={false} src={image} />}
       actions={[
         <ButtonPrimary className="!text-base !font-normal">
-          Bidding
+          Đấu giá
         </ButtonPrimary>,
       ]}
       className="shadow-shadowHeavy max-w-full md:max-w-sm lg:max-w-xs"

@@ -8,9 +8,10 @@ import { statusAuction } from "../../../../../utils/render/statusRender";
 
 interface AuctionListProps {
   dataProduct: Auction[];
+  priceSort: string;
 }
 
-export const AuctionList = ({ dataProduct }: AuctionListProps) => {
+export const AuctionList = ({ dataProduct, priceSort }: AuctionListProps) => {
   const [dataSource, setDataSource] = useState<Auction[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 20;
@@ -42,7 +43,7 @@ export const AuctionList = ({ dataProduct }: AuctionListProps) => {
     <div className="flex flex-col gap-10">
       {paginatedData.length > 0 ? (
         <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          <div key={priceSort} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-5">
             {paginatedData.map((element) => (
               <CardElement
                 key={element.id}

@@ -41,5 +41,13 @@ export const auctionApi = {
     } catch (error: any) {
       throw error.response.data
     }
-  } 
+  } ,
+  reAuction: async (id: number | undefined, data: UpdateAuctionDate) => {
+    try {
+      const response = await api.put(`auction/reAuction/${id}`, data);
+      return response.data
+    } catch (error: any) {
+      throw error.response.data
+    }
+  },
 }
