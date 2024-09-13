@@ -23,6 +23,7 @@ import DateRangeAuction from "../../../../../../../../components/FormItem/DateRa
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { auctionApi } from "../../../../../../../../service/api/auctionApi";
+import { useNavigate } from "react-router-dom";
 interface ModalDetailProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,6 +33,8 @@ interface ModalDetailProps {
 const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
   const [dataItem, setDataItem] = useState<MyAuctionProfile>();
   const [loading, setLoading] = useState(false);
+  const [renderDetail, setRenderDetail] = useState(false);
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   const handleClose = () => {
     setOpen(false);
@@ -43,9 +46,14 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
     };
     try {
       setLoading(true);
-      await auctionApi.updateAuction(dataItem?.id, formattedDate);
+      if (dataItem?.status === "Cancel") {
+        await auctionApi.reAuction(dataItem?.id, formattedDate);
+      } else {
+        await auctionApi.updateAuction(dataItem?.id, formattedDate);
+      }
       toast.success("Cập nhật ngày cho phiên đấu giá thành công");
       setRender(true);
+      setRenderDetail(true)
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -58,6 +66,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
       await auctionApi.cancelAuction(dataItem?.id);
       toast.success("Hủy phiên thành công");
       setRender(true);
+      setRenderDetail(true)
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -146,14 +155,34 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
       children: <>{statusAuction[dataItem ? dataItem.status : "NaN"]()}</>,
     },
   ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await auctionApi.getAuctionById(data?.id);
+        setDataItem(response.data);
+      } catch (error: any) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (open) {
+      fetchData();
+    }
+    if(renderDetail) {
+      fetchData();
+    }
+  }, [data?.id, open, renderDetail]);
+
   useEffect(() => {
     if (open) {
-      setDataItem(data);
-      const start = data.startTime ? dayjs(data.startTime) : null;
-      const end = data.endTime ? dayjs(data.endTime) : null;
+      const start = dataItem?.startTime ? dayjs(dataItem.startTime) : null;
+      const end = dataItem?.endTime ? dayjs(dataItem.endTime) : null;
       form.setFieldsValue({ dateRange: [start, end] });
     }
-  }, [data, form, open]);
+  }, [data, dataItem?.endTime, dataItem?.startTime, form, open]);
   return (
     <Modal
       loading={loading}
@@ -162,27 +191,38 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
       onCancel={handleClose}
       title={<p className="text-xl">Chi tiết đấu giá</p>}
       footer={[
-        dataItem?.status === 'InProgress' && <Popconfirm
-          key={"delete-pop"}
-          title={`Hủy phiên đấu giá`}
-          description="Bạn có muốn hủy phiên này không?"
-          okText="Có"
-          cancelText="Không"
-          onConfirm={() => handleDelete()}
-        >
-          <Button type="primary" key={"cancel"} className="!text-base" danger>
-            Hủy phiên đấu giá
+        dataItem?.status === "InProgress" && (
+          <Popconfirm
+            key={"delete-pop"}
+            title={`Hủy phiên đấu giá`}
+            description="Bạn có muốn hủy phiên này không?"
+            okText="Có"
+            cancelText="Không"
+            onConfirm={() => handleDelete()}
+          >
+            <Button type="primary" key={"cancel"} className="!text-base" danger>
+              Hủy phiên đấu giá
+            </Button>
+          </Popconfirm>
+        ),
+        (dataItem?.status === "Waiting" || dataItem?.status === "Cancel") && (
+          <Button
+            onClick={() => form.submit()}
+            type="primary"
+            className={`text-base font-bold ${
+              dataItem?.status === "Cancel" && "bg-orange-500"
+            }`}
+            key={"edit"}
+          >
+            {dataItem?.status === "Cancel" && <>Tái mở phiên đấu giá</>}
+            {dataItem?.status === "Waiting" && <>Chỉnh sửa ngày đấu giá</>}
           </Button>
-        </Popconfirm>,
-        dataItem?.status === 'Waiting' && <Button
-          onClick={() => form.submit()}
-          type="primary"
-          className="text-base"
-          key={"edit"}
+        ),
+        <ButtonPrimary
+          onClick={() => navigate(`/u/auction/${data?.id}`)}
+          className="!text-base"
+          key={"go-to"}
         >
-          Chỉnh sửa ngày phiên đấu giá
-        </Button>,
-        <ButtonPrimary className="!text-base" key={"go-to"}>
           Tới phiên đấu giá
         </ButtonPrimary>,
       ]}

@@ -24,10 +24,13 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
   const ref1 = useRef(null);
   const ref2 = useRef(null);
   const [form] = Form.useForm();
+  const [dataItem, setDataItem] = useState<ProductProfile>()
   const [imageDescription, setImageDescription] = useState<string[]>([]);
+  const [renderDetail, setRenderDetail] = useState(false)
   const [loading, setLoading] = useState(false);
   const [current, setCurrent] = useState(0);
   const [openTutorial, setOpenTutorial] = useState<boolean>(false);
+  const [checkedDelete, setCheckedDelete] = useState<boolean>(false);
 
   const tutorialSteps: TourProps["steps"] = [
     {
@@ -66,6 +69,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
       await productApi.deleteProduct(id);
       toast.success(`Xóa sản phẩm ${name} thành công`);
       setRender(true);
+      setCheckedDelete(true)
       handleCancle();
     } catch (error: any) {
       toast.error(error.message);
@@ -77,10 +81,10 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
   const handleEdit = async (values: ProductDetailRequest) => {
     try {
       setLoading(true);
-      await productApi.editProduct(data?.id, values);
+      await productApi.editProduct(dataItem?.id, values);
       toast.success("Cập nhật thành công");
       setRender(true);
-      handleCancle();
+      setRenderDetail(true)
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -98,7 +102,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
         : "";
       const step = values.step || 0;
       const formData = {
-        productId: data?.id,
+        productId: dataItem?.id,
         startTime,
         endTime,
         step,
@@ -140,13 +144,13 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
         <Form
           onFinish={handleAddAuction}
           initialValues={{
-            step: data?.startingPrice && data?.startingPrice,
+            step: dataItem?.startingPrice && dataItem?.startingPrice,
           }}
           labelCol={{ span: 24 }}
           className="grid grid-cols-2 gap-x-5"
           form={form}
         >
-          <DateRangeAuction data={data} />
+          <DateRangeAuction data={dataItem} />
         </Form>
       ),
     },
@@ -155,19 +159,39 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
   const items = steps.map((item) => ({ key: item.title, title: item.title }));
 
   useEffect(() => {
-    if (open && data) {
-      const stepValue = data.startingPrice * 0.05;
+    if (open && dataItem) {
+      const stepValue = dataItem.startingPrice * 0.05;
       form.setFieldsValue({
         step: stepValue,
       });
       form.setFieldsValue({
-        categoryId: data?.category?.id,
-        brandName: data?.brand?.name,
-        originName: data?.origin?.name,
-        ...data,
+        categoryId: dataItem?.category?.id,
+        brandName: dataItem?.brand?.name,
+        originName: dataItem?.origin?.name,
+        ...dataItem,
       });
     }
-  }, [data, form, open]);
+  }, [dataItem, form, open]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await productApi.getProductById(data?.id);
+        setDataItem(response.data);
+      } catch (error: any) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (open) {
+      fetchData();
+    }
+    if(renderDetail){
+      fetchData()
+    }
+  }, [checkedDelete, data?.id, open, renderDetail])
 
   return (
     <Modal
@@ -186,16 +210,16 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
       loading={loading}
       onCancel={handleCancle}
       width={1000}
-      footer={data?.status === 'PENDING' && [
+      footer={dataItem?.status === 'PENDING' && [
         current < steps.length - 1 && (
           <div className="flex justify-end gap-2" key={'first-step'}>
             <Popconfirm
               key={"delete-pop"}
-              title={`Xóa sản phẩm ${data?.name}`}
+              title={`Xóa sản phẩm ${dataItem?.name}`}
               description="Bạn có muốn xóa không?"
               okText="Có"
               cancelText="Không"
-              onConfirm={() => handleDelete(data?.id, data?.name)}
+              onConfirm={() => handleDelete(dataItem?.id, dataItem?.name)}
             >
               <Button type="primary" key={'delete'} className="!text-base" danger>
                 Xóa sản phẩm

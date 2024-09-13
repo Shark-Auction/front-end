@@ -150,7 +150,7 @@ const AuctionPage = () => {
           />
           <div>
             <Skeleton loading={loading}>
-              <AuctionList dataProduct={filteredAuction} />
+              <AuctionList priceSort={priceSort} dataProduct={filteredAuction} />
             </Skeleton>
           </div>
         </div>

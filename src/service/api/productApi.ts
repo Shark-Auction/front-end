@@ -13,7 +13,7 @@ export const productApi = {
       throw error.response.data;
     }
   },
-  editProduct: async (id: number, data: any) => {
+  editProduct: async (id: number | undefined, data: any) => {
     try {
       const response = await api.put(`product/${id}`, data);
       return response.data;
@@ -29,4 +29,12 @@ export const productApi = {
       throw error.response.data;
     }
   },
+  getProductById: async (id: number) => {
+    try {
+      const response = await api.get(`product/${id}`);
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  }
 };
