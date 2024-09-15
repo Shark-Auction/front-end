@@ -29,7 +29,9 @@ import { toast } from "react-toastify";
 import CategoryManagement from "./pages/AdminPage/CategoryManagement";
 import { logout } from "./core/store/slice/userSlice";
 import ErrorPage from "./pages/Error/ErrorPage";
-
+import BrandManagement from "./pages/AdminPage/BrandManagement";
+import OriginManagement from "./pages/AdminPage/OriginManagement";
+import AdminProductManagement from "./pages/AdminPage/AdminProductManagement";
 function App() {
   const router = createBrowserRouter([
     {
@@ -130,6 +132,9 @@ function App() {
       children: [
         { path: "auction-management", element: <AuctionManagement /> },
         { path: "category-management", element: <CategoryManagement /> },
+        { path: "brand-management", element: <BrandManagement /> },
+        { path: "origin-management", element: <OriginManagement /> },
+        {path: "product-management", element: <AdminProductManagement />},
       ],
     },
     {

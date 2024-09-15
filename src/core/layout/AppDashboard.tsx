@@ -3,7 +3,8 @@ import type { MenuProps } from "antd";
 import { Avatar, Dropdown, Layout, Menu, theme } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { MdCategory, MdDashboard } from "react-icons/md";
-import { AiFillProduct } from "react-icons/ai";
+import { AiFillProduct} from "react-icons/ai";
+
 import { RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/slice/userSlice";
@@ -30,6 +31,9 @@ const items: MenuItem[] = [
   getItem("Dashboard", "", <MdDashboard />),
   getItem("Category Management", "category-management", <MdCategory />),
   getItem("Auction Management", "auction-management", <AiFillProduct />),
+  getItem("Brand Management", "brand-management", <AiFillProduct/>),
+  getItem("Origin Management", "origin-management", <AiFillProduct/>),
+  getItem("Product Management", "product-management", <AiFillProduct/>),
 ];
 
 const AppDashboard: React.FC = () => {

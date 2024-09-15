@@ -56,7 +56,7 @@ const AuctionManagement = () => {
       <Form.Item name={"id"} hidden></Form.Item>
     </>
   );
-  return <Dashboard columns={column} formItem={formItem} apiUri={"Product"} />;
+  return <Dashboard columns={column} formItem={formItem} apiUri={"auction"} />;
 };
 
 export default AuctionManagement;
