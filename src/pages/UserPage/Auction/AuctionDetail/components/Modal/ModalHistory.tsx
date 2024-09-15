@@ -1,14 +1,13 @@
-import { Avatar, Button, Modal, Table, TableProps } from "antd";
+import { Avatar, Button, Modal, Table, TableProps, Tag } from "antd";
 import { useState } from "react";
+import { AuctionBiddingDetail } from "../../../../../../model/bidding";
+import { formatDateHour, formatVND } from "../../../../../../utils/format";
 
 interface BidHistoryProps {
-  id: number;
-  name: string;
-  dateBidding: string;
-  money: number;
+  data: AuctionBiddingDetail[];
 }
 
-export const ModalHistory = () => {
+export const ModalHistory = ({ data }: BidHistoryProps) => {
   const [open, setOpen] = useState(false);
   const openModal = () => {
     setOpen(true);
@@ -16,87 +15,63 @@ export const ModalHistory = () => {
   const closeModal = () => {
     setOpen(false);
   };
-  const userList = [
-    {
-      id: 1,
-      name: "Username1",
-      money: 100000,
-      dateBidding: "14/09/2024",
-    },
-    {
-      id: 2,
-      name: "Username2",
-      money: 100000,
-      dateBidding: "14/09/2024",
-    },
-    {
-      id: 3,
-      name: "Username3",
-      money: 100000,
-      dateBidding: "14/09/2024",
-    },
-    {
-      id: 4,
-      name: "Username4",
-      money: 100000,
-      dateBidding: "14/09/2024",
-    },
-    {
-      id: 5,
-      name: "Username5",
-      money: 100000,
-      dateBidding: "14/09/2024",
-    },
-  ];
-  const column: TableProps<BidHistoryProps>["columns"] = [
+  const column: TableProps["columns"] = [
     {
       title: "#",
       dataIndex: "id",
       key: "id",
+      className: "!text-base",
     },
     {
-      title: "User",
-      dataIndex: "name",
+      title: "Người đấu giá",
+      dataIndex: "customer",
       key: "name",
+      render: (data) => data.full_name,
+      className: "!text-base",
     },
     {
-      title: "Time bidding",
-      dataIndex: "dateBidding",
-      key: "dateBidding",
+      title: "Thời gian đấu thầu",
+      dataIndex: "bidTIme",
+      key: "bidTIme",
+      render: (data) => <Tag className="!text-base" color="blue">{formatDateHour(data)}</Tag>,
+      className: "!text-base",
     },
     {
-      title: "Amount bidding",
-      dataIndex: "money",
-      key: "money",
+      title: "Lượng đấu thầu",
+      dataIndex: "bidAmount",
+      key: "bidAmount",
+      render: (data) => formatVND(data),
+      className: "!text-base text-orange-700",
     },
   ];
   return (
     <>
       <div className="border-2 w-full rounded-sm border-gray-300 flex flex-col gap-5 px-10 py-5">
-        {userList.slice(0, 3).map((element) => (
+        {data.slice(0, 3).map((element: AuctionBiddingDetail) => (
           <div className="flex items-center gap-5">
             <div className="w-fit">
               <Avatar className="w-10 h-10 md:w-14 md:h-14" />
             </div>
             <div className="flex justify-between w-3/4">
-              <p className="md:text-xl">{element.name}</p>
-              <p className="md:text-xl">{element.money}</p>
+              <p className="md:text-xl">{element.customer.full_name}</p>
+              <p className="md:text-xl">{formatVND(element.bidAmount)}</p>
             </div>
           </div>
         ))}
         <div className="w-full text-center">
           <Button onClick={openModal} type="link" className="md:text-xl">
-            View more...
+            Xem thêm...
           </Button>
         </div>
       </div>
       <Modal
+        width={700}
         open={open}
         onCancel={closeModal}
-        title={<p className="md:text-xl">Bidding History</p>}
-        footer={[<Button onClick={closeModal}>Close</Button>]}
+        title={<p className="md:text-xl">Lịch sử đấu thầu</p>}
+        footer={[<Button onClick={closeModal}>Đóng</Button>]}
       >
-        <Table columns={column} dataSource={userList} />
+        <Table columns={column} dataSource={data} />
       </Modal>
     </>
   );

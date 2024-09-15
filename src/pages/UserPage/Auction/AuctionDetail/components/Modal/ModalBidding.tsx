@@ -1,17 +1,23 @@
 import { Button, InputNumber, Modal, Steps } from "antd";
 import ButtonPrimary from "../../../../../../components/Button";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { formatVND } from "../../../../../../utils/format";
+import { BiddingData } from "../../../../../../model/bidding";
+import { auctionApi } from "../../../../../../service/api/auctionApi";
 const { Step } = Steps;
 
 interface ModalBiddingProps {
   currentPrice: number;
   step: number;
+  auctionId: number
 }
 
-export const ModalBidding = ({ currentPrice, step }: ModalBiddingProps) => {
-  const [openBidding, setOpenBidding] = useState(false);
-  const [amount, setAmount] = useState(0);
-  const [current, setCurrent] = useState(0);
+export const ModalBidding = ({auctionId, currentPrice, step }: ModalBiddingProps) => {
+  const [openBidding, setOpenBidding] = useState<boolean>(false);
+  const [amount, setAmount] = useState<number>(0);
+  const [current, setCurrent] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
   const next = () => {
     setCurrent(current + 1);
   };
@@ -37,20 +43,39 @@ export const ModalBidding = ({ currentPrice, step }: ModalBiddingProps) => {
   };
   const closeBiddingModal = () => {
     setOpenBidding(false);
-    setAmount(currentPrice + step)
+    setAmount(currentPrice + step);
+    setCurrent(0)
   };
+
+  const handleSubmitBidding = async () => {
+    try {
+      const dataBidding: BiddingData = {
+        auctionId: auctionId,
+        bidAmount: amount
+      }
+      setLoading(true)
+      await auctionApi.biddingAuction(dataBidding);
+      await auctionApi.getAuctionById(auctionId)
+      toast.success('Đấu thầu thành công')
+      closeBiddingModal()
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
     setAmount(currentPrice + step);
-  }, []);
+  }, [currentPrice, step]);
 
   const steps = [
     {
-      title: "Bidding",
+      title: "Đấu thầu",
       content: (
         <div className="flex flex-col gap-5">
           <p className="text-xl">
-            <strong>Enter your bidding</strong>
+            <strong>Nhập lượng đấu thầu của bạn</strong>
           </p>
           <div className="flex">
             <Button
@@ -65,7 +90,7 @@ export const ModalBidding = ({ currentPrice, step }: ModalBiddingProps) => {
               className="w-full !rounded-none"
               value={amount}
               onChange={handleBidAmount}
-              placeholder="Bidding..."
+              placeholder="Đang đấu thầu..."
               formatter={(value) =>
                 `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VND"
               }
@@ -78,24 +103,18 @@ export const ModalBidding = ({ currentPrice, step }: ModalBiddingProps) => {
               +
             </Button>
           </div>
-          <p className="text-xl">
-            <strong>Your wallet:</strong> 1000000 VND
-          </p>
         </div>
       ),
     },
     {
-      title: "Confirm",
+      title: "Xác nhận",
       content: (
         <div className="flex flex-col gap-5">
           <p className="text-xl">
-            <strong>Confirm your bid</strong>
+            <strong>Xác nhận lượng đấu thầu của bạn</strong>
           </p>
           <p className="text-xl">
-            <strong>Bid amount:</strong> {amount} VND
-          </p>
-          <p className="text-xl">
-            <strong>Your wallet:</strong> 1000000 VND
+            <strong>Đấu thầu:</strong> {formatVND(amount)}
           </p>
         </div>
       ),
@@ -108,28 +127,29 @@ export const ModalBidding = ({ currentPrice, step }: ModalBiddingProps) => {
         onClick={openBiddingModal}
         className="font-semibold text-xl !w-full !py-5"
       >
-        BIDDING NOW
+        Đấu thầu
       </ButtonPrimary>
       <Modal
-        title="Place bid"
+        title="Đặt thầu"
         open={openBidding}
         onCancel={closeBiddingModal}
         footer={[
           current > 0 && (
             <Button key="back" onClick={prev}>
-              Previous
+              Trở về
             </Button>
           ),
           current < steps.length - 1 ? (
             <Button key="next" type="primary" onClick={next}>
-              Next
+              Tiếp theo
             </Button>
           ) : (
-            <Button key="submit" type="primary">
-              Submit
+            <Button onClick={handleSubmitBidding} key="submit" type="primary">
+              Đấu
             </Button>
           ),
         ]}
+        loading={loading}
       >
         <Steps current={current}>
           {steps.map((step, index) => (

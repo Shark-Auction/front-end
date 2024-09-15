@@ -6,6 +6,10 @@ import { ModalHistory } from "./Modal/ModalHistory";
 import { useEffect, useState } from "react";
 import { Tag } from "antd";
 import { formatDateHour, formatVND } from "../../../../../utils/format";
+import { UserAuction } from "../../../../../model/auction";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../../core/store/store";
+import { AuctionBiddingDetail } from "../../../../../model/bidding";
 
 interface GeneralAuctionProps {
   name: string;
@@ -14,8 +18,10 @@ interface GeneralAuctionProps {
   numberOfBidding: number;
   remainDay: string;
   dateEnd: string;
+  auctionId: number;
+  user: UserAuction;
+  biddingList: AuctionBiddingDetail[]
 }
-
 
 const calculateTimeRemaining = (remainDay: string) => {
   const now = new Date();
@@ -30,16 +36,18 @@ const calculateTimeRemaining = (remainDay: string) => {
   return `${days}d ${hours}h ${minutes}m ${seconds}s`;
 };
 
-
 const textCss = "md:text-xl";
 
 export const GeneralAuction = ({
+  user,
+  auctionId,
   name,
   currentPrice,
   step,
   numberOfBidding,
   remainDay,
   dateEnd,
+  biddingList
 }: GeneralAuctionProps) => {
   const image = [
     "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
@@ -50,6 +58,7 @@ export const GeneralAuction = ({
   const [timeRemaining, setTimeRemaining] = useState(
     calculateTimeRemaining(remainDay)
   );
+  const userLoginned = useSelector((state: RootState) => state.user);
   useEffect(() => {
     const intervalId = setInterval(() => {
       setTimeRemaining(calculateTimeRemaining(remainDay));
@@ -72,7 +81,9 @@ export const GeneralAuction = ({
             {formatVND(currentPrice)}
           </p>
           <p className={`${textCss} text-gray-500`}>Bước nhảy:</p>
-          <p className={`${textCss} text-red-500 font-semibold`}>{formatVND(step)}</p>
+          <p className={`${textCss} text-red-500 font-semibold`}>
+            {formatVND(step)}
+          </p>
         </div>
         <div className="flex flex-col md:flex-row gap-5 md:gap-10">
           <div className="flex items-center gap-4">
@@ -81,16 +92,28 @@ export const GeneralAuction = ({
           </div>
           <div className="flex items-center gap-4">
             <LuClock3 className="text-3xl" />
-            <Tag color="blue" className="text-base">{timeRemaining}</Tag>
+            <Tag color="blue" className="text-base">
+              {timeRemaining}
+            </Tag>
           </div>
           <div className="border bg-gray-300 rounded-lg px-5">
-            <p className="md:text-lg font-semibold">Phiên kết thúc lúc {formatDateHour(dateEnd)}</p>
+            <p className="md:text-lg font-semibold">
+              Phiên kết thúc lúc {formatDateHour(dateEnd)}
+            </p>
           </div>
         </div>
         <div className="flex w-full justify-center mt-5">
-          <ModalBidding step={500000} currentPrice={1000000} />
+          {userLoginned && user.id === userLoginned["userId"] ? (
+            <p className="text-xl font-semibold">Bạn là người sở hữu phiên này</p>
+          ) : (
+            <ModalBidding
+              auctionId={auctionId}
+              step={step}
+              currentPrice={currentPrice}
+            />
+          )}
         </div>
-        <ModalHistory />
+        <ModalHistory data={biddingList} />
       </div>
     </div>
   );
