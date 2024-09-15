@@ -52,7 +52,7 @@ export const AuctionList = ({ dataProduct, priceSort }: AuctionListProps) => {
                 name={element.product.name}
                 remainDay={element.endTime}
                 currentPrice={element.currentPrice}
-                status={statusAuction[element.status]()}
+                status={statusAuction[element.status] ? statusAuction[element.status]() : statusAuction.NaN()}
                 onClick={() => handleDetail(element.id)}
               />
             ))}
