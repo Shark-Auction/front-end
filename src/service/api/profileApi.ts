@@ -17,4 +17,12 @@ export const profileApi = {
       throw error.response.data;
     }
   },
+  getProfileUser: async () => {
+    try {
+      const response = await api.get("user/profile");
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
 };

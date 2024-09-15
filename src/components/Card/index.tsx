@@ -47,8 +47,6 @@ const CardElement = ({
     return () => clearInterval(intervalId);
   }, [remainDay]);
 
-  console.log(status)
-
   return (
     <Card
       onClick={onClick}

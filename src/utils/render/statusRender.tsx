@@ -135,6 +135,13 @@ export const statusAuction: any = {
       </Tag>
     );
   },
+  Fail: () => {
+    return (
+      <Tag className={textStyle} color="red">
+        Thất bại
+      </Tag>
+    )
+  },
   NaN: () => {
     return "NaN";
   },

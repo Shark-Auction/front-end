@@ -52,6 +52,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
         await auctionApi.updateAuction(dataItem?.id, formattedDate);
       }
       toast.success("Cập nhật ngày cho phiên đấu giá thành công");
+      await auctionApi.getAuctionById(data?.id)
       setRender(true);
       setRenderDetail(true)
     } catch (error: any) {
@@ -65,6 +66,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
       setLoading(true);
       await auctionApi.cancelAuction(dataItem?.id);
       toast.success("Hủy phiên thành công");
+      await auctionApi.getAuctionById(data?.id)
       setRender(true);
       setRenderDetail(true)
     } catch (error: any) {

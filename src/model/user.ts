@@ -22,3 +22,12 @@ export interface UserAuthentication {
   userName: string;
   roleName: string;
 }
+
+export interface User {
+  full_name: string;
+  user_name: string;
+  phone_number: string;
+  email: string;
+  address: string;
+  imageUrl: string;
+}
