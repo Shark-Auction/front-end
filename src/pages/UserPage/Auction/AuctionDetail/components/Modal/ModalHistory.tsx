@@ -1,4 +1,4 @@
-import { Avatar, Button, Modal, Table, TableProps, Tag } from "antd";
+import { Button, Modal, Table, TableProps, Tag } from "antd";
 import { useState } from "react";
 import { AuctionBiddingDetail } from "../../../../../../model/bidding";
 import { formatDateHour, formatVND } from "../../../../../../utils/format";
@@ -33,7 +33,11 @@ export const ModalHistory = ({ data }: BidHistoryProps) => {
       title: "Thời gian đấu thầu",
       dataIndex: "bidTIme",
       key: "bidTIme",
-      render: (data) => <Tag className="!text-base" color="blue">{formatDateHour(data)}</Tag>,
+      render: (data) => (
+        <Tag className="!text-base" color="blue">
+          {formatDateHour(data)}
+        </Tag>
+      ),
       className: "!text-base",
     },
     {
@@ -46,24 +50,9 @@ export const ModalHistory = ({ data }: BidHistoryProps) => {
   ];
   return (
     <>
-      <div className="border-2 w-full rounded-sm border-gray-300 flex flex-col gap-5 px-10 py-5">
-        {data.slice(0, 3).map((element: AuctionBiddingDetail) => (
-          <div className="flex items-center gap-5">
-            <div className="w-fit">
-              <Avatar className="w-10 h-10 md:w-14 md:h-14" />
-            </div>
-            <div className="flex justify-between w-3/4">
-              <p className="md:text-xl">{element.customer.full_name}</p>
-              <p className="md:text-xl">{formatVND(element.bidAmount)}</p>
-            </div>
-          </div>
-        ))}
-        <div className="w-full text-center">
-          <Button onClick={openModal} type="link" className="md:text-xl">
-            Xem thêm...
-          </Button>
-        </div>
-      </div>
+      <Button onClick={openModal} type="link" className="md:text-xl">
+        Xem danh sách tham gia đấu giá
+      </Button>
       <Modal
         width={700}
         open={open}

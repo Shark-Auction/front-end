@@ -2,6 +2,7 @@ import Table, { ColumnProps, TableProps } from "antd/es/table";
 import { toast } from "react-toastify";
 import api from "../../config/axios/api";
 import { useEffect, useState } from "react";
+import { useWebSocket } from "../../hooks/useWebSocket";
 
 export interface ColumnsTable extends ColumnProps {
   title: string;
@@ -16,6 +17,7 @@ interface TableComponentProps
   expandX?: number | string;
   render?: boolean;
   setRender?: any;
+  typeTable?: string;
 }
 
 const TableComponent = ({
@@ -24,9 +26,11 @@ const TableComponent = ({
   expandX = "default",
   render = false,
   setRender,
+  typeTable,
   ...rest
 }: TableComponentProps) => {
   const [dataSource, setDataSource] = useState<any[]>([]);
+  const { client } = useWebSocket();
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
@@ -41,10 +45,10 @@ const TableComponent = ({
                   new Date(a?.createdAt).getTime()
               )
             : response?.data?.data?.sort(
-              (a: any, b: any) =>
-                new Date(b?.product?.createdAt).getTime() -
-                new Date(a?.product?.createdAt).getTime()
-            )
+                (a: any, b: any) =>
+                  new Date(b?.product?.createdAt).getTime() -
+                  new Date(a?.product?.createdAt).getTime()
+              )
         );
       } catch (error: any) {
         toast.error(error?.response?.data);
@@ -62,6 +66,35 @@ const TableComponent = ({
       setRender(false);
     };
   }, [apiUri, render, setRender]);
+  
+  useEffect(() => {
+    if (typeTable === "auction") {
+      client.connect(
+        {},
+        () => {
+          client.subscribe("user/queue/auctions/my", (message: any) => {
+            const receivedMsg = JSON.parse(message.body);
+            console.log(receivedMsg)
+            setDataSource((prev) => {
+              return prev.map((auction) => {
+                if(auction.id === receivedMsg.id) {
+                  return {
+                    ...auction,
+                    totalBids: receivedMsg.totalBids,
+                    currentPrice: receivedMsg.currentPrice
+                  };
+                }
+                return auction
+              })
+            });
+          });
+        },
+        (error: any) => {
+          console.log(error);
+        }
+      );
+    }
+  }, [typeTable]);
   return (
     <Table
       scroll={{ x: expandX }}

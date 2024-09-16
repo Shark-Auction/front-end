@@ -20,7 +20,7 @@ interface GeneralAuctionProps {
   dateEnd: string;
   auctionId: number;
   user: UserAuction;
-  biddingList: AuctionBiddingDetail[]
+  biddingList: AuctionBiddingDetail[];
 }
 
 const calculateTimeRemaining = (remainDay: string) => {
@@ -47,7 +47,7 @@ export const GeneralAuction = ({
   numberOfBidding,
   remainDay,
   dateEnd,
-  biddingList
+  biddingList,
 }: GeneralAuctionProps) => {
   const image = [
     "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
@@ -104,7 +104,9 @@ export const GeneralAuction = ({
         </div>
         <div className="flex w-full justify-center mt-5">
           {userLoginned && user.id === userLoginned["userId"] ? (
-            <p className="text-xl font-semibold">Bạn là người sở hữu phiên này</p>
+            <p className="text-xl font-semibold">
+              Bạn là người sở hữu phiên này
+            </p>
           ) : (
             <ModalBidding
               auctionId={auctionId}
