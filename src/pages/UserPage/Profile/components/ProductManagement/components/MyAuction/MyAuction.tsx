@@ -9,7 +9,7 @@ import { statusAuction } from "../../../../../../../utils/render/statusRender";
 import ModalDetail from "./components/ModalDetail";
 import { MyAuctionProfile } from "../../../../../../../model/profile";
 
-const MyAuction = ({activeKey} : {activeKey: string}) => {
+const MyAuction = ({ activeKey }: { activeKey: string }) => {
   const [selectedRow, setSelectedRow] = useState<MyAuctionProfile>();
   const [isOpen, setIsOpen] = useState(false);
   const [render, setRender] = useState(false);
@@ -23,52 +23,56 @@ const MyAuction = ({activeKey} : {activeKey: string}) => {
       align: "center",
     },
     {
-      title: 'Ảnh sản phẩm',
-      key: 'product',
-      dataIndex: 'product',
-      render: (data) => <ImageComponent src={data?.imageThumbnail} />
+      title: "Ảnh sản phẩm",
+      key: "product",
+      dataIndex: "product",
+      render: (data) => <ImageComponent src={data?.imageThumbnail} />,
     },
     {
-      title: 'Tên sản phẩm',
-      key: 'product',
-      dataIndex: 'product',
-      render: (data) => data?.name
+      title: "Tên sản phẩm",
+      key: "product",
+      dataIndex: "product",
+      render: (data) => data?.name,
     },
     {
-      title: 'Ngày bắt đầu',
-      key: 'startTime',
-      dataIndex: 'startTime',
-      render: (data) => <Tag color="blue">{formatDateHour(data)}</Tag>
+      title: "Ngày bắt đầu",
+      key: "startTime",
+      dataIndex: "startTime",
+      render: (data) => <Tag color="blue">{formatDateHour(data)}</Tag>,
     },
     {
-      title: 'Ngày kết thúc',
-      key: 'endTime',
-      dataIndex: 'endTime',
-      render: (data) => <Tag color="cyan-inverse">{formatDateHour(data)}</Tag>
+      title: "Ngày kết thúc",
+      key: "endTime",
+      dataIndex: "endTime",
+      render: (data) => <Tag color="cyan-inverse">{formatDateHour(data)}</Tag>,
     },
     {
-      title: 'Bước nhảy',
-      key: 'step',
-      dataIndex: 'step',
-      render: (data) => <p className='font-bold text-base text-orange-600'>{formatVND(data)}</p>
+      title: "Bước nhảy",
+      key: "step",
+      dataIndex: "step",
+      render: (data) => (
+        <p className="font-bold text-base text-orange-600">{formatVND(data)}</p>
+      ),
     },
     {
-      title: 'Tổng đấu giá',
-      key: 'totalBid',
-      dataIndex: 'totalBids',
-      render: (data) => <Tag color='geekblue'>{data}</Tag>
+      title: "Tổng đấu giá",
+      key: "totalBid",
+      dataIndex: "totalBids",
+      render: (data) => <Tag color="geekblue">{data}</Tag>,
     },
     {
-      title: 'Giá hiện tại',
-      key: 'currentPrice',
-      dataIndex: 'currentPrice',
-      render: (data) => <p className='font-bold text-base text-orange-600'>{formatVND(data)}</p>
+      title: "Giá hiện tại",
+      key: "currentPrice",
+      dataIndex: "currentPrice",
+      render: (data) => (
+        <p className="font-bold text-base text-orange-600">{formatVND(data)}</p>
+      ),
     },
     {
       title: "Trạng thái",
       key: "status",
       dataIndex: "status",
-      render: (data) => statusAuction[data]()
+      render: (data) => statusAuction[data](),
     },
   ];
   const handleRowClick = (record: any) => {
@@ -76,13 +80,14 @@ const MyAuction = ({activeKey} : {activeKey: string}) => {
     setIsOpen(true);
   };
   useEffect(() => {
-    if (activeKey === '2'){
-      setRender(true)
+    if (activeKey === "2") {
+      setRender(true);
     }
-  }, [activeKey])
+  }, [activeKey]);
   return (
     <>
       <TableComponent
+        typeTable="auction"
         apiUri="auction/myauction"
         expandX={1500}
         columns={columns}
@@ -97,7 +102,12 @@ const MyAuction = ({activeKey} : {activeKey: string}) => {
         render={render}
         setRender={setRender}
       />
-      <ModalDetail open={isOpen} setOpen={setIsOpen} data={selectedRow} setRender={setRender} />
+      <ModalDetail
+        open={isOpen}
+        setOpen={setIsOpen}
+        data={selectedRow}
+        setRender={setRender}
+      />
     </>
   );
 };

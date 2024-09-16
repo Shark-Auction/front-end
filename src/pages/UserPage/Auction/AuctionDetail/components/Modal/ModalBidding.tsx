@@ -10,7 +10,7 @@ const { Step } = Steps;
 interface ModalBiddingProps {
   currentPrice: number;
   step: number;
-  auctionId: number
+  auctionId: number;
 }
 
 export const ModalBidding = ({auctionId, currentPrice, step }: ModalBiddingProps) => {

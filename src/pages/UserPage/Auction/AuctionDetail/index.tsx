@@ -7,51 +7,43 @@ import { AuctionInformation } from "./components/AuctionInformation";
 import { Skeleton } from "antd";
 import { Auction } from "../../../../model/auction";
 import { auctionApi } from "../../../../service/api/auctionApi";
-import SockJS from "sockjs-client";
-import { Stomp } from "@stomp/stompjs";
 import { AuctionBiddingDetail } from "../../../../model/bidding";
+import { useWebSocket } from "../../../../hooks/useWebSocket";
 
 const AuctionDetail = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<Auction | null>(null);
-  const [biddingData, setBiddingData] = useState<AuctionBiddingDetail[]>([])
-  const fetchDetailData = async () => {
-    try {
-      setLoading(true);
-      const response = await auctionApi.getAuctionById(id);
-      setData(response.data);
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchDetailBidding = async () => {
-    try {
-      setLoading(true)
-      const response = await auctionApi.getBidding(id)
-      setBiddingData(response.data)
-    } catch (error: any) {
-      toast.error(error.message)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const [biddingData, setBiddingData] = useState<AuctionBiddingDetail[]>([]);
+  const { client } = useWebSocket();
 
   useEffect(() => {
-    const socket = new SockJS("http://128.199.193.209:8080/ws");
-    const client = Stomp.over(socket);
-
-    client.debug = (str) => {
-      console.log(str);
+    const fetchDetailData = async () => {
+      try {
+        setLoading(true);
+        const response = await auctionApi.getAuctionById(id);
+        setData(response.data);
+      } catch (error: any) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
     };
 
+    const fetchDetailBidding = async () => {
+      try {
+        setLoading(true);
+        const response = await auctionApi.getBidding(id);
+        setBiddingData(response.data);
+      } catch (error: any) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
     client.connect(
       {},
-      (frame: any) => {
-        console.log("STOMP Connected: " + frame);
+      () => {
         client.subscribe(`/topic/auction/${id}`, async (message) => {
           const receivedMsg = JSON.parse(message.body);
           setData((prevData) => ({
@@ -67,14 +59,7 @@ const AuctionDetail = () => {
     );
     fetchDetailData();
     fetchDetailBidding();
-    return () => {
-      if (client && client.connected) {
-        client.disconnect(() => {
-          console.log("Disconnected from WebSocket");
-        });
-      }
-    };
-  }, []);
+  }, [id]);
 
   return (
     <Skeleton loading={loading}>
