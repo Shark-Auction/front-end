@@ -14,10 +14,10 @@ RUN npm install
 COPY . .
 
 # Set environment variable for port
-ENV PORT=3000
+ENV PORT=5173
 
 # Expose the port the app runs on
-EXPOSE 3000
+EXPOSE 5173
 
 # Start the app in development mode with the specified port
 CMD ["npm", "run", "dev"]
