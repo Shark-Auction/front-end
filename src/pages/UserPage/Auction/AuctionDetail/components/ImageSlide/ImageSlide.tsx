@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { CSSProperties, useState } from "react";
 // Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
-
+import { SwiperSlide, Swiper } from "swiper/react";
+import { type Swiper as SwiperState } from "swiper";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -19,7 +19,7 @@ interface ImageSlideProps {
 }
 
 export default function ImageSlide({ image }: ImageSlideProps) {
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperState | null>(null);
 
   return (
     <>
@@ -27,7 +27,7 @@ export default function ImageSlide({ image }: ImageSlideProps) {
         style={{
           "--swiper-navigation-color": "#fff",
           "--swiper-pagination-color": "#fff",
-        }}
+        } as CSSProperties}
         loop={true}
         spaceBetween={10}
         navigation={true}
