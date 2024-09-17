@@ -6,6 +6,7 @@ import { status } from '../../../../../../../utils/render/statusRender';
 import ModalDetail from './components/ModalDetail';
 import { formatVND } from '../../../../../../../utils/format';
 import { ProductProfile } from '../../../../../../../model/profile';
+import { getImageProduct } from '../../../../../../../utils/getImage';
 
   const MyProduct = ({activeKey} : {activeKey: string}) => {
     const [selectedRow, setSelectedRow] = useState<ProductProfile>();
@@ -23,8 +24,8 @@ import { ProductProfile } from '../../../../../../../model/profile';
       {
         title: "Ảnh",
         key: "image",
-        dataIndex: "imageThumbnail",
-        render: (data) => <ImageComponent preview={false} height={150} width={150} src={data} />,
+        dataIndex: "thumbnail",
+        render: (data) => <ImageComponent preview={false} height={150} width={150} src={getImageProduct(data)} />,
         width: 200
       },
       {

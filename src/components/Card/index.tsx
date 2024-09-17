@@ -3,6 +3,7 @@ import ButtonPrimary from "../Button";
 import { useEffect, useState } from "react";
 import ImageComponent from "../Image";
 import { formatVND } from "../../utils/format";
+import { getImageProduct } from "../../utils/getImage";
 
 interface CardElementProps {
   name: string;
@@ -52,13 +53,13 @@ const CardElement = ({
       onClick={onClick}
       hoverable={true}
       key={id}
-      cover={<ImageComponent width={'100%'} height={'100%'} preview={false} src={image} />}
+      cover={<ImageComponent width={'100%'} height={'100%'} preview={false} src={getImageProduct(image)} />}
       actions={[
         <ButtonPrimary className="!text-base !font-normal">
           Đấu giá
         </ButtonPrimary>,
       ]}
-      className="shadow-shadowHeavy max-w-full md:max-w-sm lg:max-w-xs"
+      className="shadow-shadowHeavy max-w-full md:max-w-sm lg:max-w-xs !overflow-hidden"
     >
       <div className="flex flex-col gap-2">
         <div className="overflow-hidden">

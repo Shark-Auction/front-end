@@ -32,6 +32,7 @@ import ErrorPage from "./pages/Error/ErrorPage";
 import BrandManagement from "./pages/AdminPage/BrandManagement";
 import OriginManagement from "./pages/AdminPage/OriginManagement";
 import AdminProductManagement from "./pages/AdminPage/AdminProductManagement";
+import VerifyPage from "./pages/Auth/Verify";
 function App() {
   const router = createBrowserRouter([
     {
@@ -119,6 +120,10 @@ function App() {
           path: "register",
           element: <RegisterPage />,
         },
+        {
+          path: "verify",
+          element: <VerifyPage />
+        }
       ],
     },
     {

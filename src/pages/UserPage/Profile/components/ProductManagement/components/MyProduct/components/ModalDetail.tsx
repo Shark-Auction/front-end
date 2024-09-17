@@ -24,9 +24,9 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
   const ref1 = useRef(null);
   const ref2 = useRef(null);
   const [form] = Form.useForm();
-  const [dataItem, setDataItem] = useState<ProductProfile>()
+  const [dataItem, setDataItem] = useState<ProductProfile>();
   const [imageDescription, setImageDescription] = useState<string[]>([]);
-  const [renderDetail, setRenderDetail] = useState(false)
+  const [renderDetail, setRenderDetail] = useState(false);
   const [loading, setLoading] = useState(false);
   const [current, setCurrent] = useState(0);
   const [openTutorial, setOpenTutorial] = useState<boolean>(false);
@@ -69,7 +69,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
       await productApi.deleteProduct(id);
       toast.success(`Xóa sản phẩm ${name} thành công`);
       setRender(true);
-      setCheckedDelete(true)
+      setCheckedDelete(true);
       handleCancle();
     } catch (error: any) {
       toast.error(error.message);
@@ -84,7 +84,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
       await productApi.editProduct(dataItem?.id, values);
       toast.success("Cập nhật thành công");
       setRender(true);
-      setRenderDetail(true)
+      setRenderDetail(true);
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -188,10 +188,10 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
     if (open) {
       fetchData();
     }
-    if(renderDetail){
-      fetchData()
+    if (renderDetail) {
+      fetchData();
     }
-  }, [checkedDelete, data?.id, open, renderDetail])
+  }, [checkedDelete, data?.id, open, renderDetail]);
 
   return (
     <Modal
@@ -210,46 +210,66 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
       loading={loading}
       onCancel={handleCancle}
       width={1000}
-      footer={dataItem?.status === 'PENDING' && [
-        current < steps.length - 1 && (
-          <div className="flex justify-end gap-2" key={'first-step'}>
-            <Popconfirm
-              key={"delete-pop"}
-              title={`Xóa sản phẩm ${dataItem?.name}`}
-              description="Bạn có muốn xóa không?"
-              okText="Có"
-              cancelText="Không"
-              onConfirm={() => handleDelete(dataItem?.id, dataItem?.name)}
-            >
-              <Button type="primary" key={'delete'} className="!text-base" danger>
-                Xóa sản phẩm
+      footer={
+        dataItem && [
+          current < steps.length - 1 && (
+            <div className="flex justify-end gap-2" key={"first-step"}>
+              {dataItem.status === "PENDING" && (
+                <Popconfirm
+                  key={"delete-pop"}
+                  title={`Xóa sản phẩm ${dataItem?.name}`}
+                  description="Bạn có muốn xóa không?"
+                  okText="Có"
+                  cancelText="Không"
+                  onConfirm={() => handleDelete(dataItem?.id, dataItem?.name)}
+                >
+                  <Button
+                    type="primary"
+                    key={"delete"}
+                    className="!text-base"
+                    danger
+                  >
+                    Xóa sản phẩm
+                  </Button>
+                </Popconfirm>
+              )}
+              {dataItem.status === "PENDING" && (
+                <Button
+                  key={"edit"}
+                  className="!text-base"
+                  onClick={() => form.submit()}
+                  type="primary"
+                  ref={ref2}
+                >
+                  Chỉnh sửa sản phẩm
+                </Button>
+              )}
+              {dataItem.status === "CONFIRMING" && <ButtonPrimary
+                key={"auction"}
+                className="text-base"
+                onClick={() => next()}
+              >
+                Đăng lên trang đấu giá
+              </ButtonPrimary>}
+            </div>
+          ),
+          current > 0 && (
+            <div key={"second-step"} className="flex justify-end gap-2">
+              <Button className="!text-base" key="back" onClick={prev}>
+                Trở lại
               </Button>
-            </Popconfirm>
-            <Button
-              key={'edit'}
-              className="!text-base"
-              onClick={() => form.submit()}
-              type="primary"
-              ref={ref2}
-            >
-              Chỉnh sửa sản phẩm
-            </Button>
-            <ButtonPrimary key={'auction'} className="text-base" onClick={() => next()}>
-              Đăng lên trang đấu giá
-            </ButtonPrimary>
-          </div>
-        ),
-        current > 0 && (
-          <div key={'second-step'} className="flex justify-end gap-2">
-            <Button className="!text-base" key="back" onClick={prev}>
-              Trở lại
-            </Button>
-            <Button className="!text-base" key={'confirm-auction'} type="primary" onClick={() => form.submit()}>
-              Đăng đấu giá
-            </Button>
-          </div>
-        ),
-      ]}
+              <Button
+                className="!text-base"
+                key={"confirm-auction"}
+                type="primary"
+                onClick={() => form.submit()}
+              >
+                Đăng đấu giá
+              </Button>
+            </div>
+          ),
+        ]
+      }
     >
       <Steps current={current} items={items} />
       <div className="steps-content mt-5">{steps[current].content}</div>

@@ -13,9 +13,9 @@ type MenuItem = GetProp<MenuProps, "items">[number];
 const AuctionPage = () => {
   const [category, setCategory] = useState<MenuItem[]>([]);
   const [selectedKey, setSelectedKey] = useState<number>();
-  const [searchText, setSearchText] = useState<string>('');
+  const [searchText, setSearchText] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
-  const [priceSort, setPriceSort] = useState<string>('');
+  const [priceSort, setPriceSort] = useState<string>("");
   const [dataAuction, setDataAuction] = useState<Auction[]>([]);
   const [filteredAuction, setFilteredAuction] = useState<Auction[]>([]);
   const handleMenuClick = (key: any) => {
@@ -74,9 +74,13 @@ const AuctionPage = () => {
       try {
         setLoading(true);
         const response = await auctionApi.getAuction();
-        const filteredData = response.data.filter(
-          (e: Auction) => e.status !== "Cancel"
-        );
+        const filteredData = response.data
+          .filter((e: Auction) => e.status !== "Cancel")
+          .sort(
+            (a: Auction, b: Auction) =>
+              new Date(b?.startTime).getTime() -
+              new Date(a?.startTime).getTime()
+          );
         setDataAuction(filteredData);
         setFilteredAuction(filteredData);
       } catch (error: any) {
@@ -114,14 +118,18 @@ const AuctionPage = () => {
         return 0;
       });
     }
-  
 
     if (statusFilter.length > 0) {
       filtered = filtered.filter((auction: Auction) =>
         statusFilter.includes(auction.status)
       );
     }
-    setFilteredAuction(filtered);
+    setFilteredAuction(
+      filtered.sort(
+        (a: Auction, b: Auction) =>
+          new Date(b?.startTime).getTime() - new Date(a?.startTime).getTime()
+      )
+    );
   }, [selectedKey, dataAuction, searchText, priceSort, statusFilter]);
 
   return (
@@ -150,7 +158,10 @@ const AuctionPage = () => {
           />
           <div>
             <Skeleton loading={loading}>
-              <AuctionList priceSort={priceSort} dataProduct={filteredAuction} />
+              <AuctionList
+                priceSort={priceSort}
+                dataProduct={filteredAuction}
+              />
             </Skeleton>
           </div>
         </div>

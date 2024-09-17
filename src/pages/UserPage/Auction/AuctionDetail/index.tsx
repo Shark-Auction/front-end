@@ -75,6 +75,7 @@ const AuctionDetail = () => {
             dateEnd={data.endTime}
             numberOfBidding={data.totalBids}
             key={data.id}
+            image={data.product.product_images}
             biddingList={biddingData}
           />
           <SellerAuction seller={data.product.seller} />

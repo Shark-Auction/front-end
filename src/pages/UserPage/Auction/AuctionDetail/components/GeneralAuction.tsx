@@ -6,7 +6,7 @@ import { ModalHistory } from "./Modal/ModalHistory";
 import { useEffect, useState } from "react";
 import { Tag } from "antd";
 import { formatDateHour, formatVND } from "../../../../../utils/format";
-import { UserAuction } from "../../../../../model/auction";
+import { ProductImage, UserAuction } from "../../../../../model/auction";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../../core/store/store";
 import { AuctionBiddingDetail } from "../../../../../model/bidding";
@@ -21,6 +21,7 @@ interface GeneralAuctionProps {
   auctionId: number;
   user: UserAuction;
   biddingList: AuctionBiddingDetail[];
+  image: ProductImage[];
 }
 
 const calculateTimeRemaining = (remainDay: string) => {
@@ -47,14 +48,9 @@ export const GeneralAuction = ({
   numberOfBidding,
   remainDay,
   dateEnd,
+  image,
   biddingList,
 }: GeneralAuctionProps) => {
-  const image = [
-    "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
-    "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREoRGyXmHy_6aIgXYqWHdOT3KjfmnuSyxypw&s",
-    "https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg",
-  ];
   const [timeRemaining, setTimeRemaining] = useState(
     calculateTimeRemaining(remainDay)
   );
