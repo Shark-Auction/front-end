@@ -8,7 +8,10 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     login: (_, action) => action.payload,
-    logout: () => initialState,
+    logout: () => {
+      localStorage.removeItem('key')
+      return initialState
+    },
     updateAccessToken: (state: any, action) => {
       if(state) {
         state.accessToken = action.payload;

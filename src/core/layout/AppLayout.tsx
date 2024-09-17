@@ -1,13 +1,23 @@
 import { Layout } from "antd";
 import { useEffect, useState } from "react";
 import AppHeader from "./AppHeader";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import AppFooter from "./AppFooter";
+import { RootState } from "../store/store";
+import { useSelector } from "react-redux";
 
 const { Header, Footer, Content } = Layout;
 
 const AppLayout = () => {
   const [headerHeight, setHeaderHeight] = useState(0);
+  const navigate = useNavigate();
+  const userLogin = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    if (userLogin && userLogin["roleName"] === "admin") {
+      navigate("/admin");
+    }
+  }, [navigate, userLogin]);
 
   useEffect(() => {
     const headerElement = document.querySelector(".ant-layout-header");
@@ -19,7 +29,7 @@ const AppLayout = () => {
     <Layout className="min-h-screen">
       <Header
         className="fixed w-full z-[10] text-black flex items-center 
-      bg-primaryColor md:h-[90px] md:rounded-es-md md:rounded-ee-md shadow-xl" 
+      bg-primaryColor md:h-[90px] md:rounded-es-md md:rounded-ee-md shadow-xl"
       >
         <AppHeader />
       </Header>
