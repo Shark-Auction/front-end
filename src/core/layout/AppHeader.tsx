@@ -12,12 +12,8 @@ const AppHeader = () => {
   const userLogin = useSelector((state: RootState) => state.user);
   const itemsLink = [
     {
-      title: "Auction",
+      title: "Đấu giá",
       link: "/u/auction",
-    },
-    {
-      title: "Category",
-      link: "/",
     },
     {
       title: "Blog",
@@ -28,18 +24,18 @@ const AppHeader = () => {
     label: <Link to={e.link}>{e.title}</Link>,
     key: e.title,
   }));
-  const handleLogin = () => {
+  const handleLogout = () => {
     dispatch(logout());
     navigate("/u/home");
   };
   const itemsUser: MenuProps["items"] = [
     {
       key: "1",
-      label: <Link to={"/u/profile"}>Your profile</Link>,
+      label: <Link to={"/u/profile"}>Thông tin cá nhân</Link>,
     },
     {
       key: "2",
-      label: <div onClick={handleLogin}>Logout</div>,
+      label: <div onClick={handleLogout}>Đăng xuất</div>,
     },
   ];
   return (
@@ -71,7 +67,13 @@ const AppHeader = () => {
           </Link>
         ))}
         {userLogin ? (
-          <Dropdown menu={{ items: itemsUser }} placement="bottomLeft" arrow trigger={['click']}>
+          <Dropdown
+            menu={{ items: itemsUser }}
+            placement="bottomLeft"
+            arrow
+            trigger={["click"]}
+            className="cursor-pointer"
+          >
             <div className="flex items-center gap-2 border border-gray-500 py-2 px-5 rounded-lg">
               <Avatar className="!w-10 !h-10" />
               <p className="text-sm font-bold">{userLogin["fullName"]}</p>{" "}
@@ -82,23 +84,26 @@ const AppHeader = () => {
             onClick={() => navigate("/auth/login")}
             className="px-5 shadow-lg"
           >
-            <p className="md:text-xl hover:text-inherit">Login</p>
+            <p className="md:text-xl hover:text-inherit">Đăng nhập</p>
           </Button>
         )}
       </div>
       {/*Mobile */}
       <div className="md:hidden flex items-center gap-5">
-        <Dropdown
-          menu={{ items }}
-          trigger={["click"]}
-          className="active:text-black"
-          overlayClassName="w-[150px]"
-        >
-          <IoMenuSharp className="text-3xl" />
-        </Dropdown>
-        <Link to={"/auth/login"} className="hover:text-black text-xl">
-          Login
-        </Link>
+        {userLogin ? (
+          <Dropdown
+            menu={{ items }}
+            trigger={["click"]}
+            className="active:text-black"
+            overlayClassName="w-[150px]"
+          >
+            <IoMenuSharp className="text-3xl" />
+          </Dropdown>
+        ) : (
+          <Link to={"/auth/login"} className="hover:text-black text-xl">
+            Đăng nhập
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,12 @@
-import { Avatar, Button, Divider, Menu, MenuProps } from "antd";
+import {
+  Avatar,
+  Button,
+  Divider,
+  Drawer,
+  FloatButton,
+  Menu,
+  MenuProps,
+} from "antd";
 import { FaListAlt } from "react-icons/fa";
 import { FaUserLarge } from "react-icons/fa6";
 import { IoMdAdd } from "react-icons/io";
@@ -6,11 +14,28 @@ import { MdEdit } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import { RootState } from "../../../core/store/store";
+import { useEffect, useState } from "react";
+import { IoReorderThreeOutline } from "react-icons/io5";
 type MenuItem = Required<MenuProps>["items"][number];
 
 const UserProfile = () => {
   const navigate = useNavigate();
-  const loginnedUser = useSelector((state: RootState) => state.user)
+  const [key, setKey] = useState<string>(localStorage.getItem("key") || "");
+  const loginnedUser = useSelector((state: RootState) => state.user);
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+  const navigateEdit = () => {
+    localStorage.setItem("key", "");
+    setKey("")
+    setOpen(false);
+    navigate('/u/profile')
+  }
   const itemsMenu: MenuItem[] = [
     {
       key: "",
@@ -39,19 +64,31 @@ const UserProfile = () => {
     },
   ];
   const onClick: MenuProps["onClick"] = (e) => {
+    localStorage.setItem("key", e.key);
+    setKey(e.key);
+    setOpen(false);
     navigate(`/u/profile/${e.key}`);
   };
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem("key");
+    };
+  }, []);
   return (
-    <div className="flex md:flex-row gap-10">
-      <div className="md:w-1/4 border rounded-md shadow-shadowLight py-5 px-3 bg-white !h-fit sticky top-32">
+    <div className="flex flex-col md:flex-row gap-10 p-5 md:p-0">
+      <div className="hidden md:block md:w-1/4 border rounded-md shadow-shadowLight py-5 px-3 bg-white !h-fit md:sticky top-32">
         <div className="flex items-center gap-2">
           <Avatar className="w-20 h-20" />
           <div className="flex flex-col flex-grow">
             <p className="text-base">
-              <strong>{loginnedUser ? loginnedUser['fullName'] : "NaN"}</strong>
+              <strong>{loginnedUser ? loginnedUser["fullName"] : "NaN"}</strong>
             </p>
-            <Button type="link" className="!p-0 !text-left flex justify-start !w-fit">
-              Edit information
+            <Button
+              onClick={navigateEdit}
+              type="link"
+              className="!p-0 !text-left flex justify-start !w-fit"
+            >
+              Chỉnh sửa thông tin
             </Button>
           </div>
         </div>
@@ -59,12 +96,50 @@ const UserProfile = () => {
         <Menu
           className="!border-none !text-base"
           onClick={onClick}
-          defaultSelectedKeys={[""]}
+          defaultSelectedKeys={[key]}
           mode="inline"
           items={itemsMenu}
         />
       </div>
-      <div className="md:w-3/4 border rounded-md shadow-shadowLight p-5">
+      <FloatButton
+        onClick={showDrawer}
+        className="block md:hidden"
+        type="primary"
+        icon={<IoReorderThreeOutline />}
+      />
+      <Drawer
+        placement={"left"}
+        closable={false}
+        onClose={onClose}
+        open={open}
+        width={"75%"}
+        className="!p-0"
+      >
+        <div className="flex items-center gap-2">
+          <Avatar className="w-20 h-20" />
+          <div className="flex flex-col flex-grow">
+            <p className="text-base">
+              <strong>{loginnedUser ? loginnedUser["fullName"] : "NaN"}</strong>
+            </p>
+            <Button
+              onClick={navigateEdit}
+              type="link"
+              className="!p-0 !text-left flex justify-start !w-fit"
+            >
+              Chỉnh sửa thông tin
+            </Button>
+          </div>
+        </div>
+        <Divider className="border-gray-200" />
+        <Menu
+          className="!border-none !text-base"
+          onClick={onClick}
+          defaultSelectedKeys={[key]}
+          mode="inline"
+          items={itemsMenu}
+        />
+      </Drawer>
+      <div className="w-full md:w-3/4 border rounded-md shadow-shadowLight p-5">
         <Outlet />
       </div>
     </div>
