@@ -51,7 +51,7 @@ export const status: any = {
   CONFIRMING: () => {
     return (
       <Tag className={textStyle} color="cyan">
-        Đang duyệt
+        Đã được duyệt
       </Tag>
     );
   },

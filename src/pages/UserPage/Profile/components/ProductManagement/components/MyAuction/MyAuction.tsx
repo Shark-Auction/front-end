@@ -8,6 +8,7 @@ import { Tag } from "antd";
 import { statusAuction } from "../../../../../../../utils/render/statusRender";
 import ModalDetail from "./components/ModalDetail";
 import { MyAuctionProfile } from "../../../../../../../model/profile";
+import { getImageProduct } from "../../../../../../../utils/getImage";
 
 const MyAuction = ({ activeKey }: { activeKey: string }) => {
   const [selectedRow, setSelectedRow] = useState<MyAuctionProfile>();
@@ -26,7 +27,7 @@ const MyAuction = ({ activeKey }: { activeKey: string }) => {
       title: "Ảnh sản phẩm",
       key: "product",
       dataIndex: "product",
-      render: (data) => <ImageComponent src={data?.imageThumbnail} />,
+      render: (data) => <ImageComponent src={getImageProduct(data?.thumbnail)} />,
     },
     {
       title: "Tên sản phẩm",

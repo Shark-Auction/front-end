@@ -36,7 +36,7 @@ interface Origin {
   name: string;
 }
 
-interface ProductImage {
+export interface ProductImage {
   id: number;
   url: string;
 }

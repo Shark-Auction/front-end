@@ -13,20 +13,21 @@ import "./imageSlide.css";
 // import required modules
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import { Image } from "antd";
+import { getImageProduct } from "../../../../../../utils/getImage";
+import { ProductImage } from "../../../../../../model/auction";
 
 interface ImageSlideProps {
-  image: string[];
+  image: ProductImage[];
 }
 
 export default function ImageSlide({ image }: ImageSlideProps) {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperState | null>(null);
-
   return (
     <>
       <Swiper
         style={{
-          "--swiper-navigation-color": "#fff",
-          "--swiper-pagination-color": "#fff",
+          "--swiper-navigation-color": "#000",
+          "--swiper-pagination-color": "#000",
         } as CSSProperties}
         loop={true}
         spaceBetween={10}
@@ -35,9 +36,9 @@ export default function ImageSlide({ image }: ImageSlideProps) {
         modules={[FreeMode, Navigation, Thumbs]}
         className="imageSlide2"
       >
-        {image?.map((element: string, index: number) => (
-          <SwiperSlide key={index}>
-            <Image src={element} />
+        {image?.map((element: ProductImage) => (
+          <SwiperSlide key={element.id}>
+            <Image src={getImageProduct(element.url)} />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -51,9 +52,9 @@ export default function ImageSlide({ image }: ImageSlideProps) {
         modules={[FreeMode, Navigation, Thumbs]}
         className="imageSlide"
       >
-        {image?.map((element: string, index: number) => (
-          <SwiperSlide className="cursor-pointer" key={index}>
-            <img src={element} />
+        {image?.map((element: ProductImage) => (
+          <SwiperSlide className="cursor-pointer" key={element.id}>
+            <img src={getImageProduct(element.url)} />
           </SwiperSlide>
         ))}
       </Swiper>

@@ -57,3 +57,31 @@
   height: 100%;
   object-fit: cover;
 }
+
+.swiper-button-next {
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  color: white; /* Change arrow color */
+}
+
+/* Target the previous button */
+.swiper-button-prev {
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  color: white; /* Change arrow color */
+}
+
+/* Add hover effect */
+.swiper-button-next:hover, .swiper-button-prev:hover {
+  background-color: rgba(0, 0, 0, 0.8); /* Darker background on hover */
+}
+
+/* Customize the arrow icons */
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 20px; /* Adjust the size of the arrow icon */
+}
