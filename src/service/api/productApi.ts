@@ -21,6 +21,15 @@ export const productApi = {
       throw error.response.data;
     }
   },
+
+  confirmProduct: async (id: number | undefined, data: any) => {
+    try {
+      const response = await api.put(`product/confirm/${id}`, data);
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
   deleteProduct: async (id: number) => {
     try {
       const response = await api.delete(`product/${id}`);

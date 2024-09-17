@@ -11,21 +11,21 @@ const CategoryManagement = () => {
       key: "id",
     },
     {
-      title: "Ảnh",
+      title: "Image",
       dataIndex: "imageUrl",
       key: "image",
       render: (data) => <ImageComponent src={data} />,
     },
     {
-      title: "Tên",
+      title: "Name",
       dataIndex: "name",
       key: "name",
     },
-    {
-      title: "Danh mục con",
-      dataIndex: "parent",
-      key: "parent",
-    },
+    // {
+    //   title: "Danh mục con",
+    //   dataIndex: "parent",
+    //   key: "parent",
+    // },
     {
       title: "Action",
       dataIndex: "id",

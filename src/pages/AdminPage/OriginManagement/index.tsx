@@ -2,6 +2,7 @@ import { Button } from "antd";
 import Dashboard, { Column } from "../../../components/Dashboard";
 import ButtonPrimary from "../../../components/Button";
 import ImageComponent from "../../../components/Image";
+import { formatDateHour } from "../../../utils/format";
 
 const OriginManagement = () => {
   const columns: Column[] = [
@@ -19,11 +20,13 @@ const OriginManagement = () => {
       title: "Created At",
       dataIndex: "createdAt",
       key: "createdAt",
+      render: (text) => formatDateHour(text.createdAt)
     },
     {
-        title: "Updated At",
-        dataIndex: "updatedAt",
-        key: "updatedAt",
+      title: "Updated At",
+      dataIndex: "updatedAt",
+      key: "updatedAt",
+      render: (text) => formatDateHour(text.updatedAt)
     },
     {
       title: "Action",

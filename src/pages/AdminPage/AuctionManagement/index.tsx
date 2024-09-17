@@ -1,6 +1,7 @@
 import { Form, Image, Input } from "antd";
 import React from "react";
 import Dashboard, { Column } from "../../../components/Dashboard";
+import ImageComponent from "../../../components/Image";
 
 const AuctionManagement = () => {
   const column: Column[] = [
@@ -10,14 +11,22 @@ const AuctionManagement = () => {
       dataIndex: "id",
     },
     {
-      title: "Name",
+      title: "Product",
       key: "name",
-      dataIndex: "name",
+      dataIndex: "product",
+      render: (text) => (text.name)
     },
     {
-      title: "Remain Day",
-      key: "remainDay",
-      dataIndex: "remainDay",
+      title: "Product IMG",
+      key: "product_images",
+      dataIndex: "product",
+      render: (data) => <ImageComponent src={data} />,
+    },
+    {
+      title: "Seller",
+      key: "full_name",
+      dataIndex: "product",
+      render: (text) => (text.seller.full_name)
     },
     {
       title: "currentPrice",
@@ -29,12 +38,12 @@ const AuctionManagement = () => {
       key: "status",
       dataIndex: "status",
     },
-    {
-      title: "Image",
-      key: "image",
-      dataIndex: "image",
-      render: (data) => <Image width={200} src={data} />,
-    },
+    // {
+    //   title: "Image",
+    //   key: "image",
+    //   dataIndex: "image",
+    //   render: (data) => <Image width={200} src={data} />,
+    // },
   ];
   const formItem = (
     <>
