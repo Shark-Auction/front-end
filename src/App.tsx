@@ -47,7 +47,7 @@ function App() {
           element: (
             <ProtectedRoute
               element={<UserPage />}
-              allowedRoles={["user", null]}
+              allowedRoles={["User", null]}
             />
           ),
           children: [
@@ -125,7 +125,7 @@ function App() {
       path: "/admin",
       element: (
         <ProtectedRoute
-          allowedRoles={["admin", "staff", "shipper"]}
+          allowedRoles={["Admin", "Staff", "Shipper"]}
           element={<AppDashboard />}
         />
       ),
@@ -134,13 +134,13 @@ function App() {
         { path: "category-management", element: <CategoryManagement /> },
         { path: "brand-management", element: <BrandManagement /> },
         { path: "origin-management", element: <OriginManagement /> },
-        {path: "product-management", element: <AdminProductManagement />},
+        { path: "product-management", element: <AdminProductManagement /> },
       ],
     },
     {
-      path: '*',
-      element: <ErrorPage />
-    }
+      path: "*",
+      element: <ErrorPage />,
+    },
   ]);
   return <RouterProvider router={router} />;
 }
@@ -152,10 +152,10 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute = ({ element, allowedRoles }: ProtectedRouteProps) => {
   const userLogin = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   if (!allowedRoles.includes(userLogin && userLogin["roleName"])) {
     toast.error("Từ chối truy cập");
-    dispatch(logout())
+    dispatch(logout());
     return <Navigate to={"/auth/login"} replace />;
   }
   return element;

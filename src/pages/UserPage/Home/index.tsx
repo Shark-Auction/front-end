@@ -3,49 +3,43 @@ import CardElement from "../../../components/Card";
 import Carousel from "../../../components/Carousel";
 import { CardCategory } from "./components/CardCategory";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import Underline from "../../../components/UI/underline";
 import { categoryApi } from "../../../service/api/categoryApi";
 import { Category } from "../../../model/category";
-
-interface ProductProps {
-  id: string;
-  remainDay: string;
-  name: string;
-  currentPrice: string;
-  status: string;
-  image: string;
-}
+import EmptyComponent from "../../../components/Empty";
+import { auctionApi } from "../../../service/api/auctionApi";
+import { Auction } from "../../../model/auction";
+import { statusAuction } from "../../../utils/render/statusRender";
 
 const HomePage = () => {
-  const [dataProduct, setDataProduct] = useState<ProductProps[]>([]);
-  const [category, setCategory] = useState<Category[]>([])
+  const [dataProduct, setDataProduct] = useState<Auction[]>([]);
+  const [category, setCategory] = useState<Category[]>([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [pageSize, setPageSize] = useState(0);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const fetchCategory = async () => {
     try {
-      setLoading(true)
-      const response = await categoryApi.getCategory()
-      const filterParent = response.data.filter((item: Category) => item.parent === null)
-      setCategory(filterParent)
+      setLoading(true);
+      const response = await categoryApi.getCategory();
+      const filterParent = response.data.filter(
+        (item: Category) => item.parent === null
+      );
+      setCategory(filterParent);
     } catch (error: any) {
-      toast.error(error.message)
+      toast.error(error.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        "https://65335392d80bd20280f6684e.mockapi.io/api/v1/Product"
-      );
+      const response = await auctionApi.getAuction();
       setDataProduct(response.data);
     } catch (error: any) {
       toast.error(error);
@@ -66,7 +60,7 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchData();
-    fetchCategory()
+    fetchCategory();
   }, []);
 
   useEffect(() => {
@@ -82,47 +76,57 @@ const HomePage = () => {
         />
       </div>
       <div className="border shadow-shadowLight flex flex-col gap-5 pt-5 ">
-        <div className="">
-          <p className="text-2xl text-gray-500 px-5">Danh mục</p>
-        </div>
         <Skeleton loading={loading}>
-          <div>
-            <Carousel
-              type="Category"
-              numberOfSlide={1}
-              data={category}
-              component={(item: Category) => (
-                <CardCategory icon={item.imageUrl} name={item.name} />
-              )}
-            />
+          <div className="">
+            <p className="text-2xl text-gray-500 px-5">Danh mục</p>
           </div>
+          {category.length !== 0 ? (
+            <div>
+              <Carousel
+                type="Category"
+                numberOfSlide={1}
+                data={category}
+                component={(item: Category) => (
+                  <CardCategory icon={item.imageUrl} name={item.name} />
+                )}
+              />
+            </div>
+          ) : (
+            <EmptyComponent />
+          )}
         </Skeleton>
       </div>
       <div className="border-b-4 shadow-shadowLight flex justify-center py-2 border-b-primaryColor">
         <p className="text-2xl text-primaryColor">Đề xuất</p>
       </div>
       <Skeleton loading={loading}>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-5">
-          {dataProduct.slice(0, pageSize).map((element) => (
-            <CardElement
-              image={element.image}
-              id={element.id}
-              name={element.name}
-              remainDay={element.remainDay}
-              currentPrice={element.currentPrice}
-              status={element.status}
-              onClick={() => navigate(`/u/auction/${element.id}`)}
-            />
-          ))}
-        </div>
-        <div className="flex justify-center">
-          <Link
-            to={"/u/auction"}
-            className="text-xl text-primaryColor relative group"
-          >
-            More Auction <Underline color="primaryColor" />
-          </Link>
-        </div>
+        {dataProduct.length > 0 ? (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-5">
+              {dataProduct.slice(0, pageSize).map((element) => (
+                <CardElement
+                  image={element.product.thumbnail}
+                  id={element.id}
+                  name={element.product.name}
+                  remainDay={element.endTime}
+                  currentPrice={element.currentPrice}
+                  status={statusAuction[element.status]()}
+                  onClick={() => navigate(`/u/auction/${element.id}`)}
+                />
+              ))}
+            </div>
+            <div className="flex justify-center">
+              <Link
+                to={"/u/auction"}
+                className="text-xl text-primaryColor relative group"
+              >
+                Xem thêm <Underline color="primaryColor" />
+              </Link>
+            </div>
+          </>
+        ) : (
+          <EmptyComponent />
+        )}
       </Skeleton>
     </div>
   );

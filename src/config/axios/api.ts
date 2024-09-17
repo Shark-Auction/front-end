@@ -2,7 +2,7 @@ import axios from "axios";
 import { RootState, store } from "../../core/store/store";
 import { logout, updateAccessToken } from "../../core/store/slice/userSlice";
 
-const baseUrl = 'http://128.199.193.209:8080/api/v1/'
+const baseUrl = 'http://api.sharkauction.online/api/v1/'
 
 const api = axios.create({
   baseURL: baseUrl,

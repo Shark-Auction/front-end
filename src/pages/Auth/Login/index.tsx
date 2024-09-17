@@ -17,10 +17,10 @@ const LoginPage = () => {
       const response = await authApi.signIn(values);
       toast.success('Đăng nhập thành công')
       dispatch(login(response.data))
-      if(response.data.roleName === 'user') {
+      if(response.data.roleName === 'User') {
         navigate('/u/home')
       } else {
-        navigate('/admin')
+        navigate('/Admin')
       }
     } catch (error: any) {
       toast.error(error.message)
