@@ -124,12 +124,7 @@ const AuctionPage = () => {
         statusFilter.includes(auction.status)
       );
     }
-    setFilteredAuction(
-      filtered.sort(
-        (a: Auction, b: Auction) =>
-          new Date(b?.startTime).getTime() - new Date(a?.startTime).getTime()
-      )
-    );
+    setFilteredAuction(filtered);
   }, [selectedKey, dataAuction, searchText, priceSort, statusFilter]);
 
   return (
