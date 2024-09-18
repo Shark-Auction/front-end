@@ -1,4 +1,4 @@
-import { Tag } from "antd";
+import { Badge, Tag } from "antd";
 
 const textStyle = "!text-base";
 
@@ -146,3 +146,15 @@ export const statusAuction: any = {
     return "NaN";
   },
 };
+
+export const badgeRibbonStatus: any = {
+  Waiting: () => {
+    return <Badge.Ribbon text='Đợi đấu giá' color="blue" />
+  },
+  InProgress: () => {
+    return <Badge.Ribbon text='Đang đấu giá' color="cyan" />
+  },
+  Completed: () => {
+    return <Badge.Ribbon text='Hoàn thành' color="geekblue"/>
+  }
+}

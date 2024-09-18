@@ -6,22 +6,13 @@ import { ModalHistory } from "./Modal/ModalHistory";
 import { useEffect, useState } from "react";
 import { Tag } from "antd";
 import { formatDateHour, formatVND } from "../../../../../utils/format";
-import { ProductImage, UserAuction } from "../../../../../model/auction";
+import { Auction, UserAuction } from "../../../../../model/auction";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../../core/store/store";
-import { AuctionBiddingDetail } from "../../../../../model/bidding";
+import { badgeRibbonStatus } from "../../../../../utils/render/statusRender";
 
 interface GeneralAuctionProps {
-  name: string;
-  currentPrice: number;
-  step: number;
-  numberOfBidding: number;
-  remainDay: string;
-  dateEnd: string;
-  auctionId: number;
-  user: UserAuction;
-  biddingList: AuctionBiddingDetail[];
-  image: ProductImage[];
+  data: Auction;
 }
 
 const calculateTimeRemaining = (remainDay: string) => {
@@ -39,52 +30,48 @@ const calculateTimeRemaining = (remainDay: string) => {
 
 const textCss = "md:text-xl";
 
-export const GeneralAuction = ({
-  user,
-  auctionId,
-  name,
-  currentPrice,
-  step,
-  numberOfBidding,
-  remainDay,
-  dateEnd,
-  image,
-  biddingList,
-}: GeneralAuctionProps) => {
+export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
+  const [isWinner, setIsWinner] = useState<UserAuction>();
   const [timeRemaining, setTimeRemaining] = useState(
-    calculateTimeRemaining(remainDay)
+    calculateTimeRemaining(data.endTime)
   );
   const userLoginned = useSelector((state: RootState) => state.user);
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setTimeRemaining(calculateTimeRemaining(remainDay));
+      setTimeRemaining(calculateTimeRemaining(data.endTime));
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [remainDay]);
+  }, [data.endTime]);
+
+  useEffect(() => {
+    if (data && userLoginned && data.winner !== null) {
+      setIsWinner(data.winner);
+    }
+  }, [data, userLoginned]);
   return (
-    <div className="w-full border shadow-shadowLight flex flex-col md:flex-row gap-10">
-      <div className="w-full md:w-2/4 h-[600px]">
-        <ImageSlide image={image} />
+    <div className="w-full border shadow-shadowLight flex flex-col md:flex-row">
+      <div className="w-full md:w-1/4 h-full">
+        <ImageSlide image={data.product.product_images} />
       </div>
-      <div className="py-5 px-3 flex flex-col gap-5 w-full">
+      <div className="py-5 md:w-3/4 px-3 flex flex-col gap-5 w-full md:ml-10">
         <p className="text-2xl">
-          <strong>{name}</strong>
+          <strong>{data.product.name}</strong>
         </p>
         <div className="grid grid-cols-2 gap-y-2 gap-x-10 w-fit">
           <p className={`${textCss} text-gray-500`}>Giá trị hiện tại:</p>
           <p className={`${textCss} text-red-500 font-semibold`}>
-            {formatVND(currentPrice)}
+            {formatVND(data.currentPrice)}
           </p>
           <p className={`${textCss} text-gray-500`}>Bước nhảy:</p>
           <p className={`${textCss} text-red-500 font-semibold`}>
-            {formatVND(step)}
+            {formatVND(data.step)}
           </p>
         </div>
         <div className="flex flex-col md:flex-row gap-5 md:gap-10">
           <div className="flex items-center gap-4">
             <TbHammer className="text-3xl" />
-            <p className="md:text-xl font-semibold">{numberOfBidding}</p>
+            <p className="md:text-xl font-semibold">{data.totalBids}</p>
           </div>
           <div className="flex items-center gap-4">
             <LuClock3 className="text-3xl" />
@@ -92,27 +79,46 @@ export const GeneralAuction = ({
               {timeRemaining}
             </Tag>
           </div>
-          <div className="border bg-gray-300 rounded-lg px-5">
+          <div className="border bg-gray-300 rounded-lg px-5 !w-fit">
             <p className="md:text-lg font-semibold">
-              Phiên kết thúc lúc {formatDateHour(dateEnd)}
+              Phiên kết thúc lúc {formatDateHour(data.endTime)}
             </p>
           </div>
         </div>
         <div className="flex w-full justify-center mt-5">
-          {userLoginned && user.id === userLoginned["userId"] ? (
+          {userLoginned && data.product.seller.id === userLoginned["userId"] ? (
             <p className="text-xl font-semibold">
               Bạn là người sở hữu phiên này
             </p>
           ) : (
             <ModalBidding
-              auctionId={auctionId}
-              step={step}
-              currentPrice={currentPrice}
+              auctionId={data.id}
+              step={data.step}
+              currentPrice={data.currentPrice}
             />
           )}
         </div>
-        <ModalHistory data={biddingList} />
+        <div className="flex flex-col md:flex-row items-center md:justify-between gap-5">
+          {isWinner && (
+            <div>
+              {userLoginned &&
+              isWinner?.user_name === userLoginned["userName"] ? (
+                <Tag className="md:!text-lg" color="volcano">
+                  <span className="font-black">Bạn </span>
+                  đang là người trả giá cao nhất
+                </Tag>
+              ) : (
+                <Tag className="md:!text-lg" color="volcano">
+                  <span className="font-black">{data?.winner?.full_name} </span>
+                  đang là người trả giá cao nhất
+                </Tag>
+              )}
+            </div>
+          )}
+          <ModalHistory id={data.id} />
+        </div>
       </div>
+      {badgeRibbonStatus[data.status]()}
     </div>
   );
 };

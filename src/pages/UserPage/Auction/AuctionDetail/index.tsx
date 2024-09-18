@@ -7,15 +7,16 @@ import { AuctionInformation } from "./components/AuctionInformation";
 import { Skeleton } from "antd";
 import { Auction } from "../../../../model/auction";
 import { auctionApi } from "../../../../service/api/auctionApi";
-import { AuctionBiddingDetail } from "../../../../model/bidding";
 import { useWebSocket } from "../../../../hooks/useWebSocket";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../core/store/store";
 
 const AuctionDetail = () => {
   const { id } = useParams();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<Auction | null>(null);
-  const [biddingData, setBiddingData] = useState<AuctionBiddingDetail[]>([]);
   const { client } = useWebSocket();
+  const userLoginned = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const fetchDetailData = async () => {
@@ -23,18 +24,6 @@ const AuctionDetail = () => {
         setLoading(true);
         const response = await auctionApi.getAuctionById(id);
         setData(response.data);
-      } catch (error: any) {
-        toast.error(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const fetchDetailBidding = async () => {
-      try {
-        setLoading(true);
-        const response = await auctionApi.getBidding(id);
-        setBiddingData(response.data);
       } catch (error: any) {
         toast.error(error.message);
       } finally {
@@ -58,25 +47,17 @@ const AuctionDetail = () => {
       }
     );
     fetchDetailData();
-    fetchDetailBidding();
   }, [id]);
+
+
+  console.log(userLoginned)
 
   return (
     <Skeleton loading={loading}>
       {data ? (
         <div className="flex flex-col gap-10">
           <GeneralAuction
-            user={data.product.seller}
-            auctionId={Number(id)}
-            name={data.product.name}
-            remainDay={data.endTime}
-            currentPrice={data.currentPrice}
-            step={data.step}
-            dateEnd={data.endTime}
-            numberOfBidding={data.totalBids}
-            key={data.id}
-            image={data.product.product_images}
-            biddingList={biddingData}
+            data={data}
           />
           <SellerAuction seller={data.product.seller} />
           <AuctionInformation auctionData={data} />
