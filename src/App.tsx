@@ -33,6 +33,7 @@ import BrandManagement from "./pages/AdminPage/BrandManagement";
 import OriginManagement from "./pages/AdminPage/OriginManagement";
 import AdminProductManagement from "./pages/AdminPage/AdminProductManagement";
 import VerifyPage from "./pages/Auth/Verify";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
 function App() {
   const router = createBrowserRouter([
     {
@@ -123,6 +124,10 @@ function App() {
         {
           path: "verify",
           element: <VerifyPage />
+        },
+        {
+          path: 'forgot-password',
+          element: <ForgotPassword />
         }
       ],
     },
