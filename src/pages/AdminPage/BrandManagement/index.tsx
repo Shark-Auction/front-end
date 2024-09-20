@@ -1,7 +1,8 @@
-import { Button } from "antd";
+import { Button, Form, Input } from "antd";
 import Dashboard, { Column } from "../../../components/Dashboard";
 import ButtonPrimary from "../../../components/Button";
 import ImageComponent from "../../../components/Image";
+import { formatDateHour } from "../../../utils/format";
 
 const BrandManagement = () => {
   const columns: Column[] = [
@@ -19,27 +20,35 @@ const BrandManagement = () => {
       title: "Created At",
       dataIndex: "createdAt",
       key: "createdAt",
+      render: (text) => formatDateHour(text.createdAt),
     },
     {
-        title: "Updated At",
-        dataIndex: "updatedAt",
-        key: "updatedAt",
+      title: "Updated At",
+      dataIndex: "updatedAt",
+      key: "updatedAt",
+      render: (text) => formatDateHour(text.createdAt),
     },
-    {
-      title: "Action",
-      dataIndex: "id",
-      key: "action",
-      render: (id, record) => (
-        <>
-          <Button danger>Delete</Button>
-        </>
-      ),
-    },
+
   ];
+
+  const formItem = (
+    <>
+
+      <Form.Item
+        label="Name"
+        name="name"
+        rules={[{ required: true, message: "Plesae input the brand name!" }]}>
+        <Input placeholder="Brand Name"></Input>
+      </Form.Item>
+      <Form.Item name={"id"} hidden></Form.Item>
+    </>
+  )
+
+
   return (
     <>
-      <ButtonPrimary>Add new brand</ButtonPrimary>
-      <Dashboard columns={columns} apiUri="brand" action={false} />
+
+      <Dashboard columns={columns} apiUri="brand" action={true} formItem={formItem} />
     </>
   );
 };

@@ -2,6 +2,7 @@ import { Form, Image, Input } from "antd";
 import React from "react";
 import Dashboard, { Column } from "../../../components/Dashboard";
 import ImageComponent from "../../../components/Image";
+import { getImageProduct } from "../../../utils/getImage";
 
 const AuctionManagement = () => {
   const column: Column[] = [
@@ -20,7 +21,7 @@ const AuctionManagement = () => {
       title: "Product IMG",
       key: "product_images",
       dataIndex: "product",
-      render: (data) => <ImageComponent src={data} />,
+      render: (data) => <ImageComponent src={getImageProduct(data.thumbnail)} />,
     },
     {
       title: "Seller",
