@@ -2,6 +2,7 @@ import { Button } from "antd";
 import Dashboard, { Column } from "../../../components/Dashboard";
 import ButtonPrimary from "../../../components/Button";
 import ImageComponent from "../../../components/Image";
+import { getImageCategory, getImageProduct } from "../../../utils/getImage";
 
 const CategoryManagement = () => {
   const columns: Column[] = [
@@ -14,7 +15,7 @@ const CategoryManagement = () => {
       title: "Image",
       dataIndex: "imageUrl",
       key: "image",
-      render: (data) => <ImageComponent src={data} />,
+      render: (data) => <ImageComponent src={getImageCategory(data)} />,
     },
     {
       title: "Name",

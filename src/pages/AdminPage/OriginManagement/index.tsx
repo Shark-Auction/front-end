@@ -1,8 +1,9 @@
-import { Button } from "antd";
+import { Button, Form, Input } from "antd";
 import Dashboard, { Column } from "../../../components/Dashboard";
 import ButtonPrimary from "../../../components/Button";
 import ImageComponent from "../../../components/Image";
 import { formatDateHour } from "../../../utils/format";
+
 
 const OriginManagement = () => {
   const columns: Column[] = [
@@ -28,21 +29,26 @@ const OriginManagement = () => {
       key: "updatedAt",
       render: (text) => formatDateHour(text.updatedAt)
     },
-    {
-      title: "Action",
-      dataIndex: "id",
-      key: "action",
-      render: (id, record) => (
-        <>
-          <Button danger>Delete</Button>
-        </>
-      ),
-    },
+
   ];
+  const formItem = (
+    <>
+      <Form.Item
+        label="Name"
+        name="name"
+        rules={[{ required: true, message: "Please input the origin name!" }]}
+      >
+        <Input placeholder="Origin Name" />
+
+      </Form.Item>
+
+      <Form.Item name={"id"} hidden></Form.Item>
+    </>
+  );
   return (
     <>
-      <ButtonPrimary>Add new Origin</ButtonPrimary>
-      <Dashboard columns={columns} apiUri="origin" action={false} />
+
+      <Dashboard columns={columns} apiUri="origin" formItem={formItem} action={true} />
     </>
   );
 };
