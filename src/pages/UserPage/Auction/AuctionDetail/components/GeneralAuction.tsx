@@ -1,6 +1,4 @@
-import { TbHammer } from "react-icons/tb";
 import ImageSlide from "./ImageSlide/ImageSlide";
-import { LuClock3 } from "react-icons/lu";
 import { ModalBidding } from "./Modal/ModalBidding";
 import { ModalHistory } from "./Modal/ModalHistory";
 import { useEffect, useState } from "react";
@@ -10,6 +8,8 @@ import { Auction, UserAuction } from "../../../../../model/auction";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../../core/store/store";
 import { badgeRibbonStatus } from "../../../../../utils/render/statusRender";
+import { GiHammerDrop } from "react-icons/gi";
+import { FaClock } from "react-icons/fa";
 
 interface GeneralAuctionProps {
   data: Auction;
@@ -70,26 +70,28 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
         </div>
         <div className="flex flex-col md:flex-row gap-5 md:gap-10">
           <div className="flex items-center gap-4">
-            <TbHammer className="text-3xl" />
+            <GiHammerDrop className="text-3xl" />
             <p className="md:text-xl font-semibold">{data.totalBids}</p>
           </div>
           <div className="flex items-center gap-4">
-            <LuClock3 className="text-3xl" />
+            <FaClock className="text-3xl" />
             <Tag color="blue" className="text-base">
               {timeRemaining}
             </Tag>
           </div>
-          <div className="border bg-gray-300 rounded-lg px-5 !w-fit">
+          <div className="border bg-gradient-secondary rounded-lg px-5 !w-fit">
             <p className="md:text-lg font-semibold">
               Phiên kết thúc lúc {formatDateHour(data.endTime)}
             </p>
           </div>
         </div>
-        <div className="flex w-full justify-center mt-5">
+        <div className="flex w-full mt-5">
           {userLoginned && data.product.seller.id === userLoginned["userId"] ? (
-            <p className="text-xl font-semibold">
-              Bạn là người sở hữu phiên này
-            </p>
+            <div className="bg-gradient-primary text-white !p-2 !w-full text-center rounded-lg">
+              <p className="text-2xl font-semibold">
+                Bạn là người sở hữu phiên này
+              </p>
+            </div>
           ) : (
             <ModalBidding
               auctionId={data.id}
@@ -98,7 +100,7 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
             />
           )}
         </div>
-        <div className="flex flex-col md:flex-row items-center md:justify-between gap-5">
+        <div className="flex flex-col md:flex-row items-center md:justify-start gap-5">
           {isWinner && (
             <div>
               {userLoginned &&

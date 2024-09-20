@@ -125,7 +125,7 @@ export const ModalBidding = ({auctionId, currentPrice, step }: ModalBiddingProps
     <>
       <ButtonPrimary
         onClick={openBiddingModal}
-        className="font-semibold text-xl !w-full !py-5"
+        className="font-semibold text-2xl !w-full !py-5"
       >
         Đấu thầu
       </ButtonPrimary>

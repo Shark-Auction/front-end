@@ -5,12 +5,12 @@ import ProductCategory from "./components/ProductCategory";
 import ProductImage from "./components/ProductImage";
 import ProductDescription from "./components/ProductDescription";
 import ButtonPrimary from "../../../../../components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { ProductRequest } from "../../../../../model/product";
 import { productApi } from "../../../../../service/api/productApi";
 
-export const RequestProduct = () => {
+const RequestProduct = () => {
   const [form] = Form.useForm();
   const [imageDescription, setImageDescription] = useState<string[]>([]);
   const [loading, setLoading] = useState(false)
@@ -83,3 +83,5 @@ export const RequestProduct = () => {
     </div>
   );
 };
+
+export default RequestProduct

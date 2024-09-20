@@ -3,7 +3,7 @@ import MyProduct from "./components/MyProduct/MyProduct"
 import MyAuction from "./components/MyAuction/MyAuction"
 import { useState } from "react";
 
-export const ProductManagement = () => {
+const ProductManagement = () => {
   const [activeKey, setActiveKey] = useState("1");
   const handleTabChange = (key: string) => {
     setActiveKey(key);
@@ -34,3 +34,5 @@ export const ProductManagement = () => {
     <Tabs centered defaultActiveKey="1" items={items} activeKey={activeKey} onChange={handleTabChange} />
   )
 }
+
+export default ProductManagement

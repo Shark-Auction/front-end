@@ -15,7 +15,11 @@ export default {
       },
       container: {
         padding: '10rem'
-      }
+      },
+      backgroundImage: {
+        'gradient-primary': 'linear-gradient(to right, #59C5FF, #3b82f6, #69caff)',
+        'gradient-secondary': 'linear-gradient(to right, rgba(89, 197, 255, 0.5), rgba(59, 130, 246, 0.5), rgba(105, 202, 255, 0.5))',
+      },
     },
   },
   plugins: [],
