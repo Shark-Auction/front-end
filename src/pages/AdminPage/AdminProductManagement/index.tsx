@@ -1,42 +1,47 @@
-import { Button, message } from "antd";
+import React, { useState } from 'react';
+import { Button, message, Table } from 'antd';
 import Dashboard, { Column } from "../../../components/Dashboard";
 import { formatDateHour } from "../../../utils/format";
 import { productApi } from "../../../service/api/productApi";
 import ImageComponent from "../../../components/Image";
 import { getImageProduct } from "../../../utils/getImage";
+import ProductDetailModal from './ProductDetailModal';  // Import the modal
 
 const AdminProductManagement = () => {
+  const [selectedProduct, setSelectedProduct] = useState<any>(null); // Store selected product
+  const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
 
-  // Hàm xử lý khi nhấn Confirm
   const handleConfirm = async (id: number) => {
     try {
       await productApi.confirmProduct(id, {});
       message.success("Product confirmed successfully!");
-
     } catch (error: any) {
       message.error(`Error: ${error.message || "Unable to confirm product"}`);
     }
   };
-  const columns: Column[] = [
-    {
-      title: "#",
-      dataIndex: "id",
-      key: "id",
-    },
 
+  const handleProductNameClick = (product: any) => {
+    setSelectedProduct(product);
+    setIsModalVisible(true);
+  };
+
+  const columns: Column[] = [
+    { title: "#", dataIndex: "id", key: "id" },
     {
       title: "User Name",
-      dataIndex: "seller", // Added dataIndex here
+      dataIndex: "seller",
       key: "user_name",
-      render: (text) => text.user_name, // Adjusted render function
-
+      render: (text) => text.user_name,
     },
-
     {
       title: "Product Name",
-      dataIndex: "name", // Added dataIndex here
+      dataIndex: "name",
       key: "name",
-
+      render: (text, record) => (
+        <a onClick={() => handleProductNameClick(record)} style={{ cursor: 'pointer', color: '#1890ff' }}>
+          {text}
+        </a>
+      ),
     },
     {
       title: "Product IMG",
@@ -46,34 +51,24 @@ const AdminProductManagement = () => {
     },
     {
       title: "Category",
-      dataIndex: "category", // Added dataIndex here
+      dataIndex: "category",
       key: "category",
-      render: (text) => text.name
+      render: (text) => text.name,
     },
     {
-      title: "Brand ",
-      dataIndex: "brand", // Added dataIndex here
+      title: "Brand",
+      dataIndex: "brand",
       key: "brand",
-      render: (text) => text.name
+      render: (text) => text.name,
     },
     {
-      title: "Origin ",
-      dataIndex: "origin", // Added dataIndex here
+      title: "Origin",
+      dataIndex: "origin",
       key: "origin",
-      render: (text) => text.name
+      render: (text) => text.name,
     },
-    {
-      title: "Condition ",
-      dataIndex: "condition", // Added dataIndex here
-      key: "condition",
-      // render: (text) => text.name
-    },
-    {
-      title: "Status ",
-      dataIndex: "status", // Added dataIndex here
-      key: "status",
-      // render: (text) => text.name
-    },
+    { title: "Condition", dataIndex: "condition", key: "condition" },
+    { title: "Status", dataIndex: "status", key: "status" },
     {
       title: "Created At",
       dataIndex: "createdAt",
@@ -92,7 +87,9 @@ const AdminProductManagement = () => {
       key: "action",
       render: (id, record) => (
         <>
-          <Button danger onClick={() => handleConfirm(id)} disabled={record.status === "AUCTIONING"} >Confirm</Button>
+          <Button danger onClick={() => handleConfirm(id)} disabled={record.status === "AUCTIONING"}>
+            Confirm
+          </Button>
         </>
       ),
     },
@@ -100,9 +97,18 @@ const AdminProductManagement = () => {
 
   return (
     <>
+
       <Dashboard columns={columns} apiUri="product" action={false} />
+
+      {/* Product Details Modal */}
+      <ProductDetailModal
+        visible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        product={selectedProduct}
+      />
     </>
   );
 };
 
 export default AdminProductManagement;
+

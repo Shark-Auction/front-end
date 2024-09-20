@@ -1,5 +1,4 @@
 import { Form, Image, Input } from "antd";
-import React from "react";
 import Dashboard, { Column } from "../../../components/Dashboard";
 import ImageComponent from "../../../components/Image";
 import { getImageProduct } from "../../../utils/getImage";
@@ -39,12 +38,7 @@ const AuctionManagement = () => {
       key: "status",
       dataIndex: "status",
     },
-    // {
-    //   title: "Image",
-    //   key: "image",
-    //   dataIndex: "image",
-    //   render: (data) => <Image width={200} src={data} />,
-    // },
+
   ];
   const formItem = (
     <>
