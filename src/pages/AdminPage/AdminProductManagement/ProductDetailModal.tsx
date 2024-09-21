@@ -21,9 +21,9 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ visible, onClos
             {product && (
                 <Descriptions bordered column={2}>
                     <Descriptions.Item label="Product Name">{product.name}</Descriptions.Item>
-                    <Descriptions.Item label="Description" span={2}>
+                    {/* <Descriptions.Item label="Seller" span={2}>
                         <div dangerouslySetInnerHTML={{ __html: product.description }} />
-                    </Descriptions.Item>
+                    </Descriptions.Item> */}
                     <Descriptions.Item label="Category">{product.category?.name}</Descriptions.Item>
                     <Descriptions.Item label="Brand">{product.brand?.name}</Descriptions.Item>
                     <Descriptions.Item label="Origin">{product.origin?.name}</Descriptions.Item>
@@ -38,16 +38,17 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ visible, onClos
                     <Descriptions.Item label="Seller Username">{product.seller?.user_name}</Descriptions.Item>
                     <Descriptions.Item label="Seller Phone">{product.seller?.phone_number}</Descriptions.Item>
                     <Descriptions.Item label="Seller Email">{product.seller?.email}</Descriptions.Item>
+                    <Descriptions.Item label="Seller Address">{product.seller?.address}</Descriptions.Item>
 
                     {/* Images */}
                     <Descriptions.Item label="Thumbnail" span={2}>
                         <Image src={getImageProduct(product.thumbnail)} width={200} />
                     </Descriptions.Item>
-                    {product.product_images?.map((img: any) => (
+                    {/* {product.product_images?.map((img: any) => (
                         <Descriptions.Item label="Additional Image" key={img.id}>
                             <Image src={getImageProduct(img.url)} width={200} />
                         </Descriptions.Item>
-                    ))}
+                    ))} */}
                 </Descriptions>
             )}
         </Modal>

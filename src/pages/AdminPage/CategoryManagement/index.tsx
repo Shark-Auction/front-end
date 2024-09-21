@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Form, Input } from "antd";
 import Dashboard, { Column } from "../../../components/Dashboard";
 import ButtonPrimary from "../../../components/Button";
 import ImageComponent from "../../../components/Image";
@@ -27,21 +27,26 @@ const CategoryManagement = () => {
     //   dataIndex: "parent",
     //   key: "parent",
     // },
-    {
-      title: "Action",
-      dataIndex: "id",
-      key: "action",
-      render: (id, record) => (
-        <>
-          <Button danger>Delete</Button>
-        </>
-      ),
-    },
+
   ];
+
+
+  const formItem = (
+    <>
+
+      <Form.Item
+        label="Name"
+        name="name"
+        rules={[{ required: true, message: "Plesae input the Category name!" }]}>
+        <Input placeholder="Category Name"></Input>
+      </Form.Item>
+      <Form.Item name={"id"} hidden></Form.Item>
+    </>
+  )
   return (
     <>
-      <ButtonPrimary>Add new category</ButtonPrimary>
-      <Dashboard columns={columns} apiUri="category" action={false} />
+
+      <Dashboard columns={columns} apiUri="category" action={true} formItem={formItem} />
     </>
   );
 };
