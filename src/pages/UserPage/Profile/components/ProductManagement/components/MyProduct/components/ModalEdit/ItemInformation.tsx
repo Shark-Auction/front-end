@@ -1,6 +1,7 @@
 import { Form, Input, InputNumber, Select } from "antd";
 import LabelForm from "../../../../../../../../../components/LabelForm";
 import { selectItems } from "../../../../../../../../../service/data/conditionItem";
+import { selectDeliveryMethod } from "../../../../../../../../../service/data/deliveryMethod";
 
 const ItemInformation = () => {
   return (
@@ -60,6 +61,50 @@ const ItemInformation = () => {
             (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
           }
           options={selectItems}
+        />
+      </Form.Item>
+      <Form.Item
+        label={<LabelForm>Giá mong muốn</LabelForm>}
+        name={"desiredPrice"}
+        className="col-span-1"
+        rules={[
+          {
+            required: true,
+            message: "Không được dể trống",
+          },
+        ]}
+      >
+        <InputNumber<number>
+          placeholder="Nhập giá khởi điểm"
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) =>
+            value?.replace(/\$\s?|(,*)/g, "") as unknown as number
+          }
+          className="w-full"
+          min={0}
+          controls={false}
+        />
+      </Form.Item>
+      <Form.Item
+        label={<LabelForm>Phương thức giao hàng</LabelForm>}
+        name={"deliveryMethod"}
+        className="col-span-1"
+        rules={[
+          {
+            required: true,
+            message: "Không được dể trống",
+          },
+        ]}
+      >
+        <Select
+          showSearch
+          placeholder="Chọn..."
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+          options={selectDeliveryMethod}
         />
       </Form.Item>
     </>

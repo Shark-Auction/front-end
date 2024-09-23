@@ -140,7 +140,7 @@ export const statusAuction: any = {
       <Tag className={textStyle} color="red">
         Thất bại
       </Tag>
-    )
+    );
   },
   NaN: () => {
     return "NaN";
@@ -149,12 +149,21 @@ export const statusAuction: any = {
 
 export const badgeRibbonStatus: any = {
   Waiting: () => {
-    return <Badge.Ribbon text='Đợi đấu giá' color="blue" />
+    return <Badge.Ribbon text="Đợi đấu giá" color="blue" />;
   },
   InProgress: () => {
-    return <Badge.Ribbon text='Đang đấu giá' color="cyan" />
+    return <Badge.Ribbon text="Đang đấu giá" color="cyan" />;
   },
   Completed: () => {
-    return <Badge.Ribbon text='Hoàn thành' color="geekblue"/>
-  }
-}
+    return <Badge.Ribbon text="Hoàn thành" color="geekblue" />;
+  },
+  WaitingPay: () => {
+    return <Badge.Ribbon text="Đợi trả" color="green" />;
+  },
+  Cancel: () => {
+    return <Badge.Ribbon text="Hủy" color="red" />;
+  },
+  Fail: () => {
+    return <Badge.Ribbon text="Thất bại" color="red-inverse" />;
+  },
+};

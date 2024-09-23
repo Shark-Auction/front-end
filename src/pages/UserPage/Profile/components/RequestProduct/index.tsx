@@ -30,6 +30,8 @@ const RequestProduct = () => {
       if (values.buyNowPrice)
         formData.append("buyNowPrice", values.buyNowPrice.toString());
       if (values.originName) formData.append("originName", values.originName);
+      if (values.desiredPrice) formData.append("desiredPrice", values.desiredPrice.toString());
+      if (values.deliveryMethod) formData.append("deliveryMethod", values.deliveryMethod);
       if (values.description)
         formData.append("description", values.description);
 
@@ -65,13 +67,13 @@ const RequestProduct = () => {
             buyNow: false,
           }}
         >
-          <div className="grid grid-cols-3 gap-x-5">
+          <div className="md:grid md:grid-cols-3 gap-x-5">
             <ProductInformation />
           </div>
-          <div className="grid grid-cols-3 gap-x-5">
+          <div className="md:grid md:grid-cols-3 gap-x-5">
             <ProductBrand />
           </div>
-          <div className="grid grid-cols-3 gap-x-5">
+          <div className="md:grid md:grid-cols-3 gap-x-5">
             <ProductCategory />
           </div>
           <div>
