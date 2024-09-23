@@ -7,6 +7,18 @@ export interface Order {
   type: string
 }
 
+export interface OrderRequestData {
+  fullName: string;
+  phoneNumber: string;
+  note: string;
+  product_id: number;
+  district: any;
+  ward: any;
+  province: any;
+  address: string;
+  type: string
+}
+
 // Role interface for both Buyer and Seller
 interface Role {
   id: number;
