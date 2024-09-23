@@ -1,10 +1,39 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message, Popconfirm } from "antd";
 import Dashboard, { Column } from "../../../components/Dashboard";
 import ButtonPrimary from "../../../components/Button";
 import ImageComponent from "../../../components/Image";
 import { formatDateHour } from "../../../utils/format";
+import { staffApi } from "../../../service/api/admin/accountAPI";
+import { useRef, useState } from "react";
+
 
 const StaffManagement = () => {
+
+    const [refetch, setRefetch] = useState(false); // State để quản lý refetch
+
+    const refreshData = () => {
+        setRefetch(true); // Đặt refetch thành true khi cần fetch lại
+    };
+    const handleBan = async (id: number) => {
+        try {
+            await staffApi.banAccount(id);
+            message.success("Account banned successfully");
+            // Optionally, trigger a reload of the data after banning
+            refreshData();  // Gọi refreshData để set refetch
+        } catch (error) {
+            message.error(`Failed to ban account: ${error}`);
+        }
+    };
+    const handleUnBan = async (id: number) => {
+        try {
+            await staffApi.unBanAccount(id);
+            message.success("Account unBanned successfully");
+            // Optionally, trigger a reload of the data after banning
+            refreshData();  // Gọi refreshData để set refetch
+        } catch (error) {
+            message.error(`Failed to unBan account: ${error}`);
+        }
+    };
     const columns: Column[] = [
         {
             title: "#",
@@ -52,28 +81,42 @@ const StaffManagement = () => {
             key: "is_active",
             render: (text) => (text ? "true" : "false"),
         },
-
+        {
+            title: "Action",
+            dataIndex: "is_active",
+            key: "action",
+            render: (_, record) => (
+                record.is_active ? (
+                    <Popconfirm
+                        title="Are you sure you want to ban this user?"
+                        onConfirm={() => handleBan(record.id)}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button danger>Ban</Button>
+                    </Popconfirm>
+                ) : (
+                    <Popconfirm
+                        title="Are you sure you want to unban this user?"
+                        onConfirm={() => handleUnBan(record.id)}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button type="primary">Unban</Button>
+                    </Popconfirm>
+                )
+            ),
+        },
 
     ];
 
-    const formItem = (
-        <>
 
-            <Form.Item
-                label="Name"
-                name="name"
-                rules={[{ required: true, message: "Plesae input the brand name!" }]}>
-                <Input placeholder="Brand Name"></Input>
-            </Form.Item>
-            <Form.Item name={"id"} hidden></Form.Item>
-        </>
-    )
 
 
     return (
         <>
 
-            <Dashboard columns={columns} apiUri="staffs" action={true} formItem={formItem} />
+            <Dashboard columns={columns} apiUri="staffs" action={false} refetch={refetch} setRefetch={setRefetch} />
         </>
     );
 };
