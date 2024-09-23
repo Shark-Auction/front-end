@@ -1,5 +1,5 @@
 import { Auction } from "../../../../../../model/auction";
-import { Button, Divider, Form, Input, Modal } from "antd";
+import { Button, Divider, Form, Input, Modal, Select } from "antd";
 import LabelForm from "../../../../../../components/LabelForm";
 import { formatVND } from "../../../../../../utils/format";
 import { RootState } from "../../../../../../core/store/store";
@@ -7,10 +7,10 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Underline from "../../../../../../components/UI/underline";
 import ButtonPrimary from "../../../../../../components/Button";
-import { Order } from "../../../../../../model/order";
+import { Order, OrderRequestData } from "../../../../../../model/order";
 import { toast } from "react-toastify";
 import { orderApi } from "../../../../../../service/api/orderApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ModalBuyNowProps {
   open: boolean;
@@ -21,6 +21,11 @@ interface ModalBuyNowProps {
 const ModalBuyNow = ({ open, setOpen, data }: ModalBuyNowProps) => {
   const [form] = Form.useForm();
   const userLoginned = useSelector((state: RootState) => state.user);
+  const [province, setProvince] = useState([]);
+  const [district, setDistrict] = useState([]);
+  const [ward, setWard] = useState([]);
+  const [isDistrict, setIsDisctrict] = useState(false);
+  const [isWard, setIsWard] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleCancel = () => {
@@ -30,10 +35,19 @@ const ModalBuyNow = ({ open, setOpen, data }: ModalBuyNowProps) => {
   const handleSubmit = () => {
     form.submit();
   };
-  const handleFinish = async (values: Order) => {
+  const handleFinish = async (values: OrderRequestData) => {
     try {
+      const toAddress = `${values.address}, ${values.ward.label}, ${values.district.label}, ${values.province.label}.`
+      const dataForm: Order = {
+        toAddress: toAddress,
+        fullName: values.fullName,
+        note: values.note || 'Người dùng để trống',
+        phoneNumber: values.phoneNumber,
+        product_id: values.product_id,
+        type: values.type
+      }
       setLoading(true);
-      await orderApi.orderAuction(values);
+      await orderApi.orderAuction(dataForm);
       toast.success("Mua ngay thành công! Hãy kiểm tra đơn hàng của bạn");
       handleCancel();
       localStorage.setItem("key", "order-mangement");
@@ -44,8 +58,65 @@ const ModalBuyNow = ({ open, setOpen, data }: ModalBuyNowProps) => {
       setLoading(false);
     }
   };
+  const handleDistrict = async (province: any) => {
+    if (province) {
+      const response = await orderApi.getDistrictApi(province.value);
+      const optionResponse = await response.data.map((e: any) => ({
+        label: e.full_name,
+        value: e.id,
+      }));
+      setDistrict(optionResponse);
+      setIsDisctrict(true);
+    } else {
+      setIsDisctrict(false);
+      setIsWard(false);
+      form.setFieldsValue({
+        district: null,
+        ward: null,
+      });
+    }
+  };
+  const handleWard = async (district: any) => {
+    if (district) {
+      const response = await orderApi.getWardApi(district.value);
+      const optionResponse = await response.data.map((e: any) => ({
+        label: e.full_name,
+        value: e.id,
+      }));
+      setWard(optionResponse);
+      setIsWard(true);
+    } else {
+      setIsWard(false);
+      form.setFieldsValue({
+        ward: null,
+      });
+    }
+  };
+  const fetchDataCity = async () => {
+    try {
+      setLoading(true);
+      const responseProvince = await orderApi.getProvinceApi();
+      const optionResponse = await responseProvince.data.map((e: any) => ({
+        label: e.full_name,
+        value: e.id,
+      }));
+      setProvince(optionResponse);
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (open) {
+      fetchDataCity();
+    }
+  }, [open]);
+
   return (
     <Modal
+      width={700}
       loading={loading}
       title={
         <p className="font-normal text-lg">
@@ -110,15 +181,93 @@ const ModalBuyNow = ({ open, setOpen, data }: ModalBuyNowProps) => {
             >
               <Input />
             </Form.Item>
+            <div className="md:grid grid-cols-3 gap-x-2">
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: "Không được để trống!",
+                  },
+                ]}
+                name={"province"}
+                label={<LabelForm>Chọn tỉnh/thành phố</LabelForm>}
+              >
+                <Select
+                  placeholder="Chọn tỉnh/thành"
+                  labelInValue
+                  options={province}
+                  optionFilterProp="children"
+                  showSearch
+                  allowClear
+                  onChange={handleDistrict}
+                  filterOption={(input: any, option: any) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                />
+              </Form.Item>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: "Không được để trống!",
+                  },
+                ]}
+                name={"district"}
+                label={<LabelForm>Chọn quận/thị xã</LabelForm>}
+              >
+                <Select
+                  placeholder="Chọn quận/thị xã"
+                  labelInValue
+                  options={district}
+                  optionFilterProp="children"
+                  showSearch
+                  onChange={handleWard}
+                  filterOption={(input: any, option: any) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  disabled={!isDistrict}
+                  allowClear
+                />
+              </Form.Item>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: "Không được để trống!",
+                  },
+                ]}
+                name={"ward"}
+                label={<LabelForm>Chọn phường</LabelForm>}
+              >
+                <Select
+                  placeholder="Chọn phường"
+                  labelInValue
+                  options={ward}
+                  optionFilterProp="children"
+                  showSearch
+                  filterOption={(input: any, option: any) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  disabled={!isWard}
+                  allowClear
+                />
+              </Form.Item>
+            </div>
             <Form.Item
+              name={"address"}
+              label={<LabelForm>Địa chỉ</LabelForm>}
               rules={[
                 {
                   required: true,
                   message: "Không được để trống!",
                 },
               ]}
-              name={"toAddress"}
-              label={<LabelForm>Địa chỉ nhận hàng</LabelForm>}
             >
               <Input />
             </Form.Item>
