@@ -56,7 +56,12 @@ interface Product {
   status: string;
   product_images: ProductImage[];
   thumbnail: string;
+  buyNow: boolean;
+  deliveryMethod: string;
+  buyNowPrice: number;
+  desiredPrice: number; 
 }
+
 
 export interface Auction {
   id: number;

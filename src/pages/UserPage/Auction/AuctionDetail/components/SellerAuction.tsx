@@ -39,7 +39,7 @@ export const SellerAuction = ({seller}: SellerAuctionProps) => {
           </p>
           <ButtonPrimary
             onClick={() => navigate(`/u/seller/${seller.id}`)}
-            className="!border-2 !border-primaryColor !bg-blue-300 !text-blue-700 text-lg"
+            className="!border-2"
           >
             Xem người bán
           </ButtonPrimary>
