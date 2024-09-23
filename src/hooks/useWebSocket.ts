@@ -8,6 +8,7 @@ export const useWebSocket = () => {
   const sock = () => new SockJS(URL);
   const client = Stomp.over(sock);
   useEffect(() => {
+    client.debug = () => {}
     return () => {
       client.disconnect = () => {}
     }

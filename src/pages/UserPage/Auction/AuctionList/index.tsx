@@ -75,7 +75,7 @@ const AuctionPage = () => {
         setLoading(true);
         const response = await auctionApi.getAuction();
         const filteredData = response.data
-          .filter((e: Auction) => e.status !== "Cancel")
+          .filter((e: Auction) => e.status === 'Waiting' || e.status === 'InProgress')
           .sort(
             (a: Auction, b: Auction) =>
               new Date(b?.startTime).getTime() -

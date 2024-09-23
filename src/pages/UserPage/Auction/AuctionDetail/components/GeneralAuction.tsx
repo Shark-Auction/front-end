@@ -123,7 +123,7 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
           <ModalHistory id={data.id} />
         </div>
       </div>
-      {badgeRibbonStatus[data.status]()}
+      {data && badgeRibbonStatus[data.status]()}
     </div>
   );
 };

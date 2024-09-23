@@ -2,6 +2,7 @@ import { Tabs, TabsProps } from "antd"
 import MyProduct from "./components/MyProduct/MyProduct"
 import MyAuction from "./components/MyAuction/MyAuction"
 import { useState } from "react";
+import MyWinning from "./components/MyWinning/MyWinning";
 
 const ProductManagement = () => {
   const [activeKey, setActiveKey] = useState("1");
@@ -26,8 +27,8 @@ const ProductManagement = () => {
     },
     {
       key: '4',
-      label: 'My Winning',
-      children: 'My Winning'
+      label: 'Đấu giá thắng',
+      children: <MyWinning />
     }
   ]
   return (

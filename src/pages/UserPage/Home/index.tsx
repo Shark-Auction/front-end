@@ -40,7 +40,15 @@ const HomePage = () => {
     try {
       setLoading(true);
       const response = await auctionApi.getAuction();
-      setDataProduct(response.data);
+      const filteredData = response.data
+        .filter(
+          (e: Auction) => e.status === "Waiting" || e.status === "InProgress"
+        )
+        .sort(
+          (a: Auction, b: Auction) =>
+            new Date(b?.startTime).getTime() - new Date(a?.startTime).getTime()
+        );
+      setDataProduct(filteredData);
     } catch (error: any) {
       toast.error(error);
     } finally {
