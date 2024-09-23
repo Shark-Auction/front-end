@@ -9,7 +9,7 @@ import { useRef, useState } from "react";
 const { Option } = Select;
 const AccountManagement = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [selectedAccountId, setSelectedAccountId] = useState(null);
+    const [selectedAccountId, setSelectedAccountId] = useState(0);
     const [newRoleId, setNewRoleId] = useState(null);
 
     const [refetch, setRefetch] = useState(false); // State để quản lý refetch
@@ -25,15 +25,15 @@ const AccountManagement = () => {
         // Add more role mappings as needed
     };
 
-    const handleEdit = (id, currentRoleId) => {
+    const handleEdit = (id: number, currentRoleId: any) => {
         setSelectedAccountId(id);
-        setNewRoleId(currentRoleId);
+        setNewRoleId(currentRoleId); // Set the current role ID
         setIsModalVisible(true);
     };
     const handleRoleChange = async () => {
         if (selectedAccountId && newRoleId) {
             try {
-                await accountApi.setRoleAccount(selectedAccountId, newRoleId);
+                await accountApi.setRoleAccount(selectedAccountId, { roleId: newRoleId });
                 message.success("Role updated successfully");
                 setIsModalVisible(false);
                 refreshData();
@@ -136,7 +136,7 @@ const AccountManagement = () => {
                             <Button type="primary">Unban</Button>
                         </Popconfirm>
                     )}
-                    <Button onClick={() => handleEdit(record.id, record.role_id.id)} style={{ marginLeft: 8 }}>
+                    <Button onClick={() => handleEdit(record.id, record.role_id.name)} style={{ marginLeft: 8 }}>
                         Edit
                     </Button>
                 </>
@@ -153,7 +153,10 @@ const AccountManagement = () => {
                 title="Edit Role"
                 visible={isModalVisible}
                 onOk={handleRoleChange}
-                onCancel={() => setIsModalVisible(false)}
+                onCancel={() => {
+                    setIsModalVisible(false)
+                    setNewRoleId(null)
+                }}
             >
                 <Select
                     value={newRoleId}

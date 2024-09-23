@@ -16,8 +16,8 @@ interface DashboardProps {
   apiUri: string;
   formItem?: React.ReactElement;
   action?: boolean;
-  refetch: boolean; // New prop for refetch
-  setRefetch: (value: boolean) => void; // New prop to set refetch state
+  refetch?: boolean; // New prop for refetch
+  setRefetch?: (value: boolean) => void; // New prop to set refetch state
 }
 
 const Dashboard = ({
@@ -124,7 +124,6 @@ const Dashboard = ({
   useEffect(() => {
     if (refetch) {
       fetchData(); // Gọi fetchData nếu refetch là true
-      setRefetch(false); // Đặt lại refetch về false
     }
   }, [refetch]); // Theo dõi refetch
   return (
