@@ -125,9 +125,9 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
           )}
           <ModalHistory id={data.id} />
         </div>
-        {(data.product.buyNow === true ||
+        {(data.product.buyNow === true &&
           (userLoginned &&
-            data.product.seller.id !== userLoginned["userId"])) &&
+            data.product.seller.user_name !== userLoginned["userName"])) &&
           data.status === "InProgress" && (
             <div className="flex gap-x-2 items-center">
               <ButtonPrimary
