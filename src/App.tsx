@@ -36,6 +36,7 @@ import React, { Suspense } from "react";
 import LoadingComponent from "./components/Loading";
 import MyProfile from "./pages/UserPage/Profile/components/MyProfile";
 import ChangePassword from "./pages/UserPage/Profile/components/ChangePassword";
+import ManagerManagement from "./pages/AdminPage/AccountManagement/manager";
 const ProductManagement = React.lazy(
   () => import("./pages/UserPage/Profile/components/ProductManagement")
 );
@@ -169,7 +170,7 @@ function App() {
       children: [
         { path: "account-management", element: <AccountManagement /> },
         { path: "staff-management", element: <StaffManagement /> },
-
+        { path: "manager-management", element: <ManagerManagement /> },
         { path: "auction-management", element: <AuctionManagement /> },
         { path: "category-management", element: <CategoryManagement /> },
         { path: "brand-management", element: <BrandManagement /> },
