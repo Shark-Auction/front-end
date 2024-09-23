@@ -26,9 +26,9 @@ export const accountApi = {
     }
   },
   
-  setRoleAccount: async (id: number,role_id: number) => {
+  setRoleAccount: async (id: number,data:any) => {
     try {
-      const response = await api.put(`account/${id}`,role_id);
+      const response = await api.put(`account/${id}`,data);
       return response.data;
     } catch (error: any) {
       throw error.response.data;
@@ -37,7 +37,7 @@ export const accountApi = {
 }
 
 export const staffApi = {
-    getStaff: async () => {
+    getAccount: async () => {
       try {
         const response = await api.get('account/staffs')
         return response.data
@@ -45,14 +45,26 @@ export const staffApi = {
         throw error.response.data
       }
     },
-    addStaff: async () => {
+    addStaff: async (data:any) => {
         try {
-          const response = await api.post('account/users/staffs')
+          const response = await api.post('account/users/staffs',data)
           return response.data
         } catch (error: any) {
           throw error.response.data
         }
       }
+  }
+
+  export const managerApi = {
+   
+    getAccount: async () => {
+      try {
+        const response = await api.get('account/managers')
+        return response.data
+      } catch (error: any) {
+        throw error.response.data
+      }
+    }
   }
 
  

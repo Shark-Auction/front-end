@@ -7,6 +7,7 @@ import ImageComponent from "../../../components/Image";
 import { getImageProduct } from "../../../utils/getImage";
 import ProductDetailModal from './ProductDetailModal';  // Import the modal
 
+
 const AdminProductManagement = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null); // Store selected product
   const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
@@ -145,7 +146,7 @@ const AdminProductManagement = () => {
       key: "action",
       render: (id, record) => (
         <>
-          <Button type="primary" onClick={() => handleConfirm(id)} disabled={record.status === "AUCTIONING"}>
+          <Button type="primary" onClick={() => handleConfirm(id)} disabled={record.status !== "PENDING"}>
             Confirm
           </Button>
         </>

@@ -37,7 +37,7 @@ const items: MenuItem[] = [
       getItem("All User", "account-management", <MdCategory />),
       getItem("Staff", "staff-management", <MdCategory />),
       getItem("Manager", "manager-management", <MdCategory />),
-      getItem("Shipper", "shipper-management", <MdCategory />),
+
     ],
   },
   getItem("Category Management", "category-management", <MdCategory />),

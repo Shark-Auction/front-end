@@ -1,39 +1,29 @@
-import { Button, Form, Input, message, Popconfirm } from "antd";
+import { Button, Form, Input, message, Modal, Popconfirm } from "antd";
 import Dashboard, { Column } from "../../../components/Dashboard";
-import ButtonPrimary from "../../../components/Button";
-import ImageComponent from "../../../components/Image";
-import { formatDateHour } from "../../../utils/format";
 import { staffApi } from "../../../service/api/admin/accountAPI";
 import { useRef, useState } from "react";
 
 
 const StaffManagement = () => {
-
+    const [isModalVisible, setIsModalVisible] = useState(false); // State to manage modal visibility
     const [refetch, setRefetch] = useState(false); // State để quản lý refetch
-
+    const [form] = Form.useForm(); // Ant Design Form instance
     const refreshData = () => {
         setRefetch(true); // Đặt refetch thành true khi cần fetch lại
     };
-    const handleBan = async (id: number) => {
+
+    const handleAddStaff = async (values: any) => {
         try {
-            await staffApi.banAccount(id);
-            message.success("Account banned successfully");
-            // Optionally, trigger a reload of the data after banning
-            refreshData();  // Gọi refreshData để set refetch
+            await staffApi.addStaff(values);
+            message.success("Staff added successfully");
+            setIsModalVisible(false);
+            form.resetFields(); // Reset form fields
+            refreshData(); // Refresh data after adding staff
         } catch (error) {
-            message.error(`Failed to ban account: ${error}`);
+            message.error(`Failed to add staff: ${error}`);
         }
     };
-    const handleUnBan = async (id: number) => {
-        try {
-            await staffApi.unBanAccount(id);
-            message.success("Account unBanned successfully");
-            // Optionally, trigger a reload of the data after banning
-            refreshData();  // Gọi refreshData để set refetch
-        } catch (error) {
-            message.error(`Failed to unBan account: ${error}`);
-        }
-    };
+
     const columns: Column[] = [
         {
             title: "#",
@@ -81,42 +71,71 @@ const StaffManagement = () => {
             key: "is_active",
             render: (text) => (text ? "true" : "false"),
         },
-        {
-            title: "Action",
-            dataIndex: "is_active",
-            key: "action",
-            render: (_, record) => (
-                record.is_active ? (
-                    <Popconfirm
-                        title="Are you sure you want to ban this user?"
-                        onConfirm={() => handleBan(record.id)}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button danger>Ban</Button>
-                    </Popconfirm>
-                ) : (
-                    <Popconfirm
-                        title="Are you sure you want to unban this user?"
-                        onConfirm={() => handleUnBan(record.id)}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button type="primary">Unban</Button>
-                    </Popconfirm>
-                )
-            ),
-        },
+
 
     ];
 
-
-
-
     return (
         <>
-
-            <Dashboard columns={columns} apiUri="staffs" action={false} refetch={refetch} setRefetch={setRefetch} />
+            <Button type="primary" onClick={() => setIsModalVisible(true)} style={{ marginBottom: 16 }}>
+                Add Staff
+            </Button>
+            <Dashboard columns={columns} apiUri="account/staffs" action={false} refetch={refetch} setRefetch={setRefetch} />
+            <Modal
+                title="Add Staff"
+                visible={isModalVisible}
+                onCancel={() => setIsModalVisible(false)}
+                footer={null}
+            >
+                <Form form={form} layout="vertical" onFinish={handleAddStaff}>
+                    <Form.Item
+                        name="full_name"
+                        label="Full Name"
+                        rules={[{ required: true, message: 'Please input the full name!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name="user_name"
+                        label="User Name"
+                        rules={[{ required: true, message: 'Please input the user name!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name="password"
+                        label="Password"
+                        rules={[{ required: true, message: 'Please input the password!' }]}
+                    >
+                        <Input.Password placeholder="Enter your password" />
+                    </Form.Item>
+                    <Form.Item
+                        name="phone_number"
+                        label="Phone Number"
+                        rules={[{ required: true, message: 'Please input the phone number!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name="email"
+                        label="Email"
+                        rules={[{ required: true, message: 'Please input the email!' }, { type: 'email', message: 'Please enter a valid email!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name="address"
+                        label="Address"
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                            Add Staff
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </>
     );
 };
