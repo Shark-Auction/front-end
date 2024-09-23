@@ -2,8 +2,9 @@ import { Tabs, TabsProps } from "antd"
 import MyProduct from "./components/MyProduct/MyProduct"
 import MyAuction from "./components/MyAuction/MyAuction"
 import { useState } from "react";
+import MyWinning from "./components/MyWinning/MyWinning";
 
-export const ProductManagement = () => {
+const ProductManagement = () => {
   const [activeKey, setActiveKey] = useState("1");
   const handleTabChange = (key: string) => {
     setActiveKey(key);
@@ -26,11 +27,13 @@ export const ProductManagement = () => {
     },
     {
       key: '4',
-      label: 'My Winning',
-      children: 'My Winning'
+      label: 'Đấu giá thắng',
+      children: <MyWinning />
     }
   ]
   return (
     <Tabs centered defaultActiveKey="1" items={items} activeKey={activeKey} onChange={handleTabChange} />
   )
 }
+
+export default ProductManagement

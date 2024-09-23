@@ -1,4 +1,4 @@
-import { Button, Divider, Form, Input } from "antd";
+import { Button, Divider, Form, Input, Popover } from "antd";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -6,28 +6,85 @@ import { LoginInformation } from "../../../model/user";
 import authApi from "../../../service/api/authApi";
 import { useDispatch } from "react-redux";
 import { login } from "../../../core/store/slice/userSlice";
+import LabelForm from "../../../components/LabelForm";
+import ButtonPrimary from "../../../components/Button";
+
+interface ForgotPassword {
+  email: string;
+}
 
 const LoginPage = () => {
-  const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [loadingForgot, setLoadingForgot] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [form] = Form.useForm();
+  const dispatch = useDispatch();
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen);
+    form.resetFields();
+  };
   const handleFinish = async (values: LoginInformation) => {
     try {
       setLoading(true);
       const response = await authApi.signIn(values);
-      toast.success('Đăng nhập thành công')
-      dispatch(login(response.data))
-      if(response.data.roleName === 'User') {
-        navigate('/u/home')
+      toast.success("Đăng nhập thành công");
+      dispatch(login(response.data));
+      if (response.data.roleName === "User") {
+        navigate("/u/home");
       } else {
-        navigate('/Admin')
+        navigate("/Admin");
       }
     } catch (error: any) {
-      toast.error(error.message)
+      toast.error(error.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+  const handleSubmitForget = async (values: ForgotPassword) => {
+    try {
+      setLoadingForgot(true);
+      await authApi.forgotPassword(values.email);
+      toast.success(
+        <p>
+          <strong>Hãy kiểm tra email của bạn</strong>
+        </p>
+      );
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoadingForgot(false);
+    }
+  };
+  const forgotPasswordContext = (
+    <Form onFinish={handleSubmitForget} form={form} labelCol={{ span: 24 }}>
+      <Form.Item
+        name={"email"}
+        label={<LabelForm>Nhập email:</LabelForm>}
+        rules={[
+          {
+            required: true,
+            message: "Không được để trống",
+          },
+          {
+            type: "email",
+            message: "Không hợp lệ",
+          },
+        ]}
+      >
+        <Input placeholder="abc@gmail.com" />
+      </Form.Item>
+      <Form.Item>
+        <ButtonPrimary
+          loading={loadingForgot}
+          className="!w-full font-semibold text-lg"
+          htmlType="submit"
+        >
+          Gửi
+        </ButtonPrimary>
+      </Form.Item>
+    </Form>
+  );
   return (
     <div
       className="w-[500px] p-10 h-full flex bg-white flex-col items-center 
@@ -50,7 +107,11 @@ const LoginPage = () => {
       <Divider />
       <div className="w-full">
         <div className="w-full">
-          <Form onFinish={handleFinish} labelCol={{ span: 24 }} className="w-full flex flex-col gap-[1px]">
+          <Form
+            onFinish={handleFinish}
+            labelCol={{ span: 24 }}
+            className="w-full flex flex-col gap-[1px]"
+          >
             <Form.Item
               label={<p className="text-lg">Tên đăng nhập</p>}
               name={"user_name"}
@@ -75,9 +136,17 @@ const LoginPage = () => {
             >
               <Input.Password />
             </Form.Item>
-            <Link to={"/auth/login"} className="text-lg text-blue-500">
-              Quên mật khẩu
-            </Link>
+            <Popover
+              placement="topLeft"
+              content={forgotPasswordContext}
+              trigger={"click"}
+              open={open}
+              onOpenChange={handleOpenChange}
+            >
+              <Button type="link" className="text-lg text-blue-500 !w-fit !p-0">
+                Quên mật khẩu
+              </Button>
+            </Popover>
             <Form.Item>
               <Button
                 loading={loading}

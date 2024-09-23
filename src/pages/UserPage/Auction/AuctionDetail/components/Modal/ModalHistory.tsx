@@ -1,14 +1,19 @@
 import { Button, Modal, Table, TableProps, Tag } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuctionBiddingDetail } from "../../../../../../model/bidding";
 import { formatDateHour, formatVND } from "../../../../../../utils/format";
+import { auctionApi } from "../../../../../../service/api/auctionApi";
+import { toast } from "react-toastify";
 
 interface BidHistoryProps {
-  data: AuctionBiddingDetail[];
+  id: number;
 }
 
-export const ModalHistory = ({ data }: BidHistoryProps) => {
+export const ModalHistory = ({ id }: BidHistoryProps) => {
   const [open, setOpen] = useState(false);
+  const [biddingData, setBiddingData] = useState<AuctionBiddingDetail[]>([]);
+  const [loading, setLoading] = useState(false);
+
   const openModal = () => {
     setOpen(true);
   };
@@ -20,34 +25,50 @@ export const ModalHistory = ({ data }: BidHistoryProps) => {
       title: "#",
       dataIndex: "id",
       key: "id",
-      className: "!text-base",
+      className: "md:!text-base",
     },
     {
       title: "Người đấu giá",
       dataIndex: "customer",
       key: "name",
       render: (data) => data.full_name,
-      className: "!text-base",
+      className: "md:!text-base",
     },
     {
       title: "Thời gian đấu thầu",
       dataIndex: "bidTIme",
       key: "bidTIme",
       render: (data) => (
-        <Tag className="!text-base" color="blue">
+        <Tag className="md:!text-base" color="blue">
           {formatDateHour(data)}
         </Tag>
       ),
-      className: "!text-base",
+      className: "md:!text-base",
     },
     {
       title: "Lượng đấu thầu",
       dataIndex: "bidAmount",
       key: "bidAmount",
       render: (data) => formatVND(data),
-      className: "!text-base text-orange-700",
+      className: "!md:text-base text-orange-700",
     },
   ];
+  useEffect(() => {
+    const fetchDetailBidding = async () => {
+      try {
+        setLoading(true);
+        const response = await auctionApi.getBidding(String(id));
+        setBiddingData(response.data);
+      } catch (error: any) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (open) {
+      fetchDetailBidding();
+    }
+  }, [id, open]);
   return (
     <>
       <Button onClick={openModal} type="link" className="md:text-xl">
@@ -60,7 +81,12 @@ export const ModalHistory = ({ data }: BidHistoryProps) => {
         title={<p className="md:text-xl">Lịch sử đấu thầu</p>}
         footer={[<Button onClick={closeModal}>Đóng</Button>]}
       >
-        <Table columns={column} dataSource={data} />
+        <Table
+          scroll={{ x: 500 }}
+          columns={column}
+          dataSource={biddingData}
+          loading={loading}
+        />
       </Modal>
     </>
   );

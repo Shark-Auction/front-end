@@ -10,19 +10,13 @@ import AuthPage from "./pages/Auth";
 import LoginPage from "./pages/Auth/Login";
 import RegisterPage from "./pages/Auth/Register";
 import HomePage from "./pages/UserPage/Home";
-import UserPage from "./pages/UserPage";
 import AuctionPage from "./pages/UserPage/Auction/AuctionList";
 import AuctionDetail from "./pages/UserPage/Auction/AuctionDetail";
 import Auction from "./pages/UserPage/Auction";
 import SellerProfile from "./pages/UserPage/Seller/SellerProfile";
 import AppDashboard from "./core/layout/AppDashboard";
 import AuctionManagement from "./pages/AdminPage/AuctionManagement";
-import UserProfile from "./pages/UserPage/Profile";
-import { MyProfile } from "./pages/UserPage/Profile/components/MyProfile";
-import { ChangePassword } from "./pages/UserPage/Profile/components/ChangePassword";
 import { OrderManagement } from "./pages/UserPage/Profile/components/OrderManagement";
-import { ProductManagement } from "./pages/UserPage/Profile/components/ProductManagement";
-import { RequestProduct } from "./pages/UserPage/Profile/components/RequestProduct";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./core/store/store";
 import { toast } from "react-toastify";
@@ -33,8 +27,24 @@ import BrandManagement from "./pages/AdminPage/BrandManagement";
 import OriginManagement from "./pages/AdminPage/OriginManagement";
 import AdminProductManagement from "./pages/AdminPage/AdminProductManagement";
 import VerifyPage from "./pages/Auth/Verify";
+
 import AccountManagement from "./pages/AdminPage/AccountManagement/account";
 import StaffManagement from "./pages/AdminPage/AccountManagement/staff";
+
+import ForgotPassword from "./pages/Auth/ForgotPassword";
+import React, { Suspense } from "react";
+import LoadingComponent from "./components/Loading";
+import MyProfile from "./pages/UserPage/Profile/components/MyProfile";
+import ChangePassword from "./pages/UserPage/Profile/components/ChangePassword";
+const ProductManagement = React.lazy(
+  () => import("./pages/UserPage/Profile/components/ProductManagement")
+);
+const RequestProduct = React.lazy(
+  () => import("./pages/UserPage/Profile/components/RequestProduct")
+);
+const UserProfile = React.lazy(() => import("./pages/UserPage/Profile"));
+const UserPage = React.lazy(() => import("./pages/UserPage"));
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -49,7 +59,11 @@ function App() {
           path: "u",
           element: (
             <ProtectedRoute
-              element={<UserPage />}
+              element={
+                <Suspense fallback={<LoadingComponent />}>
+                  <UserPage />
+                </Suspense>
+              }
               allowedRoles={["User", null]}
             />
           ),
@@ -78,7 +92,11 @@ function App() {
             },
             {
               path: "profile",
-              element: <UserProfile />,
+              element: (
+                <Suspense fallback={<LoadingComponent />}>
+                  <UserProfile />
+                </Suspense>
+              ),
               children: [
                 {
                   path: "",
@@ -94,11 +112,19 @@ function App() {
                 },
                 {
                   path: "your-management",
-                  element: <ProductManagement />,
+                  element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                      <ProductManagement />
+                    </Suspense>
+                  ),
                 },
                 {
                   path: "request-product",
-                  element: <RequestProduct />,
+                  element: (
+                    <Suspense fallback={<LoadingComponent />}>
+                      <RequestProduct />
+                    </Suspense>
+                  ),
                 },
               ],
             },
@@ -124,8 +150,12 @@ function App() {
         },
         {
           path: "verify",
-          element: <VerifyPage />
-        }
+          element: <VerifyPage />,
+        },
+        {
+          path: "forgot-password",
+          element: <ForgotPassword />,
+        },
       ],
     },
     {

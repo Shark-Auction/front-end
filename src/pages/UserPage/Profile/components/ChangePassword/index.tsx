@@ -2,7 +2,7 @@ import { Divider, Form, Input } from "antd";
 import LabelForm from "../../../../../components/LabelForm";
 import ButtonPrimary from "../../../../../components/Button";
 
-export const ChangePassword = () => {
+const ChangePassword = () => {
   const [form] = Form.useForm();
   return (
     <div>
@@ -13,7 +13,7 @@ export const ChangePassword = () => {
       <Divider className="my-5" />
       <Form
         form={form}
-        className="w-full md:w-3/5"
+        className="w-full lg:w-4/5"
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 24 }}
         labelAlign="left"
@@ -84,3 +84,5 @@ export const ChangePassword = () => {
     </div>
   );
 };
+
+export default ChangePassword

@@ -63,7 +63,6 @@ const TableComponent = ({
     }
     return () => {
       setDataSource([]);
-      setRender(false);
     };
   }, [apiUri, render, setRender]);
   

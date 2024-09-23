@@ -66,6 +66,11 @@ export interface ProductProfile {
     | "AUCTIONFAIL";
   product_images: ProductImage[];
   thumbnail: string;
+  buyNow: boolean;
+  buyNowPrice: number;
+  finalPrice: number;
+  desiredPrice: number;
+  deliveryMethod: string;
 }
 
 export interface MyAuctionProfile {

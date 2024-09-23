@@ -5,7 +5,7 @@ import { User } from "../../../../../model/user";
 import { toast } from "react-toastify";
 import { profileApi } from "../../../../../service/api/profileApi";
 
-export const MyProfile = () => {
+const MyProfile = () => {
   const [profile, setProfile] = useState<User>()
   const [loading, setLoading] = useState<boolean>(false)
   useEffect(() => {
@@ -39,3 +39,5 @@ export const MyProfile = () => {
     </Skeleton>
   );
 };
+
+export default MyProfile

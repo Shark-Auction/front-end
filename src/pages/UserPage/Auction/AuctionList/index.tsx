@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AuctionList } from "./components/AuctionList";
 import FilterSideTab from "./components/FilterSideTab";
 import { SortingAuction } from "./components/SortingAuction";
@@ -75,7 +75,7 @@ const AuctionPage = () => {
         setLoading(true);
         const response = await auctionApi.getAuction();
         const filteredData = response.data
-          .filter((e: Auction) => e.status !== "Cancel")
+          .filter((e: Auction) => e.status === 'Waiting' || e.status === 'InProgress')
           .sort(
             (a: Auction, b: Auction) =>
               new Date(b?.startTime).getTime() -
@@ -93,23 +93,23 @@ const AuctionPage = () => {
     fetchCategory();
   }, []);
 
-  useEffect(() => {
-    let filtered: Auction[] = dataAuction;
+  const sortedAndFilteredAuctions = useMemo(() => {
+    let filtered = dataAuction;
 
     if (selectedKey) {
-      filtered = dataAuction.filter(
-        (auction: Auction) => auction.product.category.id === selectedKey
+      filtered = filtered.filter(
+        (auction) => auction.product.category.id === selectedKey
       );
     }
 
     if (searchText) {
-      filtered = dataAuction.filter((auction: Auction) =>
+      filtered = filtered.filter((auction) =>
         auction.product.name.toLowerCase().includes(searchText.toLowerCase())
       );
     }
 
     if (priceSort) {
-      filtered = filtered.sort((a: Auction, b: Auction) => {
+      filtered = filtered.sort((a, b) => {
         if (priceSort === "ascending") {
           return a.currentPrice - b.currentPrice;
         } else if (priceSort === "descending") {
@@ -120,17 +120,17 @@ const AuctionPage = () => {
     }
 
     if (statusFilter.length > 0) {
-      filtered = filtered.filter((auction: Auction) =>
+      filtered = filtered.filter((auction) =>
         statusFilter.includes(auction.status)
       );
     }
-    setFilteredAuction(
-      filtered.sort(
-        (a: Auction, b: Auction) =>
-          new Date(b?.startTime).getTime() - new Date(a?.startTime).getTime()
-      )
-    );
+
+    return filtered;
   }, [selectedKey, dataAuction, searchText, priceSort, statusFilter]);
+
+  useEffect(() => {
+    setFilteredAuction(sortedAndFilteredAuctions)
+  }, [sortedAndFilteredAuctions])
 
   return (
     <div className="flex flex-col gap-10">
