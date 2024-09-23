@@ -16,6 +16,8 @@ interface DashboardProps {
   apiUri: string;
   formItem?: React.ReactElement;
   action?: boolean;
+  refetch: boolean; // New prop for refetch
+  setRefetch: (value: boolean) => void; // New prop to set refetch state
 }
 
 const Dashboard = ({
@@ -23,6 +25,7 @@ const Dashboard = ({
   apiUri,
   formItem = <></>,
   action = true,
+  refetch, setRefetch
 }: DashboardProps) => {
   const [dataSource, setDataSource] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -44,11 +47,13 @@ const Dashboard = ({
     setOpen(false);
   };
 
+
   const fetchData = async () => {
     try {
       setIsFetching(true);
       const response = await api.get(`${apiUri}`);
       setDataSource(response.data.data);
+
     } catch (error: any) {
       toast.error(error.response.data);
     } finally {
@@ -116,7 +121,12 @@ const Dashboard = ({
   useEffect(() => {
     fetchData();
   }, []);
-
+  useEffect(() => {
+    if (refetch) {
+      fetchData(); // Gọi fetchData nếu refetch là true
+      setRefetch(false); // Đặt lại refetch về false
+    }
+  }, [refetch]); // Theo dõi refetch
   return (
     <>
       {action && (
