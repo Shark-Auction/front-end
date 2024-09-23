@@ -27,6 +27,10 @@ import BrandManagement from "./pages/AdminPage/BrandManagement";
 import OriginManagement from "./pages/AdminPage/OriginManagement";
 import AdminProductManagement from "./pages/AdminPage/AdminProductManagement";
 import VerifyPage from "./pages/Auth/Verify";
+
+import AccountManagement from "./pages/AdminPage/AccountManagement/account";
+import StaffManagement from "./pages/AdminPage/AccountManagement/staff";
+
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import React, { Suspense } from "react";
 import LoadingComponent from "./components/Loading";
@@ -40,6 +44,7 @@ const RequestProduct = React.lazy(
 );
 const UserProfile = React.lazy(() => import("./pages/UserPage/Profile"));
 const UserPage = React.lazy(() => import("./pages/UserPage"));
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -162,6 +167,9 @@ function App() {
         />
       ),
       children: [
+        { path: "account-management", element: <AccountManagement /> },
+        { path: "staff-management", element: <StaffManagement /> },
+
         { path: "auction-management", element: <AuctionManagement /> },
         { path: "category-management", element: <CategoryManagement /> },
         { path: "brand-management", element: <BrandManagement /> },

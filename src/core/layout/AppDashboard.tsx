@@ -3,7 +3,7 @@ import type { MenuProps } from "antd";
 import { Avatar, Dropdown, Layout, Menu, theme } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { MdCategory, MdDashboard } from "react-icons/md";
-import { AiFillProduct} from "react-icons/ai";
+import { AiFillProduct } from "react-icons/ai";
 
 import { RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,11 +29,22 @@ function getItem(
 
 const items: MenuItem[] = [
   getItem("Dashboard", "", <MdDashboard />),
+  {
+    key: 'menu',
+    label: 'Account Management',
+    icon: <MdCategory />,
+    children: [
+      getItem("All User", "account-management", <MdCategory />),
+      getItem("Staff", "staff-management", <MdCategory />),
+      getItem("Manager", "manager-management", <MdCategory />),
+      getItem("Shipper", "shipper-management", <MdCategory />),
+    ],
+  },
   getItem("Category Management", "category-management", <MdCategory />),
   getItem("Auction Management", "auction-management", <AiFillProduct />),
-  getItem("Brand Management", "brand-management", <AiFillProduct/>),
-  getItem("Origin Management", "origin-management", <AiFillProduct/>),
-  getItem("Product Management", "product-management", <AiFillProduct/>),
+  getItem("Brand Management", "brand-management", <AiFillProduct />),
+  getItem("Origin Management", "origin-management", <AiFillProduct />),
+  getItem("Product Management", "product-management", <AiFillProduct />),
 ];
 
 const AppDashboard: React.FC = () => {
@@ -88,7 +99,7 @@ const AppDashboard: React.FC = () => {
                   <div className="flex flex-col">
                     <p className="text-sm font-bold">
                       <span>{userLogin["fullName"]}</span>
-                      <br/>
+                      <br />
                       <span className="font-normal text-gray-500">{userLogin["roleName"]}</span>
                     </p>
                   </div>
