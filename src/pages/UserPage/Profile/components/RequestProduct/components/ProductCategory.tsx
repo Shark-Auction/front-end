@@ -1,8 +1,10 @@
-import { Form, TreeSelect, TreeSelectProps } from "antd";
+import { Form, Image, TreeSelect, TreeSelectProps } from "antd";
 import LabelForm from "../../../../../../components/LabelForm";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { categoryApi } from "../../../../../../service/api/categoryApi";
+import { Category } from "../../../../../../model/category";
+import { getImageCategory } from "../../../../../../utils/getImage";
 
 const ProductCategory = () => {
   const [category, setCategory] = useState<any[]>([]);
@@ -15,10 +17,14 @@ const ProductCategory = () => {
     const tree: any[] = [];
 
     // Create a map of id to node
-    data.forEach((item: any) => {
+    console.log(data)
+    data.forEach((item: Category) => {
       map.set(item.id, {
         value: item.id,
-        title: item.name,
+        title: <div className="flex gap-2 items-center py-2">
+          <Image className="rounded-lg" width={40} height={40} preview={false} src={getImageCategory(item.imageUrl)} />
+          <p>{item.name}</p>
+        </div>,
         children: [],
       });
     });
@@ -69,13 +75,13 @@ const ProductCategory = () => {
       >
         <TreeSelect
           showSearch
-          style={{ width: "100%" }}
           dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
           placeholder="Chọn..."
           allowClear
           treeDefaultExpandAll
           treeData={category}
           onPopupScroll={onPopupScroll}
+          className="h-fit"
         />
       </Form.Item>
     </>

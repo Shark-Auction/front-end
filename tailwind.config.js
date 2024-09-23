@@ -19,6 +19,8 @@ export default {
       backgroundImage: {
         'gradient-primary': 'linear-gradient(to right, #59C5FF, #3b82f6, #69caff)',
         'gradient-secondary': 'linear-gradient(to right, rgba(89, 197, 255, 0.5), rgba(59, 130, 246, 0.5), rgba(105, 202, 255, 0.5))',
+        'gradient-orange': 'linear-gradient(to right, #FFA726, #FB8C00, #F57C00, #EF6C00)',
+        'gradient-red': 'linear-gradient(to right, #ff3232, #e50000, #ff3232)',
       },
     },
   },
