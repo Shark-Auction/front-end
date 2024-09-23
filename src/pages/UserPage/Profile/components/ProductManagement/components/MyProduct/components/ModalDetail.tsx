@@ -12,6 +12,8 @@ import { auctionApi } from "../../../../../../../../service/api/auctionApi";
 import type { TourProps } from "antd";
 import DateRangeAuction from "../../../../../../../../components/FormItem/DateRangeAuction";
 import { ProductProfile } from "../../../../../../../../model/profile";
+import ItemBuyNow from "./ModalEdit/ItemBuyNow";
+import { status } from "../../../../../../../../utils/render/statusRender";
 
 interface ModalDetailProps {
   open: boolean;
@@ -31,6 +33,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
   const [current, setCurrent] = useState(0);
   const [openTutorial, setOpenTutorial] = useState<boolean>(false);
   const [checkedDelete, setCheckedDelete] = useState<boolean>(false);
+  const [buyNowStatus, setBuyNowStatus] = useState<boolean>(false);
 
   const tutorialSteps: TourProps["steps"] = [
     {
@@ -83,7 +86,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
       setLoading(true);
       await productApi.editProduct(dataItem?.id, values);
       toast.success("Cập nhật thành công");
-      setRender(true);
+      setRender(true)
       setRenderDetail(true);
     } catch (error: any) {
       toast.error(error.message);
@@ -133,6 +136,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
             <ItemInformation />
             <ItemCategory />
             <ItemBrandOrigin />
+            <ItemBuyNow buyNow={buyNowStatus} />
             <ItemDescription setImageDescription={setImageDescription} />
           </Form>
         </div>
@@ -178,6 +182,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
       try {
         setLoading(true);
         const response = await productApi.getProductById(data?.id);
+        setBuyNowStatus(response.data.buyNow);
         setDataItem(response.data);
       } catch (error: any) {
         toast.error(error.message);
@@ -190,6 +195,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
     }
     if (renderDetail) {
       fetchData();
+      setRenderDetail(false)
     }
   }, [checkedDelete, data?.id, open, renderDetail]);
 
@@ -204,6 +210,8 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
           >
             (Hướng dẫn chỉnh sửa)
           </span>
+          {" "}
+          {data && status[data?.status]()}
         </p>
       }
       open={open}
@@ -244,13 +252,15 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
                   Chỉnh sửa sản phẩm
                 </Button>
               )}
-              {dataItem.status === "CONFIRMING" && <ButtonPrimary
-                key={"auction"}
-                className="text-base"
-                onClick={() => next()}
-              >
-                Đăng lên trang đấu giá
-              </ButtonPrimary>}
+              {dataItem.status === "CONFIRMING" && (
+                <ButtonPrimary
+                  key={"auction"}
+                  className="text-base"
+                  onClick={() => next()}
+                >
+                  Đăng lên trang đấu giá
+                </ButtonPrimary>
+              )}
             </div>
           ),
           current > 0 && (

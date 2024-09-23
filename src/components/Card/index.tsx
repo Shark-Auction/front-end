@@ -55,7 +55,7 @@ const CardElement = ({
       key={id}
       cover={<ImageComponent width={'100%'} height={'100%'} preview={false} src={getImageProduct(image)} />}
       actions={[
-        <ButtonPrimary className="!text-base !font-normal">
+        <ButtonPrimary hover="!bg-gradient-red" className="!text-base !font-normal !bg-gradient-red">
           Đấu giá
         </ButtonPrimary>,
       ]}

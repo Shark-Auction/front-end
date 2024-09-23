@@ -57,6 +57,14 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
       <div className="py-5 md:w-3/4 px-3 flex flex-col gap-5 w-full md:ml-10">
         <p className="text-2xl">
           <strong>{data.product.name}</strong>
+          {userLoginned &&
+            data.product.seller.id === userLoginned["userId"] && (
+              <div className="bg-gradient-orange text-white !px-4 !w-fit text-center rounded-md">
+                <p className="text-lg font-semibold">
+                  Bạn là người sở hữu phiên này
+                </p>
+              </div>
+            )}
         </p>
         <div className="grid grid-cols-2 gap-y-2 gap-x-10 w-fit">
           <p className={`${textCss} text-gray-500`}>Giá trị hiện tại:</p>
@@ -85,20 +93,15 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
             </p>
           </div>
         </div>
-        <div className="flex w-full mt-5">
-          {userLoginned && data.product.seller.id === userLoginned["userId"] ? (
-            <div className="bg-gradient-primary text-white !p-2 !w-full text-center rounded-lg">
-              <p className="text-2xl font-semibold">
-                Bạn là người sở hữu phiên này
-              </p>
-            </div>
-          ) : (
-            <ModalBidding
-              auctionId={data.id}
-              step={data.step}
-              currentPrice={data.currentPrice}
-            />
-          )}
+        <div className="flex w-full">
+          {userLoginned &&
+            data.product.seller.id !== userLoginned["userId"] && (
+              <ModalBidding
+                auctionId={data.id}
+                step={data.step}
+                currentPrice={data.currentPrice}
+              />
+            )}
         </div>
         <div className="flex flex-col md:flex-row items-center md:justify-start gap-5">
           {isWinner && (
