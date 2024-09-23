@@ -10,6 +10,8 @@ import { RootState } from "../../../../../core/store/store";
 import { badgeRibbonStatus } from "../../../../../utils/render/statusRender";
 import { GiHammerDrop } from "react-icons/gi";
 import { FaClock } from "react-icons/fa";
+import ButtonPrimary from "../../../../../components/Button";
+import ModalBuyNow from "./Modal/ModalBuyNow";
 
 interface GeneralAuctionProps {
   data: Auction;
@@ -32,6 +34,7 @@ const textCss = "md:text-xl";
 
 export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
   const [isWinner, setIsWinner] = useState<UserAuction>();
+  const [openBuyNow, setOpenBuyNow] = useState<boolean>(false);
   const [timeRemaining, setTimeRemaining] = useState(
     calculateTimeRemaining(data.endTime)
   );
@@ -122,8 +125,28 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
           )}
           <ModalHistory id={data.id} />
         </div>
+        {(data.product.buyNow === true ||
+          (userLoginned &&
+            data.product.seller.id !== userLoginned["userId"])) &&
+          data.status === "InProgress" && (
+            <div className="flex gap-x-2 items-center">
+              <ButtonPrimary
+                onClick={() => setOpenBuyNow(true)}
+                className="!bg-gradient-orange"
+              >
+                Mua ngay
+              </ButtonPrimary>
+              <p className="text-lg">
+                Với mức giá{" "}
+                <strong className="text-orange-600">
+                  {formatVND(data.product.buyNowPrice)}
+                </strong>
+              </p>
+            </div>
+          )}
       </div>
       {data && badgeRibbonStatus[data.status]()}
+      <ModalBuyNow data={data} open={openBuyNow} setOpen={setOpenBuyNow} />
     </div>
   );
 };

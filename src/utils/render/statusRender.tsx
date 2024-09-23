@@ -97,6 +97,11 @@ export const status: any = {
       </Tag>
     );
   },
+  SOLD: () => {
+    return (
+      <Tag className={textStyle} color='orange'>Đã bán</Tag>
+    )
+  }
 };
 
 export const statusAuction: any = {
@@ -167,3 +172,17 @@ export const badgeRibbonStatus: any = {
     return <Badge.Ribbon text="Thất bại" color="red-inverse" />;
   },
 };
+
+export const orderStatus: any = {
+  processing: () => {
+    return <Tag className={textStyle} color="geekblue-inverse">Đang chờ giao hàng</Tag>
+  },
+  shipping: () => {
+    return <Tag className={textStyle} color="gold-inverse">Đang giao hàng</Tag>
+  },
+  delivered: () => {
+    return <Tag className={textStyle} color="blue-inverse">Đã giao hàng</Tag>
+  },
+  received: () => {
+    return <Tag className={textStyle} color="green-inverse">Đã nhận hàng</Tag>
+  }}
