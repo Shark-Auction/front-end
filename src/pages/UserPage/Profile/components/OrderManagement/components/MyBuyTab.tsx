@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { OrderInformation } from "../../../../../../model/order";
 import { Select, Spin } from "antd";
 import { orderApi } from "../../../../../../service/api/orderApi";
 import { toast } from "react-toastify";
 import CardOrder from "../../../../../../components/CardOrder";
 import EmptyComponent from "../../../../../../components/Empty";
+import ModalRating from "./components/ModalRating";
 const optionFilter = [
   {
     value: "",
@@ -27,16 +28,25 @@ const optionFilter = [
     label: "Đã nhận hàng",
   },
 ];
-const MyBuyTab = () => {
+interface MyBuyTabProps {
+  activeKey: string;
+}
+const MyBuyTab = ({ activeKey }: MyBuyTabProps) => {
   const [dataBuy, setDataBuy] = useState<OrderInformation[]>([]);
   const [filteredData, setFilteredData] = useState<OrderInformation[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [order, setOrder] = useState<OrderInformation>();
   const fetchData = async () => {
     try {
       setLoading(true);
       const response = await orderApi.getMyBuyOrder();
-      setDataBuy(response.data);
+      const filter = response.data.sort(
+        (a: OrderInformation, b: OrderInformation) =>
+          new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
+      );
+      setDataBuy(filter);
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -46,9 +56,16 @@ const MyBuyTab = () => {
   const handleChange = (values: string) => {
     setFilterStatus(values);
   };
+  const handleOpenModalRating = (record: OrderInformation) => {
+    setOpen(true);
+    setOrder(record);
+  };
   useEffect(() => {
     fetchData();
-  }, []);
+    if (activeKey === "1") {
+      fetchData();
+    }
+  }, [activeKey]);
   useEffect(() => {
     let filtered = dataBuy;
     if (filterStatus === "") {
@@ -74,11 +91,15 @@ const MyBuyTab = () => {
           </div>
           {filteredData.length > 0 ? (
             filteredData.map((element: OrderInformation) => (
-              <CardOrder data={element} />
+              <CardOrder
+                onClickRating={() => handleOpenModalRating(element)}
+                data={element}
+              />
             ))
           ) : (
             <EmptyComponent />
           )}
+          <ModalRating data={order} open={open} setOpen={setOpen} />
         </div>
       ) : (
         <Spin />

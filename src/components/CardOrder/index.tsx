@@ -5,12 +5,15 @@ import ButtonPrimary from "../Button";
 import { OrderInformation } from "../../model/order";
 import { getImageProduct } from "../../utils/getImage";
 import { orderStatus } from "../../utils/render/statusRender";
+import { Link } from "react-router-dom";
 
 interface CardOrderProps {
   data: OrderInformation;
+  onClickDetail?: () => void;
+  onClickRating?: () => void;
 }
 
-const CardOrder = ({ data }: CardOrderProps) => {
+const CardOrder = ({ data, onClickDetail, onClickRating }: CardOrderProps) => {
   return (
     <Card
       className="w-full flex overflow-hidden shadow-shadowLight"
@@ -40,14 +43,25 @@ const CardOrder = ({ data }: CardOrderProps) => {
               {formatDateHour(data.orderDate)}
             </Tag>
           </p>
-          <Divider className="my-1" />
           <p className="text-lg">
             Trạng thái giao hàng: {data.status && orderStatus[data?.status]()}
           </p>
+          <p className="text-lg">
+            Người bán:{" "}
+            <Link
+              className="underline underline-offset-2 text-blue-600 hover:underline hover:!text-blue-600"
+              to={`/u/seller/${data.product.seller.id}`}
+            >
+              {data.product.seller.full_name}
+            </Link>
+          </p>
         </div>
         <div className="w-full flex justify-end gap-5">
-          <ButtonPrimary className="!text-base">Xem chi tiết</ButtonPrimary>
+          <ButtonPrimary onClick={onClickDetail} className="!text-base">
+            Xem chi tiết
+          </ButtonPrimary>
           <ButtonPrimary
+            onClick={onClickRating}
             hover="!bg-gradient-orange"
             className="!text-base !bg-gradient-orange"
           >

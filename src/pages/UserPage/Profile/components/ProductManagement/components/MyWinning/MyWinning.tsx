@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TableComponent, {
   ColumnsTable,
 } from "../../../../../../../components/Table";
@@ -6,16 +6,20 @@ import { formatDateHour, formatVND } from "../../../../../../../utils/format";
 import ImageComponent from "../../../../../../../components/Image";
 import { getImageProduct } from "../../../../../../../utils/getImage";
 
-const MyWinning = () => {
+interface MyWinningProps {
+  activeKey: string;
+}
+
+const MyWinning = ({ activeKey }: MyWinningProps) => {
   const [render, setRender] = useState(false);
   const column: ColumnsTable[] = [
     {
       title: "#",
       dataIndex: "id",
       key: "id",
-      fixed: 'left',
+      fixed: "left",
       width: 150,
-      align: 'center'
+      align: "center",
     },
     {
       title: "Ảnh",
@@ -66,6 +70,11 @@ const MyWinning = () => {
       render: (data) => formatDateHour(data),
     },
   ];
+  useEffect(() => {
+    if (activeKey === "4") {
+      setRender(true);
+    }
+  }, [activeKey]);
   return (
     <TableComponent
       expandX={1700}
