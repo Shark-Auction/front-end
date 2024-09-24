@@ -21,6 +21,8 @@ export default {
         'gradient-secondary': 'linear-gradient(to right, rgba(89, 197, 255, 0.5), rgba(59, 130, 246, 0.5), rgba(105, 202, 255, 0.5))',
         'gradient-orange': 'linear-gradient(to right, #FFA726, #FB8C00, #F57C00, #EF6C00)',
         'gradient-red': 'linear-gradient(to right, #ff3232, #e50000, #ff3232)',
+        'gradient-header': 'linear-gradient(90deg, rgba(0,215,255,1) 10%, rgba(0,176,255,1) 30%, rgba(70,165,226,1) 50%, rgba(0,176,255,1) 70%, rgba(0,215,255,1) 90%)',
+        'gradient-rating' : 'radial-gradient(circle, rgba(253,255,184,1) 0%, rgba(149,255,102,1) 91%, rgba(48,255,187,1) 100%)'
       },
     },
   },

@@ -69,7 +69,7 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
               </div>
             )}
         </p>
-        <div className="grid grid-cols-2 gap-y-2 gap-x-10 w-fit">
+        <div className="grid grid-cols-2 gap-y-4 gap-x-5 w-fit">
           <p className={`${textCss} text-gray-500`}>Giá trị hiện tại:</p>
           <p className={`${textCss} text-red-500 font-semibold`}>
             {formatVND(data.currentPrice)}
@@ -78,6 +78,10 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
           <p className={`${textCss} text-red-500 font-semibold`}>
             {formatVND(data.step)}
           </p>
+          <p className={`${textCss} text-gray-500`}>Thời gian bắt đầu:</p>
+          <Tag color="geekblue" className="md:text-base">
+            {formatDateHour(data.startTime)}
+          </Tag>
         </div>
         <div className="flex flex-col md:flex-row gap-5 md:gap-10">
           <div className="flex items-center gap-4">
@@ -98,7 +102,8 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
         </div>
         <div className="flex w-full">
           {userLoginned &&
-            data.product.seller.id !== userLoginned["userId"] && (
+            data.product.seller.id !== userLoginned["userId"] &&
+            data.status === "InProgress" && (
               <ModalBidding
                 auctionId={data.id}
                 step={data.step}
@@ -125,9 +130,9 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
           )}
           <ModalHistory id={data.id} />
         </div>
-        {(data.product.buyNow === true &&
-          (userLoginned &&
-            data.product.seller.user_name !== userLoginned["userName"])) &&
+        {data.product.buyNow === true &&
+          userLoginned &&
+          data.product.seller.user_name !== userLoginned["userName"] &&
           data.status === "InProgress" && (
             <div className="flex gap-x-2 items-center">
               <ButtonPrimary

@@ -27,7 +27,10 @@ const optionFilter = [
     label: "Đã nhận hàng",
   },
 ];
-const MySellTab = () => {
+interface MySellTabProps {
+  activeKey: string;
+}
+const MySellTab = ({ activeKey }: MySellTabProps) => {
   const [dataBuy, setDataBuy] = useState<OrderInformation[]>([]);
   const [filteredData, setFilteredData] = useState<OrderInformation[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>("");
@@ -48,7 +51,10 @@ const MySellTab = () => {
   };
   useEffect(() => {
     fetchData();
-  }, []);
+    if (activeKey === "2") {
+      fetchData();
+    }
+  }, [activeKey]);
   useEffect(() => {
     let filtered = dataBuy;
     if (filterStatus === "") {

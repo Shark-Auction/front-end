@@ -28,7 +28,7 @@ const ProductManagement = () => {
     {
       key: '4',
       label: 'Đấu giá thắng',
-      children: <MyWinning />
+      children: <MyWinning activeKey={activeKey} />
     }
   ]
   return (
