@@ -15,7 +15,7 @@ createRoot(document.getElementById("root")!).render(
           <App />
         </PersistGate>
       </Provider>
-      <ToastContainer />
+      <ToastContainer position="top-center" />
     </>
   // </StrictMode>
 );

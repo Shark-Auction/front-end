@@ -78,7 +78,7 @@ export const AuctionInformation = ({
     },
   ];
   return (
-    <div className="w-full shadow-shadowLight border p-5 flex flex-col gap-10">
+    <div className="w-full rounded-lg shadow-shadowLight border p-5 flex flex-col gap-10 bg-white">
       <div>
         <p className="text-2xl">
           <strong>Thông tin sản phẩm</strong>

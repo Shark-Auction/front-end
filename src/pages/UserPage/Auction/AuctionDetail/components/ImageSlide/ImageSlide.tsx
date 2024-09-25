@@ -25,10 +25,12 @@ export default function ImageSlide({ image }: ImageSlideProps) {
   return (
     <>
       <Swiper
-        style={{
-          "--swiper-navigation-color": "#000",
-          "--swiper-pagination-color": "#000",
-        } as CSSProperties}
+        style={
+          {
+            "--swiper-navigation-color": "#000",
+            "--swiper-pagination-color": "#000",
+          } as CSSProperties
+        }
         loop={true}
         spaceBetween={10}
         navigation={true}
@@ -38,7 +40,7 @@ export default function ImageSlide({ image }: ImageSlideProps) {
       >
         {image?.map((element: ProductImage) => (
           <SwiperSlide key={element.id}>
-            <Image src={getImageProduct(element.url)} />
+            <Image className="rounded-lg" src={getImageProduct(element.url)} />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -54,7 +56,7 @@ export default function ImageSlide({ image }: ImageSlideProps) {
       >
         {image?.map((element: ProductImage) => (
           <SwiperSlide className="cursor-pointer" key={element.id}>
-            <img src={getImageProduct(element.url)} />
+            <img className="rounded-lg" src={getImageProduct(element.url)} />
           </SwiperSlide>
         ))}
       </Swiper>
