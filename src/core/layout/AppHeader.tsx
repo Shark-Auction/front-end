@@ -12,6 +12,10 @@ const AppHeader = () => {
   const userLogin = useSelector((state: RootState) => state.user);
   const itemsLink = [
     {
+      title: "Trang chủ",
+      link: "/u/home",
+    },
+    {
       title: "Đấu giá",
       link: "/u/auction",
     },
@@ -26,7 +30,7 @@ const AppHeader = () => {
   }));
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/u/home");
+    navigate("/auth/login");
   };
   const itemsUser: MenuProps["items"] = [
     {
@@ -48,19 +52,19 @@ const AppHeader = () => {
           alt="logo"
         />
         <p
-          onClick={() => navigate("/u/home")}
+          onClick={() => navigate("/")}
           className="hidden md:block md:text-3xl cursor-pointer"
         >
           <strong>Shark Auction</strong>
         </p>
       </div>
       {/*Desktop */}
-      <div className="hidden md:flex justify-between items-center md:w-fit gap-10">
+      <div className="hidden md:flex items-center justify-end md:w-full gap-10">
         {itemsLink.map((element) => (
           <Link
             key={element.title}
             to={element.link}
-            className="md:text-xl relative group hover:text-black"
+            className="text-base md:text-lg lg:text-xl relative group hover:text-black"
           >
             {element.title}
             <Underline />
@@ -76,7 +80,7 @@ const AppHeader = () => {
           >
             <div className="flex items-center gap-2 border border-gray-500 py-2 px-5 rounded-lg">
               <Avatar className="!w-10 !h-10" />
-              <p className="text-sm font-bold">{userLogin["fullName"]}</p>{" "}
+              <p className="text-sm font-bold">{userLogin["fullName"]}</p>
             </div>
           </Dropdown>
         ) : (

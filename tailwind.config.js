@@ -14,7 +14,7 @@ export default {
         shadowLight: 'rgba(0, 0, 0, 0.24) 0px 3px 8px;'
       },
       container: {
-        padding: '10rem'
+        padding: '5rem'
       },
       backgroundImage: {
         'gradient-primary': 'linear-gradient(to right, #59C5FF, #3b82f6, #69caff)',

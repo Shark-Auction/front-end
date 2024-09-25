@@ -4,13 +4,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import LabelForm from "../../../../../../components/LabelForm";
 
-interface ProductDescriptionProps {
-  setImageDescription: React.Dispatch<React.SetStateAction<string[]>>;
-}
-
-const ProductDescription = ({
-  setImageDescription,
-}: ProductDescriptionProps) => {
+const ProductDescription = () => {
   const quillRef = React.useRef<ReactQuill>(null);
   // Handle image upload (for preview)
   const handleImageUpload = useCallback(() => {
@@ -31,35 +25,13 @@ const ProductDescription = ({
             const range = quill.getSelection();
             if (range) {
               quill.insertEmbed(range.index, "image", base64Image);
-              setImageDescription((prevImages) => [...prevImages, base64Image]);
             }
           }
-          // try {
-          //   const response = await fetch('/api/upload-image', {
-          //     method: 'POST',
-          //     headers: { 'Content-Type': 'application/json' },
-          //     body: JSON.stringify({ image: base64Image }),
-          //   });
-          //   const result = await response.json();
-          //   const imageUrl = result.url; // Assuming server response contains the image URL
-
-          //   if (imageUrl && quillRef.current) {
-          //     const quill = quillRef.current.getEditor();
-          //     const range = quill.getSelection();
-          //     if (range) {
-          //       quill.insertEmbed(range.index, 'custom-image', imageUrl);
-          //       setUploadedImages((prevImages) => [...prevImages, imageUrl]);
-          //       onContentChange(quill.root.innerHTML);
-          //     }
-          //   }
-          // } catch (error) {
-          //   console.error('Image upload failed:', error);
-          // }
         };
         reader.readAsDataURL(file);
       }
     };
-  }, [setImageDescription]);
+  }, []);
 
   const modules = {
     toolbar: {
@@ -77,17 +49,6 @@ const ProductDescription = ({
         image: handleImageUpload, // Override default image handler with custom handler
       },
     },
-  };
-
-  const handleContentChange = (content: string) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(content, "text/html");
-    const currentImagesInEditor = Array.from(
-      doc.getElementsByTagName("img")
-    ).map((img) => img.src);
-    setImageDescription((prevImages) =>
-      prevImages.filter((img) => currentImagesInEditor.includes(img))
-    );
   };
 
   return (
@@ -109,7 +70,6 @@ const ProductDescription = ({
           ref={quillRef}
           modules={modules}
           theme="snow" // Use the "snow" theme for a Word-like editor
-          onChange={handleContentChange}
         />
       </Form.Item>
     </>

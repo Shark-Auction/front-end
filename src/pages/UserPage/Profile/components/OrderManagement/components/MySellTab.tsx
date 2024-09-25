@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { OrderInformation } from "../../../../../../model/order";
-import { Select, Spin } from "antd";
+import { Select } from "antd";
 import { orderApi } from "../../../../../../service/api/orderApi";
 import { toast } from "react-toastify";
 import CardOrder from "../../../../../../components/CardOrder";
 import EmptyComponent from "../../../../../../components/Empty";
+import LoadingComponent from "../../../../../../components/Loading";
 const optionFilter = [
   {
     value: "",
@@ -87,7 +88,7 @@ const MySellTab = ({ activeKey }: MySellTabProps) => {
           )}
         </div>
       ) : (
-        <Spin />
+        <LoadingComponent />
       )}
     </>
   );

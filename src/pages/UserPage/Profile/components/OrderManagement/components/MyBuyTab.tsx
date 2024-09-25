@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { OrderInformation } from "../../../../../../model/order";
-import { Select, Spin } from "antd";
+import { Select } from "antd";
 import { orderApi } from "../../../../../../service/api/orderApi";
 import { toast } from "react-toastify";
 import CardOrder from "../../../../../../components/CardOrder";
 import EmptyComponent from "../../../../../../components/Empty";
 import ModalRating from "./components/ModalRating";
+import LoadingComponent from "../../../../../../components/Loading";
 const optionFilter = [
   {
     value: "",
@@ -102,7 +103,7 @@ const MyBuyTab = ({ activeKey }: MyBuyTabProps) => {
           <ModalRating data={order} open={open} setOpen={setOpen} />
         </div>
       ) : (
-        <Spin />
+        <LoadingComponent />
       )}
     </>
   );
