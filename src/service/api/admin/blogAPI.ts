@@ -9,4 +9,18 @@ export const blogApi = {
       throw error.response.data
     }
   },
+  addBlog: async (data: any) => {
+    try {
+      console.log('apo')
+      const response = await api.post('blog', data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+      )
+      return response.data
+    } catch (error: any) {
+      throw error.response.data
+    }
+  },
 }
