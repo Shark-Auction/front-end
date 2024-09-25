@@ -37,6 +37,9 @@ import LoadingComponent from "./components/Loading";
 import MyProfile from "./pages/UserPage/Profile/components/MyProfile";
 import ChangePassword from "./pages/UserPage/Profile/components/ChangePassword";
 import ManagerManagement from "./pages/AdminPage/AccountManagement/manager";
+import BlogManagement from "./pages/AdminPage/BlogManagement/index";
+
+
 const ProductManagement = React.lazy(
   () => import("./pages/UserPage/Profile/components/ProductManagement")
 );
@@ -176,6 +179,7 @@ function App() {
         { path: "brand-management", element: <BrandManagement /> },
         { path: "origin-management", element: <OriginManagement /> },
         { path: "product-management", element: <AdminProductManagement /> },
+        { path: "blog-management", element: <BlogManagement /> },
       ],
     },
     {
