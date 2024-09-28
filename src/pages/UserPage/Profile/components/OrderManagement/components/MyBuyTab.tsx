@@ -39,6 +39,7 @@ const MyBuyTab = ({ activeKey }: MyBuyTabProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [order, setOrder] = useState<OrderInformation>();
+  const [loadingAction, setLoadingAction] = useState<boolean>(false);
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -60,6 +61,18 @@ const MyBuyTab = ({ activeKey }: MyBuyTabProps) => {
   const handleOpenModalRating = (record: OrderInformation) => {
     setOpen(true);
     setOrder(record);
+  };
+  const handleReceived = async (id: number) => {
+    try {
+      setLoadingAction(true);
+      await orderApi.receivedOrder(id);
+      toast.success(`Cập nhật đơn hàng ${id} thành công`);
+      await fetchData();
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoadingAction(false);
+    }
   };
   useEffect(() => {
     fetchData();
@@ -94,6 +107,8 @@ const MyBuyTab = ({ activeKey }: MyBuyTabProps) => {
             filteredData.map((element: OrderInformation) => (
               <CardOrder
                 onClickRating={() => handleOpenModalRating(element)}
+                onClickConfirmed={() => handleReceived(element.id)}
+                loadingAction={loadingAction}
                 data={element}
               />
             ))

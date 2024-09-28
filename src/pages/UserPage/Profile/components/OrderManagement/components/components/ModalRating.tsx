@@ -198,12 +198,6 @@ const ModalRating = ({ open, setOpen, data }: ModalRatingProps) => {
           name={"imagesFile"}
           valuePropName="fileList"
           getValueFromEvent={normFile}
-          rules={[
-            {
-              required: true,
-              message: "Không được dể trống",
-            },
-          ]}
         >
           <Upload
             listType="picture-card"

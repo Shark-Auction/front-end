@@ -99,9 +99,11 @@ export const status: any = {
   },
   SOLD: () => {
     return (
-      <Tag className={textStyle} color='orange'>Đã bán</Tag>
-    )
-  }
+      <Tag className={textStyle} color="orange">
+        Đã bán
+      </Tag>
+    );
+  },
 };
 
 export const statusAuction: any = {
@@ -174,15 +176,46 @@ export const badgeRibbonStatus: any = {
 };
 
 export const orderStatus: any = {
+  paid: () => {
+    return (
+      <Tag className={textStyle} color="volcano-inverse">
+        Đang thanh toán
+      </Tag>
+    );
+  },
   processing: () => {
-    return <Tag className={textStyle} color="geekblue-inverse">Đang chờ giao hàng</Tag>
+    return (
+      <Tag className={textStyle} color="geekblue-inverse">
+        Đang chờ giao hàng
+      </Tag>
+    );
   },
   shipping: () => {
-    return <Tag className={textStyle} color="gold-inverse">Đang giao hàng</Tag>
+    return (
+      <Tag className={textStyle} color="gold-inverse">
+        Đang giao hàng
+      </Tag>
+    );
   },
   delivered: () => {
-    return <Tag className={textStyle} color="blue-inverse">Đã giao hàng</Tag>
+    return (
+      <Tag className={textStyle} color="blue-inverse">
+        Đã giao hàng
+      </Tag>
+    );
   },
   received: () => {
-    return <Tag className={textStyle} color="green-inverse">Đã nhận hàng</Tag>
-  }}
+    return (
+      <Tag className={textStyle} color="green-inverse">
+        Đã nhận hàng
+      </Tag>
+    );
+  },
+  cancelled: () => {
+    return (
+      <Tag className={textStyle} color="red-inverse">
+        Hủy
+      </Tag>
+    );
+  },
+};

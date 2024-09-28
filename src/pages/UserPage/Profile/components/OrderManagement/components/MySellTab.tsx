@@ -35,6 +35,7 @@ const MySellTab = ({ activeKey }: MySellTabProps) => {
   const [dataBuy, setDataBuy] = useState<OrderInformation[]>([]);
   const [filteredData, setFilteredData] = useState<OrderInformation[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>("");
+  const [loadingAction, setLoadingAction] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const fetchData = async () => {
     try {
@@ -49,6 +50,30 @@ const MySellTab = ({ activeKey }: MySellTabProps) => {
   };
   const handleChange = (values: string) => {
     setFilterStatus(values);
+  };
+  const handleDelivered = async (id: number) => {
+    try {
+      setLoadingAction(true);
+      await orderApi.deliveredOrder(id);
+      toast.success(`Cập nhật đơn hàng ${id} thành công`);
+      await fetchData()
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoadingAction(false);
+    }
+  };
+  const handleSend = async (id: number) => {
+    try {
+      setLoadingAction(true);
+      await orderApi.sendOrder(id);
+      toast.success(`Cập nhật đơn hàng ${id} thành công`);
+      await fetchData()
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoadingAction(false);
+    }
   };
   useEffect(() => {
     fetchData();
@@ -81,7 +106,12 @@ const MySellTab = ({ activeKey }: MySellTabProps) => {
           </div>
           {filteredData.length > 0 ? (
             filteredData.map((element: OrderInformation) => (
-              <CardOrder data={element} />
+              <CardOrder
+                data={element}
+                loadingAction={loadingAction}
+                onClickDelivered={() => handleDelivered(element.id)}
+                onClickSent={() => handleSend(element.id)}
+              />
             ))
           ) : (
             <EmptyComponent />

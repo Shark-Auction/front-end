@@ -1,4 +1,4 @@
-import { Card, Divider, Tag } from "antd";
+import { Button, Card, Tag } from "antd";
 import ImageComponent from "../Image";
 import { formatDateHour, formatVND } from "../../utils/format";
 import ButtonPrimary from "../Button";
@@ -6,16 +6,34 @@ import { OrderInformation } from "../../model/order";
 import { getImageProduct } from "../../utils/getImage";
 import { orderStatus } from "../../utils/render/statusRender";
 import { Link } from "react-router-dom";
+import { RootState } from "../../core/store/store";
+import { useSelector } from "react-redux";
 
 interface CardOrderProps {
   data: OrderInformation;
+  loadingAction?: boolean;
   onClickDetail?: () => void;
   onClickRating?: () => void;
+  onClickPayment?: () => void;
+  onClickConfirmed?: () => void;
+  onClickDelivered?: () => void;
+  onClickSent?: () => void;
 }
 
-const CardOrder = ({ data, onClickDetail, onClickRating }: CardOrderProps) => {
+const CardOrder = ({
+  data,
+  onClickDetail,
+  onClickRating,
+  onClickPayment,
+  onClickConfirmed,
+  onClickDelivered,
+  onClickSent,
+  loadingAction,
+}: CardOrderProps) => {
+  const userLoginned = useSelector((state: RootState) => state.user);
   return (
     <Card
+      loading={loadingAction}
       className="w-full flex overflow-hidden shadow-shadowLight"
       cover={
         <ImageComponent
@@ -46,27 +64,81 @@ const CardOrder = ({ data, onClickDetail, onClickRating }: CardOrderProps) => {
           <p className="text-lg">
             Trạng thái giao hàng: {data.status && orderStatus[data?.status]()}
           </p>
-          <p className="text-lg">
-            Người bán:{" "}
-            <Link
-              className="underline underline-offset-2 text-blue-600 hover:underline hover:!text-blue-600"
-              to={`/u/seller/${data.product.seller.id}`}
-            >
-              {data.product.seller.full_name}
-            </Link>
-          </p>
+          {data.buyer.user_name ===
+          (userLoginned && userLoginned["userName"]) ? (
+            <p className="text-lg">
+              Người bán:{" "}
+              <Link
+                className="underline underline-offset-2 text-blue-600 hover:underline hover:!text-blue-600"
+                to={`/u/seller/${data.product.seller.id}`}
+              >
+                {data.product.seller.full_name}
+              </Link>
+            </p>
+          ) : (
+            <p className="text-lg">
+              Người mua:{" "}
+              <Link
+                className="underline underline-offset-2 text-blue-600 hover:underline hover:!text-blue-600"
+                to={`/u/seller/${data.buyer.id}`}
+              >
+                {data.buyer.full_name}
+              </Link>
+            </p>
+          )}
         </div>
         <div className="w-full flex justify-end gap-5">
           <ButtonPrimary onClick={onClickDetail} className="!text-base">
             Xem chi tiết
           </ButtonPrimary>
-          <ButtonPrimary
-            onClick={onClickRating}
-            hover="!bg-gradient-orange"
-            className="!text-base !bg-gradient-orange"
-          >
-            Đánh giá
-          </ButtonPrimary>
+          {data.status === "shipping" &&
+            userLoginned &&
+            userLoginned["userName"] === data.product.seller.user_name && (
+              <Button
+                onClick={onClickDelivered}
+                className="!text-base !text-white !bg-amber-600 hover:!bg-amber-600 !shadow-shadowLight"
+              >
+                Giao hàng
+              </Button>
+            )}
+          {data.status === "processing" &&
+            userLoginned &&
+            userLoginned["userName"] === data.product.seller.user_name && (
+              <Button
+                onClick={onClickSent}
+                className="!text-base !text-black !bg-lime-200 hover:!bg-lime-200 !shadow-shadowLight"
+              >
+                Gửi hàng
+              </Button>
+            )}
+          {data.status === "paid" && (
+            <ButtonPrimary
+              onClick={onClickPayment}
+              hover="!bg-gradient-orange"
+              className="!text-base !bg-gradient-orange"
+            >
+              Nhập thông tin giao hàng
+            </ButtonPrimary>
+          )}
+          {data.status === "delivered" &&
+            userLoginned &&
+            userLoginned["userName"] !== data.product.seller.user_name && (
+              <Button
+                onClick={onClickConfirmed}
+                className="!text-base !text-white !bg-cyan-600 hover:!bg-cyan-600 !shadow-shadowLight"
+              >
+                Xác nhận
+              </Button>
+            )}
+          {data.status === "received" && (
+            <ButtonPrimary
+              onClick={onClickRating}
+              hover="!bg-gradient-orange"
+              className="!text-base !bg-gradient-orange"
+            >
+              Đánh giá
+            </ButtonPrimary>
+          )}
         </div>
       </div>
     </Card>
