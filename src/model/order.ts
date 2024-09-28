@@ -101,7 +101,7 @@ export interface OrderInformation {
   phoneNumber: string;
   note: string;
   orderDate: string;
-  status: string;
+  status: 'paid' | 'processing' | 'shipping' | 'delivered' | 'received' | 'cancelled';
   type: 'BuyNow' | 'Auction';
   price: number;
   product: Product;

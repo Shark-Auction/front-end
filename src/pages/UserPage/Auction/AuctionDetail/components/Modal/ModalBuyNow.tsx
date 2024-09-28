@@ -31,21 +31,23 @@ const ModalBuyNow = ({ open, setOpen, data }: ModalBuyNowProps) => {
   const handleCancel = () => {
     setOpen(false);
     form.resetFields();
+    setIsDisctrict(false);
+    setIsWard(false);
   };
   const handleSubmit = () => {
     form.submit();
   };
   const handleFinish = async (values: OrderRequestData) => {
     try {
-      const toAddress = `${values.address}, ${values.ward.label}, ${values.district.label}, ${values.province.label}.`
+      const toAddress = `${values.address}, ${values.ward.label}, ${values.district.label}, ${values.province.label}.`;
       const dataForm: Order = {
         toAddress: toAddress,
         fullName: values.fullName,
-        note: values.note || 'Người dùng để trống',
+        note: values.note || "Người dùng để trống",
         phoneNumber: values.phoneNumber,
         product_id: values.product_id,
-        type: values.type
-      }
+        type: values.type,
+      };
       setLoading(true);
       await orderApi.orderAuction(dataForm);
       toast.success("Mua ngay thành công! Hãy kiểm tra đơn hàng của bạn");
@@ -58,12 +60,15 @@ const ModalBuyNow = ({ open, setOpen, data }: ModalBuyNowProps) => {
       setLoading(false);
     }
   };
-  const handleDistrict = async (province: any) => {
+  const handleDistrict = async (province: {
+    value: string;
+    label: React.ReactNode;
+  }) => {
     if (province) {
       const response = await orderApi.getDistrictApi(province.value);
-      const optionResponse = await response.data.map((e: any) => ({
-        label: e.full_name,
-        value: e.id,
+      const optionResponse = response.data.map((e: any) => ({
+        label: e.DistrictName,
+        value: e.DistrictID,
       }));
       setDistrict(optionResponse);
       setIsDisctrict(true);
@@ -80,8 +85,8 @@ const ModalBuyNow = ({ open, setOpen, data }: ModalBuyNowProps) => {
     if (district) {
       const response = await orderApi.getWardApi(district.value);
       const optionResponse = await response.data.map((e: any) => ({
-        label: e.full_name,
-        value: e.id,
+        label: e.WardName,
+        value: e.WardCode,
       }));
       setWard(optionResponse);
       setIsWard(true);
@@ -96,9 +101,9 @@ const ModalBuyNow = ({ open, setOpen, data }: ModalBuyNowProps) => {
     try {
       setLoading(true);
       const responseProvince = await orderApi.getProvinceApi();
-      const optionResponse = await responseProvince.data.map((e: any) => ({
-        label: e.full_name,
-        value: e.id,
+      const optionResponse = responseProvince.data.map((e: any) => ({
+        label: e.ProvinceName,
+        value: e.ProvinceID,
       }));
       setProvince(optionResponse);
     } catch (error: any) {
