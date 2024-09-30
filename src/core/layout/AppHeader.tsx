@@ -21,7 +21,7 @@ const AppHeader = () => {
     },
     {
       title: "Blog",
-      link: "/",
+      link: "/u/blog",
     },
   ];
   const items: MenuProps["items"] = itemsLink.map((e) => ({
