@@ -51,8 +51,9 @@ const ProductImage: React.FC = () => {
       file.type === "image/jpg";
     if (!isJpgOrPng) {
       toast.error("Chỉ nhận file jpg/png/jpeg");
+      return isJpgOrPng || Upload.LIST_IGNORE;
     }
-    return isJpgOrPng || Upload.LIST_IGNORE; // Return false to prevent upload
+    return false
   };
 
   useEffect(() => {
