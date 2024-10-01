@@ -13,7 +13,6 @@ import ProductBuyNow from "./components/ProductBuyNow";
 
 const RequestProduct = () => {
   const [form] = Form.useForm();
-  const [imageDescription, setImageDescription] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const handleFinish = async (values: ProductRequest) => {
     try {
@@ -83,7 +82,7 @@ const RequestProduct = () => {
             <ProductImage />
           </div>
           <div className="pb-10">
-            <ProductDescription setImageDescription={setImageDescription} />
+            <ProductDescription />
           </div>
           <Form.Item className="flex justify-center">
             <ButtonPrimary htmlType="submit" className="text-lg py-4 !px-10">

@@ -71,7 +71,7 @@ export const ModalHistory = ({ id }: BidHistoryProps) => {
   }, [id, open]);
   return (
     <>
-      <Button onClick={openModal} type="link" className="md:text-xl">
+      <Button onClick={openModal} type="link" className="md:text-xl !p-0">
         Xem danh sách tham gia đấu giá
       </Button>
       <Modal

@@ -40,6 +40,8 @@ import ManagerManagement from "./pages/AdminPage/AccountManagement/manager";
 import BlogManagement from "./pages/AdminPage/BlogManagement/index";
 import ViolateManagement from "./pages/AdminPage/ViolateManagement";
 
+import BlogList from "./pages/UserPage/Blog/BlogList";
+import BlogDetail from "./pages/UserPage/Blog/BlogDetail";
 
 const ProductManagement = React.lazy(
   () => import("./pages/UserPage/Profile/components/ProductManagement")
@@ -49,6 +51,13 @@ const RequestProduct = React.lazy(
 );
 const UserProfile = React.lazy(() => import("./pages/UserPage/Profile"));
 const UserPage = React.lazy(() => import("./pages/UserPage"));
+const BlogPage = React.lazy(() => import("./pages/UserPage/Blog"));
+const PaymentSuccess = React.lazy(
+  () => import("./pages/UserPage/ResultPayment/PaymentSuccess")
+);
+const PaymentCancel = React.lazy(
+  () => import("./pages/UserPage/ResultPayment/PaymentCancel")
+);
 
 function App() {
   const router = createBrowserRouter([
@@ -76,6 +85,28 @@ function App() {
             {
               path: "home",
               element: <HomePage />,
+            },
+            {
+              path: "payment-success",
+              element: <PaymentSuccess />,
+            },
+            {
+              path: "payment-cancel",
+              element: <PaymentCancel />,
+            },
+            {
+              path: "blog",
+              element: <BlogPage />,
+              children: [
+                {
+                  path: "",
+                  element: <BlogList />,
+                },
+                {
+                  path: ":id",
+                  element: <BlogDetail />,
+                },
+              ],
             },
             {
               path: "auction",

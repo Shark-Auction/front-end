@@ -75,7 +75,9 @@ const AuctionPage = () => {
         setLoading(true);
         const response = await auctionApi.getAuction();
         const filteredData = response.data
-          .filter((e: Auction) => e.status === 'Waiting' || e.status === 'InProgress')
+          .filter(
+            (e: Auction) => e.status === "Waiting" || e.status === "InProgress"
+          )
           .sort(
             (a: Auction, b: Auction) =>
               new Date(b?.startTime).getTime() -
@@ -98,7 +100,11 @@ const AuctionPage = () => {
 
     if (selectedKey) {
       filtered = filtered.filter(
-        (auction) => auction.product.category.id === selectedKey
+        (auction) =>
+          auction.product.category.id === selectedKey ||
+          (auction.product.category.parent !== null
+            ? auction.product.category.parent.id === selectedKey
+            : "")
       );
     }
 
@@ -129,8 +135,8 @@ const AuctionPage = () => {
   }, [selectedKey, dataAuction, searchText, priceSort, statusFilter]);
 
   useEffect(() => {
-    setFilteredAuction(sortedAndFilteredAuctions)
-  }, [sortedAndFilteredAuctions])
+    setFilteredAuction(sortedAndFilteredAuctions);
+  }, [sortedAndFilteredAuctions]);
 
   return (
     <div className="flex flex-col gap-10">

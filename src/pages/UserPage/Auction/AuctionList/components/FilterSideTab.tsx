@@ -11,7 +11,7 @@ interface FilterSideTabProps {
 const FilterSideTab = ({ items = [], setSelectedkey, setSearchText, searchText }: FilterSideTabProps) => {
 
   const handleReset = () => {
-    setSelectedkey(null);
+    setSelectedkey([]);
     setSearchText(null)
   };
 

@@ -1,24 +1,25 @@
 import axios from "axios";
 import { RootState, store } from "../../core/store/store";
 import { logout, updateAccessToken } from "../../core/store/slice/userSlice";
+import { toast } from "react-toastify";
 
-const baseUrl = 'http://api.sharkauction.online/api/v1/'
+const baseUrl = "http://api.sharkauction.online/api/v1/";
 
 const api = axios.create({
   baseURL: baseUrl,
-  headers:{ 
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  }
-})
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+});
 
 api.interceptors.request.use(
   (config) => {
-    const state: RootState = store.getState()
-    const user = state.user
+    const state: RootState = store.getState();
+    const user = state.user;
 
-    if (user && user['accessToken']) {
-      config.headers.Authorization = `Bearer ${user['accessToken']}`;
+    if (user && user["accessToken"]) {
+      config.headers.Authorization = `Bearer ${user["accessToken"]}`;
     }
     return config;
   },
@@ -29,12 +30,11 @@ api.interceptors.request.use(
 
 const refreshToken = async (refresh: any) => {
   if (!refresh) {
-    throw new Error('No refresh token available');
+    throw new Error("No refresh token available");
   }
-  const response = await axios.post(
-    `${baseUrl}user/refresh`,
-    { refreshToken: refresh }
-  );
+  const response = await axios.post(`${baseUrl}user/refresh`, {
+    refreshToken: refresh,
+  });
   const { accessToken } = response.data.data;
   return accessToken;
 };
@@ -52,14 +52,16 @@ api.interceptors.response.use(
     ) {
       originalRequest._retry = true;
       try {
-        const state: RootState = store.getState()
-        const user = state.user
-        const newAccessToken = await refreshToken(user && user['refreshToken']);
-        store.dispatch(updateAccessToken(newAccessToken))
+        const state: RootState = store.getState();
+        const user = state.user;
+        const newAccessToken = await refreshToken(user && user["refreshToken"]);
+        store.dispatch(updateAccessToken(newAccessToken));
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return api(originalRequest);
       } catch (error) {
-        store.dispatch(logout())
+        store.dispatch(logout());
+        window.location.href = "/auth/login";
+        toast.warning("Phiên đăng nhập đã hết hạn");
         return Promise.reject(error);
       }
     }
@@ -67,4 +69,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api
+export default api;

@@ -23,7 +23,7 @@ const ProfileInformation = ({ data }: ProfileInformationProps) => {
         email: data?.email,
       }}
       className="w-full md:w-3/5"
-      labelCol={{ span: 4 }}
+      labelCol={{ span: 6 }}
       wrapperCol={{ span: 24 }}
       labelAlign="left"
       layout="horizontal"

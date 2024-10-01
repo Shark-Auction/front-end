@@ -1,5 +1,3 @@
-import ImageSlide from "./ImageSlide/ImageSlide";
-import { ModalBidding } from "./Modal/ModalBidding";
 import { ModalHistory } from "./Modal/ModalHistory";
 import { useEffect, useState } from "react";
 import { Tag } from "antd";
@@ -50,23 +48,13 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
     }
   }, [data, userLoginned]);
   return (
-    <div className="w-full border shadow-shadowLight flex flex-col md:flex-row">
-      <div className="w-full md:w-1/4 h-full">
-        <ImageSlide image={data.product.product_images} />
-      </div>
-      <div className="py-5 md:w-3/4 px-3 flex flex-col gap-5 w-full md:ml-10">
+    <div className="w-full border rounded-lg shadow-shadowLight flex flex-col md:flex-row bg-white">
+      <div className="py-5 flex flex-col gap-5 w-full md:ml-5">
+        {data && badgeRibbonStatus[data.status]()}
         <p className="text-2xl">
           <strong>{data.product.name}</strong>
-          {userLoginned &&
-            data.product.seller.id === userLoginned["userId"] && (
-              <div className="bg-gradient-orange text-white !px-4 !w-fit text-center rounded-md">
-                <p className="text-lg font-semibold">
-                  Bạn là người sở hữu phiên này
-                </p>
-              </div>
-            )}
         </p>
-        <div className="grid grid-cols-2 gap-y-2 gap-x-10 w-fit">
+        <div className="grid grid-cols-2 gap-y-4 gap-x-5 w-fit">
           <p className={`${textCss} text-gray-500`}>Giá trị hiện tại:</p>
           <p className={`${textCss} text-red-500 font-semibold`}>
             {formatVND(data.currentPrice)}
@@ -75,8 +63,17 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
           <p className={`${textCss} text-red-500 font-semibold`}>
             {formatVND(data.step)}
           </p>
+          <p className={`${textCss} text-gray-500`}>Thời gian bắt đầu:</p>
+          <Tag color="geekblue" className="md:text-base">
+            {formatDateHour(data.startTime)}
+          </Tag>
+          <div className="border bg-gradient-secondary rounded-lg px-5 !w-fit col-span-2">
+            <p className="md:text-lg font-semibold">
+              Phiên kết thúc lúc {formatDateHour(data.endTime)}
+            </p>
+          </div>
         </div>
-        <div className="flex flex-col md:flex-row gap-5 md:gap-10">
+        <div className="flex md:flex-row gap-5 md:gap-10">
           <div className="flex items-center gap-4">
             <GiHammerDrop className="text-3xl" />
             <p className="md:text-xl font-semibold">{data.totalBids}</p>
@@ -87,23 +84,8 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
               {timeRemaining}
             </Tag>
           </div>
-          <div className="border bg-gradient-secondary rounded-lg px-5 !w-fit">
-            <p className="md:text-lg font-semibold">
-              Phiên kết thúc lúc {formatDateHour(data.endTime)}
-            </p>
-          </div>
         </div>
-        <div className="flex w-full">
-          {userLoginned &&
-            data.product.seller.id !== userLoginned["userId"] && (
-              <ModalBidding
-                auctionId={data.id}
-                step={data.step}
-                currentPrice={data.currentPrice}
-              />
-            )}
-        </div>
-        <div className="flex flex-col md:flex-row items-center md:justify-start gap-5">
+        <div className="flex flex-col items-start md:justify-start gap-5">
           {isWinner && (
             <div>
               {userLoginned &&
@@ -123,7 +105,6 @@ export const GeneralAuction = ({ data }: GeneralAuctionProps) => {
           <ModalHistory id={data.id} />
         </div>
       </div>
-      {data && badgeRibbonStatus[data.status]()}
     </div>
   );
 };

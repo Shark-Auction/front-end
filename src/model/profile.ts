@@ -86,10 +86,16 @@ export interface MyAuctionProfile {
 }
 
 export interface UpdateAuctionDateData {
-  dateRange: any[]
+  dateRange: any[];
 }
 
 export interface UpdateAuctionDate {
   startTime: string;
-  endTime: string
+  endTime: string;
+}
+
+export interface ChangePasswordData {
+  oldPassword: string;
+  newPassword: string;
+  confirmedPassword: string;
 }
