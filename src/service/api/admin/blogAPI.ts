@@ -11,7 +11,7 @@ export const blogApi = {
   },
   addBlog: async (data: any) => {
     try {
-      console.log('apo')
+      console.log('api')
       const response = await api.post('blog', data, {
         headers: {
           "Content-Type": "multipart/form-data",

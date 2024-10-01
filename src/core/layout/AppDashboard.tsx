@@ -46,6 +46,7 @@ const items: MenuItem[] = [
   getItem("Origin Management", "origin-management", <AiFillProduct />),
   getItem("Product Management", "product-management", <AiFillProduct />),
   getItem("Blog Management", "blog-management", <AiFillProduct />),
+  getItem("Violate Management", "violate-management", <AiFillProduct />),
 ];
 
 const AppDashboard: React.FC = () => {
