@@ -38,6 +38,7 @@ import MyProfile from "./pages/UserPage/Profile/components/MyProfile";
 import ChangePassword from "./pages/UserPage/Profile/components/ChangePassword";
 import ManagerManagement from "./pages/AdminPage/AccountManagement/manager";
 import BlogManagement from "./pages/AdminPage/BlogManagement/index";
+import ViolateManagement from "./pages/AdminPage/ViolateManagement";
 
 
 const ProductManagement = React.lazy(
@@ -180,6 +181,8 @@ function App() {
         { path: "origin-management", element: <OriginManagement /> },
         { path: "product-management", element: <AdminProductManagement /> },
         { path: "blog-management", element: <BlogManagement /> },
+        { path: "violate-management", element: <ViolateManagement /> },
+
       ],
     },
     {
