@@ -42,6 +42,7 @@ import ViolateManagement from "./pages/AdminPage/ViolateManagement";
 
 import BlogList from "./pages/UserPage/Blog/BlogList";
 import BlogDetail from "./pages/UserPage/Blog/BlogDetail";
+import OrderDetail from "./pages/UserPage/Profile/components/OrderManagement/components/OrderDetail";
 
 const ProductManagement = React.lazy(
   () => import("./pages/UserPage/Profile/components/ProductManagement")
@@ -129,9 +130,14 @@ function App() {
             {
               path: "profile",
               element: (
-                <Suspense fallback={<LoadingComponent />}>
-                  <UserProfile />
-                </Suspense>
+                <ProtectedRoute
+                  element={
+                    <Suspense fallback={<LoadingComponent />}>
+                      <UserProfile />
+                    </Suspense>
+                  }
+                  allowedRoles={["User"]}
+                />
               ),
               children: [
                 {
@@ -145,6 +151,10 @@ function App() {
                 {
                   path: "order-management",
                   element: <OrderManagement />,
+                },
+                {
+                  path: "order-management/:id",
+                  element: <OrderDetail />,
                 },
                 {
                   path: "your-management",
@@ -213,7 +223,6 @@ function App() {
         { path: "product-management", element: <AdminProductManagement /> },
         { path: "blog-management", element: <BlogManagement /> },
         { path: "violate-management", element: <ViolateManagement /> },
-
       ],
     },
     {
@@ -233,8 +242,8 @@ const ProtectedRoute = ({ element, allowedRoles }: ProtectedRouteProps) => {
   const userLogin = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   if (!allowedRoles.includes(userLogin && userLogin["roleName"])) {
-    toast.error("Từ chối truy cập");
     dispatch(logout());
+    toast.error("Từ chối truy cập");
     return <Navigate to={"/auth/login"} replace />;
   }
   return element;

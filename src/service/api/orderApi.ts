@@ -106,5 +106,13 @@ export const orderApi = {
     } catch (error: any) {
       throw error.response.data;
     }
-  }
+  },
+  orderDetail: async (id: number) => {
+    try {
+      const response = await api.get(`order/${id}`);
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
 };
