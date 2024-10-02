@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import CardOrder from "../../../../../../components/CardOrder";
 import EmptyComponent from "../../../../../../components/Empty";
 import LoadingComponent from "../../../../../../components/Loading";
+import ModalDeliveryInformation from "./components/ModalDeliveryInformation";
+import { useNavigate } from "react-router-dom";
 const optionFilter = [
   {
     value: "",
@@ -36,7 +38,13 @@ const MySellTab = ({ activeKey }: MySellTabProps) => {
   const [filteredData, setFilteredData] = useState<OrderInformation[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>("");
   const [loadingAction, setLoadingAction] = useState<boolean>(false);
+  const [openDelivery, setOpenDelivery] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [order, setOrder] = useState<OrderInformation>();
+  const navigate = useNavigate();
+  const handleNavigate = (id: number) => {
+    navigate(`${id}`);
+  };
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -56,7 +64,7 @@ const MySellTab = ({ activeKey }: MySellTabProps) => {
       setLoadingAction(true);
       await orderApi.deliveredOrder(id);
       toast.success(`Cập nhật đơn hàng ${id} thành công`);
-      await fetchData()
+      await fetchData();
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -68,12 +76,16 @@ const MySellTab = ({ activeKey }: MySellTabProps) => {
       setLoadingAction(true);
       await orderApi.sendOrder(id);
       toast.success(`Cập nhật đơn hàng ${id} thành công`);
-      await fetchData()
+      await fetchData();
     } catch (error: any) {
       toast.error(error.message);
     } finally {
       setLoadingAction(false);
     }
+  };
+  const handleOpenDeliveryInformation = (record: OrderInformation) => {
+    setOpenDelivery(true);
+    setOrder(record);
   };
   useEffect(() => {
     fetchData();
@@ -110,12 +122,22 @@ const MySellTab = ({ activeKey }: MySellTabProps) => {
                 data={element}
                 loadingAction={loadingAction}
                 onClickDelivered={() => handleDelivered(element.id)}
+                onClickDetail={() => handleNavigate(element.id)}
                 onClickSent={() => handleSend(element.id)}
+                onClickDeliveredInformation={() =>
+                  handleOpenDeliveryInformation(element)
+                }
               />
             ))
           ) : (
             <EmptyComponent />
           )}
+          <ModalDeliveryInformation
+            open={openDelivery}
+            setOpen={setOpenDelivery}
+            type="seller"
+            data={order}
+          />
         </div>
       ) : (
         <LoadingComponent />

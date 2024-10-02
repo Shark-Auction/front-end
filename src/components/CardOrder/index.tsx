@@ -18,6 +18,7 @@ interface CardOrderProps {
   onClickConfirmed?: () => void;
   onClickDelivered?: () => void;
   onClickSent?: () => void;
+  onClickDeliveredInformation?: () => void;
 }
 
 const CardOrder = ({
@@ -28,9 +29,10 @@ const CardOrder = ({
   onClickConfirmed,
   onClickDelivered,
   onClickSent,
+  onClickDeliveredInformation,
   loadingAction,
 }: CardOrderProps) => {
-  const userLoginned = useSelector((state: RootState) => state.user);
+  const userLoginned = useSelector((state: RootState) => state.user);  
   return (
     <Card
       loading={loadingAction}
@@ -46,6 +48,7 @@ const CardOrder = ({
     >
       <div className="flex flex-col justify-between h-full w-full">
         <div className="flex flex-col gap-2">
+          <p className="text-base">Mã đơn hàng: {data.id}</p>
           <p className="text-2xl font-bold">{data.product.name}</p>
           <p className="text-lg">
             Giá chốt:{" "}
@@ -55,15 +58,17 @@ const CardOrder = ({
                 : formatVND(data.product.finalPrice)}
             </strong>
           </p>
-          <p className="text-lg">
-            Thời gian thanh toán:{" "}
-            <Tag className="!text-base" color="blue">
-              {formatDateHour(data.orderDate)}
-            </Tag>
-          </p>
-          <p className="text-lg">
-            Trạng thái giao hàng: {data.status && orderStatus[data?.status]()}
-          </p>
+          <div className="flex flex-col md:flex-row md:justify-between">
+            <p className="text-lg">
+              Thời gian thanh toán:{" "}
+              <Tag className="!text-base" color="blue">
+                {formatDateHour(data.orderDate)}
+              </Tag>
+            </p>
+            <p className="text-lg">
+              Trạng thái giao hàng: {data.status && orderStatus[data?.status]()}
+            </p>
+          </div>
           {data.buyer.user_name ===
           (userLoginned && userLoginned["userName"]) ? (
             <p className="text-lg">
@@ -93,7 +98,8 @@ const CardOrder = ({
           </ButtonPrimary>
           {data.status === "shipping" &&
             userLoginned &&
-            userLoginned["userName"] === data.product.seller.user_name && (
+            userLoginned["userName"] === data.product.seller.user_name &&
+            data.product.deliveryMethod === "self_shipping" && (
               <Button
                 onClick={onClickDelivered}
                 className="!text-base !text-white !bg-amber-600 hover:!bg-amber-600 !shadow-shadowLight"
@@ -104,12 +110,23 @@ const CardOrder = ({
           {data.status === "processing" &&
             userLoginned &&
             userLoginned["userName"] === data.product.seller.user_name && (
-              <Button
-                onClick={onClickSent}
-                className="!text-base !text-black !bg-lime-200 hover:!bg-lime-200 !shadow-shadowLight"
-              >
-                Gửi hàng
-              </Button>
+              <>
+                {data.product.deliveryMethod === "self_shipping" ? (
+                  <Button
+                    onClick={onClickSent}
+                    className="!text-base !text-black !bg-lime-200 hover:!bg-lime-200 !shadow-shadowLight"
+                  >
+                    Gửi hàng
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={onClickDeliveredInformation}
+                    className="!text-base !text-black !bg-green-200 hover:!bg-green -200 !shadow-shadowLight"
+                  >
+                    Nhập thông tin cho GHN
+                  </Button>
+                )}
+              </>
             )}
           {data.status === "paid" && (
             <ButtonPrimary
@@ -120,6 +137,16 @@ const CardOrder = ({
               Nhập thông tin giao hàng
             </ButtonPrimary>
           )}
+          {data.status === "processing" &&
+            userLoginned &&
+            userLoginned["userName"] !== data.product.seller.user_name && (
+              <Button
+                onClick={onClickDeliveredInformation}
+                className="!text-base !text-white !bg-green-600 hover:!bg-green-600 !shadow-shadowLight"
+              >
+                Nhập thông tin cho GHN
+              </Button>
+            )}
           {data.status === "delivered" &&
             userLoginned &&
             userLoginned["userName"] !== data.product.seller.user_name && (

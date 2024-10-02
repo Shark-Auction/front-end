@@ -45,7 +45,7 @@ interface Category {
   id: number;
   name: string;
   imageUrl: string;
-  parent: string;
+  parent: any;
 }
 
 // Brand information of the product

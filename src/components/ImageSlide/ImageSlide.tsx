@@ -13,8 +13,8 @@ import "./imageSlide.css";
 // import required modules
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import { Image } from "antd";
-import { getImageProduct } from "../../../../../../utils/getImage";
-import { ProductImage } from "../../../../../../model/auction";
+import { getImageProduct } from "../../utils/getImage";
+import { ProductImage } from "../../model/auction";
 
 interface ImageSlideProps {
   image: ProductImage[];

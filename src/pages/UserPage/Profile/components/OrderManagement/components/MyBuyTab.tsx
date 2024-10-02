@@ -7,6 +7,8 @@ import CardOrder from "../../../../../../components/CardOrder";
 import EmptyComponent from "../../../../../../components/Empty";
 import ModalRating from "./components/ModalRating";
 import LoadingComponent from "../../../../../../components/Loading";
+import ModalDeliveryInformation from "./components/ModalDeliveryInformation";
+import { useNavigate } from "react-router-dom";
 const optionFilter = [
   {
     value: "",
@@ -38,8 +40,13 @@ const MyBuyTab = ({ activeKey }: MyBuyTabProps) => {
   const [filterStatus, setFilterStatus] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
+  const [openDelivery, setOpenDelivery] = useState<boolean>(false);
   const [order, setOrder] = useState<OrderInformation>();
   const [loadingAction, setLoadingAction] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const handleNavigate = (id: number) => {
+    navigate(`${id}`);
+  };
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -61,6 +68,10 @@ const MyBuyTab = ({ activeKey }: MyBuyTabProps) => {
   const handleOpenModalRating = (record: OrderInformation) => {
     setOpen(true);
     setOrder(record);
+  };
+  const handleOpenDeliveryInformation = (record: OrderInformation) => {
+    setOpenDelivery(true);
+    setOrder(record)
   };
   const handleReceived = async (id: number) => {
     try {
@@ -92,6 +103,7 @@ const MyBuyTab = ({ activeKey }: MyBuyTabProps) => {
   }, [dataBuy, filterStatus]);
   return (
     <>
+      {console.log(dataBuy)}
       {!loading ? (
         <div className="flex flex-col gap-5">
           <div className="flex items-center gap-3 text-lg">
@@ -110,12 +122,20 @@ const MyBuyTab = ({ activeKey }: MyBuyTabProps) => {
                 onClickConfirmed={() => handleReceived(element.id)}
                 loadingAction={loadingAction}
                 data={element}
+                onClickDeliveredInformation={() => handleOpenDeliveryInformation(element)}
+                onClickDetail={() => handleNavigate(element.id)}
               />
             ))
           ) : (
             <EmptyComponent />
           )}
           <ModalRating data={order} open={open} setOpen={setOpen} />
+          <ModalDeliveryInformation
+            open={openDelivery}
+            setOpen={setOpenDelivery}
+            type="buyer"
+            data={order}
+          />
         </div>
       ) : (
         <LoadingComponent />

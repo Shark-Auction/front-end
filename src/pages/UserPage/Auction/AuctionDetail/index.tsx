@@ -9,7 +9,7 @@ import { auctionApi } from "../../../../service/api/auctionApi";
 import { useWebSocket } from "../../../../hooks/useWebSocket";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../core/store/store";
-import ImageSlide from "./components/ImageSlide/ImageSlide";
+import ImageSlide from "../../../../components/ImageSlide/ImageSlide";
 import ActionAuction from "./components/ActionAuction";
 
 const AuctionDetail = () => {
