@@ -3,6 +3,7 @@ import MyProduct from "./components/MyProduct/MyProduct"
 import MyAuction from "./components/MyAuction/MyAuction"
 import { useState } from "react";
 import MyWinning from "./components/MyWinning/MyWinning";
+import MyPayment from "./components/MyPayment/MyPayment";
 
 const ProductManagement = () => {
   const [activeKey, setActiveKey] = useState("1");
@@ -29,6 +30,11 @@ const ProductManagement = () => {
       key: '4',
       label: 'Đấu giá thắng',
       children: <MyWinning activeKey={activeKey} />
+    },
+    {
+      key: '5',
+      label: 'Giao dịch của tôi',
+      children: <MyPayment activeKey={activeKey} />
     }
   ]
   return (

@@ -5,6 +5,17 @@ import TableComponent, {
 } from "../../../../../../../components/Table";
 import { formatDateHour, formatVND } from "../../../../../../../utils/format";
 import { getImageProduct } from "../../../../../../../utils/getImage";
+import ButtonPrimary from "../../../../../../../components/Button";
+import {
+  PaymentRequest,
+  PaymentResponse,
+} from "../../../../../../../model/payment";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../../../../core/store/store";
+import { toast } from "react-toastify";
+import { paymentApi } from "../../../../../../../service/api/paymentApi";
+import { Auction } from "../../../../../../../model/auction";
+import { Skeleton } from "antd";
 
 interface MyWinningProps {
   activeKey: string;
@@ -12,6 +23,25 @@ interface MyWinningProps {
 
 const MyWinning = ({ activeKey }: MyWinningProps) => {
   const [render, setRender] = useState(false);
+  const userLoginned = useSelector((state: RootState) => state.user);
+  const [loading, setLoading] = useState(false);
+  const handlePayment = async (data: Auction) => {
+    const formItem: PaymentRequest = {
+      orderId: data.product.id,
+      userId: userLoginned ? userLoginned["userId"] : 0,
+      senderTransaction: true,
+    };
+    try {
+      setLoading(true);
+      const response = await paymentApi.payment(formItem);
+      const data: PaymentResponse = response.data;
+      window.open(data.checkoutUrl);
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   const column: ColumnsTable[] = [
     {
       title: "#",
@@ -57,9 +87,9 @@ const MyWinning = ({ activeKey }: MyWinningProps) => {
       title: "Giá chót",
       dataIndex: "product",
       key: "finalPrice",
-      render: (data) => (
+      render: (_, record) => (
         <p className="font-bold text-base text-orange-600">
-          {formatVND(data.finalPrice)}
+          {formatVND(record.currentPrice)}
         </p>
       ),
     },
@@ -69,6 +99,17 @@ const MyWinning = ({ activeKey }: MyWinningProps) => {
       key: "endTime",
       render: (data) => formatDateHour(data),
     },
+    {
+      title: "Thanh toán",
+      dataIndex: "id",
+      key: "action",
+      align: "center",
+      render: (_, record: any) => (
+        <ButtonPrimary onClick={() => handlePayment(record as Auction)}>
+          Thanh toán
+        </ButtonPrimary>
+      ),
+    },
   ];
   useEffect(() => {
     if (activeKey === "4") {
@@ -76,13 +117,15 @@ const MyWinning = ({ activeKey }: MyWinningProps) => {
     }
   }, [activeKey]);
   return (
-    <TableComponent
-      expandX={1700}
-      render={render}
-      setRender={setRender}
-      columns={column}
-      apiUri="auction/win"
-    />
+    <Skeleton loading={loading}>
+      <TableComponent
+        expandX={1700}
+        render={render}
+        setRender={setRender}
+        columns={column}
+        apiUri="auction/win"
+      />
+    </Skeleton>
   );
 };
 
