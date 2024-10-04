@@ -4,6 +4,7 @@ import ButtonPrimary from "../../../../../../../components/Button";
 import { OrderInformation } from "../../../../../../../model/order";
 import { useEffect, useState } from "react";
 import {
+  Delivery,
   DeliveryDetailSeller,
   DeliveryRequestReceiver,
 } from "../../../../../../../model/delivery";
@@ -26,6 +27,7 @@ const ModalDeliveryInformation = ({
 }: ModalDeliveryInformationProp) => {
   const [form] = Form.useForm();
   const [order, setOrder] = useState<OrderInformation>();
+  const [dataDelivery, setDataDelivery] = useState<Delivery>();
   const handleCancel = () => {
     setOpen(false);
     setOrder(undefined);
@@ -68,9 +70,18 @@ const ModalDeliveryInformation = ({
     };
     console.log(formItem);
   };
+  const fetchDelivery = async (id: number) => {
+    try {
+      const response = await deliveryApi.getDeliveryByOrder(id);
+      setDataDelivery(response.data);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
   useEffect(() => {
-    if (open) {
+    if (open && data) {
       setOrder(data);
+      fetchDelivery(data.id);
     }
   }, [data, open]);
   return (
@@ -123,7 +134,12 @@ const ModalDeliveryInformation = ({
           <Form.Item hidden name={"serviceID"} />
         </Form>
       ) : (
-        <Form form={form} onFinish={handleFinishSeller} labelCol={{ span: 24 }}>
+        <Form
+          disabled={dataDelivery && dataDelivery.length === 0 ? true : false}
+          form={form}
+          onFinish={handleFinishSeller}
+          labelCol={{ span: 24 }}
+        >
           <Form.Item
             name={"name"}
             label={<LabelForm>Tên người nhận:</LabelForm>}

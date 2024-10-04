@@ -3,7 +3,6 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-import AppLayout from "./core/layout/AppLayout";
 import LandingPage from "./pages/LandingPage";
 import "./App.css";
 import AuthPage from "./pages/Auth";
@@ -60,11 +59,17 @@ const PaymentCancel = React.lazy(
   () => import("./pages/UserPage/ResultPayment/PaymentCancel")
 );
 
+const AppLayout = React.lazy(() => import("./core/layout/AppLayout"));
+
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <AppLayout />,
+      element: (
+        <Suspense fallback={<LoadingComponent />}>
+          <AppLayout />
+        </Suspense>
+      ),
       children: [
         {
           path: "",
@@ -89,11 +94,19 @@ function App() {
             },
             {
               path: "payment-success",
-              element: <PaymentSuccess />,
+              element: (
+                <Suspense fallback={<LoadingComponent />}>
+                  <PaymentSuccess />
+                </Suspense>
+              ),
             },
             {
               path: "payment-cancel",
-              element: <PaymentCancel />,
+              element: (
+                <Suspense fallback={<LoadingComponent />}>
+                  <PaymentCancel />
+                </Suspense>
+              ),
             },
             {
               path: "blog",

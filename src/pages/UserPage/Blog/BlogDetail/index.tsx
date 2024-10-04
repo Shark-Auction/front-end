@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { Skeleton } from "antd";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { blogApiUser } from "../../../../service/api/blogApiUser";
-import { Blog } from "../../../../model/blog";
-import { Skeleton } from "antd";
-import { getImageBlog } from "../../../../utils/getImage";
-import { formatDateHour } from "../../../../utils/format";
 import ImageComponent from "../../../../components/Image";
+import { Blog } from "../../../../model/blog";
+import { blogApiUser } from "../../../../service/api/blogApiUser";
+import { formatDateHour } from "../../../../utils/format";
+import { getImageBlog } from "../../../../utils/getImage";
 
 const BlogDetail = () => {
   const { id } = useParams();

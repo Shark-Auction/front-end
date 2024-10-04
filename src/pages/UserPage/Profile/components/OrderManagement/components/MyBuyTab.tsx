@@ -103,7 +103,6 @@ const MyBuyTab = ({ activeKey }: MyBuyTabProps) => {
   }, [dataBuy, filterStatus]);
   return (
     <>
-      {console.log(dataBuy)}
       {!loading ? (
         <div className="flex flex-col gap-5">
           <div className="flex items-center gap-3 text-lg">

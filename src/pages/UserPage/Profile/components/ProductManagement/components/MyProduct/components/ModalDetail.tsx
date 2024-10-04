@@ -1,19 +1,19 @@
+import type { TourProps } from "antd";
 import { Button, Form, Modal, Popconfirm, Steps, Tour } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { productApi } from "../../../../../../../../service/api/productApi";
+import ButtonPrimary from "../../../../../../../../components/Button";
+import DateRangeAuction from "../../../../../../../../components/FormItem/DateRangeAuction";
 import { ProductDetailRequest } from "../../../../../../../../model/product";
+import { ProductProfile } from "../../../../../../../../model/profile";
+import { auctionApi } from "../../../../../../../../service/api/auctionApi";
+import { productApi } from "../../../../../../../../service/api/productApi";
+import { status } from "../../../../../../../../utils/render/statusRender";
 import ItemBrandOrigin from "./ModalEdit/ItemBrandOrigin";
-import ItemInformation from "./ModalEdit/ItemInformation";
+import ItemBuyNow from "./ModalEdit/ItemBuyNow";
 import ItemCategory from "./ModalEdit/ItemCategory";
 import ItemDescription from "./ModalEdit/ItemDescription";
-import ButtonPrimary from "../../../../../../../../components/Button";
-import { auctionApi } from "../../../../../../../../service/api/auctionApi";
-import type { TourProps } from "antd";
-import DateRangeAuction from "../../../../../../../../components/FormItem/DateRangeAuction";
-import { ProductProfile } from "../../../../../../../../model/profile";
-import ItemBuyNow from "./ModalEdit/ItemBuyNow";
-import { status } from "../../../../../../../../utils/render/statusRender";
+import ItemInformation from "./ModalEdit/ItemInformation";
 
 interface ModalDetailProps {
   open: boolean;
@@ -27,7 +27,6 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
   const ref2 = useRef(null);
   const [form] = Form.useForm();
   const [dataItem, setDataItem] = useState<ProductProfile>();
-  const [imageDescription, setImageDescription] = useState<string[]>([]);
   const [renderDetail, setRenderDetail] = useState(false);
   const [loading, setLoading] = useState(false);
   const [current, setCurrent] = useState(0);
@@ -137,7 +136,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
             <ItemCategory />
             <ItemBrandOrigin />
             <ItemBuyNow buyNow={buyNowStatus} />
-            <ItemDescription setImageDescription={setImageDescription} />
+            <ItemDescription />
           </Form>
         </div>
       ),

@@ -4,13 +4,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import LabelForm from "../../../../../../../../../components/LabelForm";
 
-interface ProductDescriptionProps {
-  setImageDescription: React.Dispatch<React.SetStateAction<string[]>>;
-}
-
-const ItemDescription = ({
-  setImageDescription,
-}: ProductDescriptionProps) => {
+const ItemDescription = () => {
   const quillRef = React.useRef<ReactQuill>(null);
   const handleImageUpload = useCallback(() => {
     const input = document.createElement("input");
@@ -30,7 +24,6 @@ const ItemDescription = ({
             const range = quill.getSelection();
             if (range) {
               quill.insertEmbed(range.index, "image", base64Image);
-              setImageDescription((prevImages) => [...prevImages, base64Image]);
             }
           }
           // try {
@@ -58,7 +51,7 @@ const ItemDescription = ({
         reader.readAsDataURL(file);
       }
     };
-  }, [setImageDescription]);
+  }, []);
 
   const modules = {
     toolbar: {
@@ -80,13 +73,7 @@ const ItemDescription = ({
 
   const handleContentChange = (content: string) => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(content, "text/html");
-    const currentImagesInEditor = Array.from(
-      doc.getElementsByTagName("img")
-    ).map((img) => img.src);
-    setImageDescription((prevImages) =>
-      prevImages.filter((img) => currentImagesInEditor.includes(img))
-    );
+    parser.parseFromString(content, "text/html");
   };
 
   return (

@@ -23,3 +23,78 @@ export interface DeliveryDetailSeller {
   height: number;
   note: string;
 }
+
+interface Receiver {
+  id: number;
+  full_name: string;
+  user_name: string;
+  phone_number: string;
+  email: string;
+  address: string;
+  imageUrl: string | null;
+  date_of_birth: string; // Consider using Date type for better type safety
+  role_id: {
+    id: number;
+    name: string;
+  };
+  email_verified: boolean;
+  is_active: boolean;
+}
+
+export interface Delivery {
+  id: number;
+  orderCode: string | null;
+  receiver: Receiver;
+  paymentTypeId: number;
+  serviceTypeId: number;
+  fromName: string | null;
+  fromPhone: string | null;
+  fromAddress: string | null;
+  fromWardName: string | null;
+  fromDistrictName: string | null;
+  fromProvinceName: string | null;
+  productId: number;
+  sender: string | null;
+  toName: string;
+  toPhone: string;
+  toAddress: string;
+  toWardCode: string;
+  toDistrictId: number;
+  weight: number;
+  length: number;
+  width: number;
+  height: number;
+  note: string | null;
+  requiredNote: string;
+  returnPhone: string | null;
+  returnAddress: string | null;
+  status: DeliveryStatusGHN;
+  deliveryStatus: string | null;
+}
+
+export type DeliveryStatusGHN =
+  | "RECEIVER_INFORMATION"
+  | "SENDER_INFORMATION"
+  | "WAITING_RECEIVING"
+  | "READY_TO_PICK"
+  | "PICKING"
+  | "CANCEL"
+  | "MONEY_COLLECT_PICKING"
+  | "PICKED"
+  | "STORING"
+  | "TRANSPORTING"
+  | "SORTING"
+  | "DELIVERING"
+  | "MONEY_COLLECT_DELIVERING"
+  | "DELIVERED"
+  | "DELIVERY_FAIL"
+  | "WAITING_TO_RETURN"
+  | "RETURN"
+  | "RETURN_TRANSPORTING"
+  | "RETURN_SORTING"
+  | "RETURNING"
+  | "RETURN_FAIL"
+  | "RETURNED"
+  | "EXCEPTION"
+  | "DAMAGE"
+  | "LOST";
