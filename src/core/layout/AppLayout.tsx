@@ -29,7 +29,7 @@ const AppLayout = () => {
     <Layout className="min-h-screen">
       <Header
         className="fixed w-full z-[10] text-black flex items-center 
-      bg-gradient-header md:h-[90px] md:rounded-es-md md:rounded-ee-md shadow-xl"
+      bg-gradient-header md:h-fit md:rounded-es-md md:rounded-ee-md shadow-xl"
       >
         <AppHeader />
       </Header>

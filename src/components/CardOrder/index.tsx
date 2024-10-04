@@ -32,7 +32,7 @@ const CardOrder = ({
   onClickDeliveredInformation,
   loadingAction,
 }: CardOrderProps) => {
-  const userLoginned = useSelector((state: RootState) => state.user);  
+  const userLoginned = useSelector((state: RootState) => state.user);
   return (
     <Card
       loading={loadingAction}
@@ -121,9 +121,9 @@ const CardOrder = ({
                 ) : (
                   <Button
                     onClick={onClickDeliveredInformation}
-                    className="!text-base !text-black !bg-green-200 hover:!bg-green -200 !shadow-shadowLight"
+                    className="!text-base !text-white !bg-green-600 hover:!bg-green-600 !shadow-shadowLight"
                   >
-                    Nhập thông tin cho GHN
+                    Nhập địa chỉ gửi
                   </Button>
                 )}
               </>
@@ -139,12 +139,13 @@ const CardOrder = ({
           )}
           {data.status === "processing" &&
             userLoginned &&
-            userLoginned["userName"] !== data.product.seller.user_name && (
+            userLoginned["userName"] !== data.product.seller.user_name &&
+            data.product.deliveryMethod !== "self_shipping" && (
               <Button
                 onClick={onClickDeliveredInformation}
                 className="!text-base !text-white !bg-green-600 hover:!bg-green-600 !shadow-shadowLight"
               >
-                Nhập thông tin cho GHN
+                Nhập địa chỉ nhận
               </Button>
             )}
           {data.status === "delivered" &&
