@@ -12,7 +12,6 @@
 //   const [isModalOpen, setIsModalOpen] = useState(false);
 //   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
-
 //   useEffect(() => {
 //     const fetchCategories = async () => {
 //       try {
@@ -137,61 +136,58 @@
 // };
 
 // export default CategoryManagement;
-import { Button, Form, Input, Modal, Table } from "antd";
-import Dashboard, { Column } from "../../../components/Dashboard";
-import ButtonPrimary from "../../../components/Button";
-import ImageComponent from "../../../components/Image";
-import { getImageCategory } from "../../../utils/getImage";
+import { Button, Modal, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
+import { Column } from "../../../components/Dashboard";
+import ImageComponent from "../../../components/Image";
 import { categoryApi } from "../../../service/api/admin/categoryApi";
+import { getImageCategory } from "../../../utils/getImage";
+import { Category } from "../../../model/category";
+import { toast } from "react-toastify";
 
 const CategoryManagement = () => {
-  const [categories, setCategories] = useState([]); // State to store all categories
-  const [childCategories, setChildCategories] = useState([]); // State to store child categories
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [childCategories, setChildCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
-
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await categoryApi.getCategory(); // Call API to get categories
+        setLoading(true);
+        const response = await categoryApi.getCategory();
         if (response && response.data) {
-          setCategories(response.data); // Lưu tất cả các categories vào state
+          setCategories(response.data);
         }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
+      } catch (error: any) {
+        toast.error(
+          "Error fetching child categories: " + error.response.data.message
+        );
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchCategories();
-  }, []); // Run once on component mount
-  // const fetchCategoriesChildren = async () => {
-  //   try {
-  //     const response = await categoryApi.getCategoryChildren(); // Call API to get categories
-  //     if (response && response.data) {
-  //       setCategories(response.data); // Lưu tất cả các categories vào state
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching categories:", error);
-  //   }
-  // };
+  }, []);
 
   const handleNameClick = async (parentId: number) => {
-    setSelectedCategoryId(parentId);
     try {
-      const response = await categoryApi.getCategoryChildren(parentId); // Fetch child categories
-      if (response && response.data) {
-        setChildCategories(response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching child categories:", error);
+      setLoading(true);
+      const response = await categoryApi.getCategoryChildren(parentId);
+      setChildCategories(response);
+    } catch (error: any) {
+      toast.error(
+        "Error fetching child categories: " + error.response.data.message
+      );
+    } finally {
+      setLoading(false);
     }
-    setIsModalOpen(true); // Open the modal
+    setIsModalOpen(true);
   };
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-    setChildCategories([]); // Clear child categories when closing the modal
+    setChildCategories([]);
   };
 
   const columns: Column[] = [
@@ -210,48 +206,33 @@ const CategoryManagement = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (text: string, record: any) => (
-        <Button type="link" onClick={() => handleNameClick(record.id)}>
-          {text}
-        </Button>
-      ),
+      render: (data) => <Tag color="blue" className="!text-lg !font-semibold !px-10">{data}</Tag>
     },
     {
       title: "Parent",
       dataIndex: "parent",
       key: "parent",
-      render: (data) => data ? 'day la con' : 'day la parent',
+      render: (_, record: any) => (
+        <Button type="link" className="!text-lg !font-semibold" onClick={() => handleNameClick(record.id)}>
+          View children category
+        </Button>
+      ),
     },
   ];
-
-  // Filter categories to show only parent categories
-  const parentCategories = categories.filter(category => category.parent === null);
-  const formItem = (
-    <>
-      <Form.Item
-        label="Name"
-        name="name"
-        rules={[{ required: true, message: "Please input the Category name!" }]}
-      >
-        <Input placeholder="Category Name" />
-      </Form.Item>
-      <Form.Item name={"id"} hidden></Form.Item>
-    </>
+  const parentCategories = categories.filter(
+    (category) => category.parent === null
   );
   return (
     <>
-      {/* <Dashboard
+      <Table
+        loading={loading}
+        dataSource={parentCategories}
         columns={columns}
-        apiUri="category"
-        action={true}
-        formItem={formItem}
-        dataSource={parentCategories} // Only show parent categories
-      /> */}
-      <Table dataSource={parentCategories} columns={columns} />
-      {/* Modal for displaying child categories */}
+      />
       <Modal
         title="Child Categories"
-        visible={isModalOpen}
+        open={isModalOpen}
+        width={700}
         onCancel={handleModalClose}
         footer={[
           <Button key="close" onClick={handleModalClose}>
@@ -259,14 +240,20 @@ const CategoryManagement = () => {
           </Button>,
         ]}
       >
-
         <Table
-          dataSource={childCategories} // Ensure this is set to the right data
+          loading={loading}
+          dataSource={childCategories}
           columns={[
             {
               title: "ID",
               dataIndex: "id",
               key: "id",
+            },
+            {
+              title: "Image",
+              dataIndex: "imageUrl",
+              key: "image",
+              render: (data) => <ImageComponent src={getImageCategory(data)} />,
             },
             {
               title: "Name",
@@ -277,8 +264,6 @@ const CategoryManagement = () => {
           rowKey="id"
           pagination={false}
         />
-
-
       </Modal>
     </>
   );

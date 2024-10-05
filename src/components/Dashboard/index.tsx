@@ -49,13 +49,11 @@ const Dashboard = ({
     setOpen(false);
   };
 
-
   const fetchData = async () => {
     try {
       setIsFetching(true);
       const response = await api.get(`${apiUri}`);
       setDataSource(response.data.data);
-
     } catch (error: any) {
       toast.error(error.response.data);
     } finally {
@@ -66,13 +64,35 @@ const Dashboard = ({
   const handleFinish = async (values: any) => {
     try {
       setLoading(true);
-      if (values.id) {
-        await api.put(`${apiUri}/${values.id}`, values);
-        toast.success(`Update ${apiUri} success`);
+      if (values.startTime || values.endTime) {
+        const startTime = values.startTime
+          ? values.startTime.format("YYYY-MM-DD HH:mm")
+          : "";
+        const endTime = values.endTime
+          ? values.endTime.format("YYYY-MM-DD HH:mm")
+          : "";
+        const formDataHaveDate = {
+          ...values,
+          startTime: startTime,
+          endTime: endTime,
+        };
+        if (values.id) {
+          await api.put(`${apiUri}/${values.id}`, formDataHaveDate);
+          toast.success(`Update ${apiUri} success`);
+        } else {
+          await api.post(`${apiUri}`, formDataHaveDate);
+          toast.success(`Add new ${apiUri} success`);
+        }
       } else {
-        await api.post(`${apiUri}`, values);
-        toast.success(`Add new ${apiUri} success`);
+        if (values.id) {
+          await api.put(`${apiUri}/${values.id}`, values);
+          toast.success(`Update ${apiUri} success`);
+        } else {
+          await api.post(`${apiUri}`, values);
+          toast.success(`Add new ${apiUri} success`);
+        }
       }
+
       fetchData();
       handleCloseModal();
     } catch (error: any) {
