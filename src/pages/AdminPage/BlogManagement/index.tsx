@@ -28,14 +28,7 @@ const BlogManagement = () => {
       dataIndex: "blogImages",
       render: (data) => <ImageComponent src={getImageBlog(data[0]?.url)} />,
     },
-    {
-      title: "Content",
-      key: "content",
-      dataIndex: "content",
-      render: (data) => <div dangerouslySetInnerHTML={{
-        __html: data
-      }} />
-    },
+
     {
       title: "Author",
       key: "user",

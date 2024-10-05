@@ -9,4 +9,14 @@ export const categoryApi = {
       throw error.response.data
     }
   }
+,
+  getCategoryChildren: async(parentId:number) => {
+    try {
+      const response = await api.get(`category/children/${parentId}`)
+      return response.data
+    }
+    catch (error:any) { 
+      throw error.response.data
+    }
+  }
 }

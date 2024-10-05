@@ -18,6 +18,8 @@ interface DashboardProps {
   action?: boolean;
   refetch?: boolean; // New prop for refetch
   setRefetch?: (value: boolean) => void; // New prop to set refetch state
+  onSubmit?: any;
+  dataSource?: any;
 }
 
 const Dashboard = ({
@@ -25,7 +27,7 @@ const Dashboard = ({
   apiUri,
   formItem = <></>,
   action = true,
-  refetch, setRefetch
+  refetch,
 }: DashboardProps) => {
   const [dataSource, setDataSource] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
