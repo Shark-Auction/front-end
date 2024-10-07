@@ -44,12 +44,12 @@ const AppFooter = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-5 md:flex-row md:justify-between md:px-[10%]">
+    <div className="flex flex-col gap-5 container mx-auto md:flex-row md:justify-between">
       <div className="md:w-[100%/3] flex flex-col gap-5">
         <div className="flex gap-10 items-center">
           <Image
             preview={false}
-            className="!relative !w-[70px] !object-contain"
+            className="!relative !w-10 md:!w-20 !object-cover rounded-full p-2 bg-white shadow-shadowLight"
             src="/src/assets/logo_exe.png"
             alt="logo"
           />

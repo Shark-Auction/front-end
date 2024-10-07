@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import authApi from "../../../service/api/authApi";
 import { useState } from "react";
 import dayjs from "dayjs";
+import { IoArrowBack } from "react-icons/io5";
 
 const RegisterPage = () => {
   const [form] = Form.useForm();
@@ -34,7 +35,9 @@ const RegisterPage = () => {
       toast.success(
         <>
           <div>Đăng ký thành công</div>
-          <div className="font-semibold">Hãy kiểm tra Email để xác thực tài khoản</div>
+          <div className="font-semibold">
+            Hãy kiểm tra Email để xác thực tài khoản
+          </div>
         </>
       );
       navigate("/auth/login");
@@ -57,7 +60,6 @@ const RegisterPage = () => {
       await authApi.checkUser(value);
       return Promise.resolve();
     } catch (error: any) {
-      console.log(error);
       return Promise.reject(error.message);
     }
   };
@@ -66,10 +68,14 @@ const RegisterPage = () => {
       className="w-[650px] px-10 py-5 h-full flex bg-white flex-col items-center 
       justify-center text-black md:border md:shadow-shadowHeavy rounded-md"
     >
-      <div className="text-left">
-        <p className="text-2xl md:text-3xl">
+      <div className="text-left flex items-center justify-between w-full">
+        <p className="w-1/4">
+          <IoArrowBack onClick={() => navigate('/auth/login')} size={30} className="cursor-pointer hover:opacity-50 duration-300" />
+        </p>
+        <p className="text-2xl md:text-3xl !w-fit text-center">
           <strong>Đăng ký tài khoản</strong>
         </p>
+        <p className="w-1/4"></p>
       </div>
       <Divider />
       <Form

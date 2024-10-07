@@ -1,23 +1,17 @@
-import { Form, Image, TreeSelect, TreeSelectProps } from "antd";
-import LabelForm from "../../../../../../components/LabelForm";
+import { Form, Image, TreeSelect } from "antd";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { categoryApi } from "../../../../../../service/api/categoryApi";
+import LabelForm from "../../../../../../components/LabelForm";
 import { Category } from "../../../../../../model/category";
+import { categoryApi } from "../../../../../../service/api/categoryApi";
 import { getImageCategory } from "../../../../../../utils/getImage";
 
 const ProductCategory = () => {
   const [category, setCategory] = useState<any[]>([]);
-  const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {
-    console.log("onPopupScroll", e);
-  };
 
   const transformData = (data: any) => {
     const map = new Map();
     const tree: any[] = [];
-
-    // Create a map of id to node
-    console.log(data)
     data.forEach((item: Category) => {
       map.set(item.id, {
         value: item.id,
@@ -50,7 +44,6 @@ const ProductCategory = () => {
         const response = await categoryApi.getCategory();
         const transformedData = transformData(response.data);
         setCategory(transformedData);
-        console.log(transformedData);
       } catch (error: any) {
         toast.error(error.message);
       }
@@ -80,7 +73,6 @@ const ProductCategory = () => {
           allowClear
           treeDefaultExpandAll
           treeData={category}
-          onPopupScroll={onPopupScroll}
           className="h-fit"
         />
       </Form.Item>

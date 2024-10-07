@@ -63,6 +63,19 @@ const MyPayment = ({ activeKey }: MyPaymentProps) => {
         </Tag>
       ),
     },
+    {
+      dataIndex: "status",
+      key: "orderEntity",
+      title: "Trạng thái",
+      render: (record) => (
+        <>
+          {record === "PAID" && <Tag color="green-inverse">Đã thanh toán</Tag>}
+          {record === "CANCELLED" && (
+            <Tag color="red-inverse">Thanh toán thất bại</Tag>
+          )}
+        </>
+      ),
+    },
   ];
   useEffect(() => {
     if (activeKey === "5") {

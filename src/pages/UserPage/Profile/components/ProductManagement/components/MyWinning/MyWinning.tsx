@@ -94,6 +94,12 @@ const MyWinning = ({ activeKey }: MyWinningProps) => {
       ),
     },
     {
+      title: 'Người đăng',
+      dataIndex: 'product',
+      key: 'seller',
+      render: (data) => data.seller.full_name
+    },
+    {
       title: "Ngày kết thúc",
       dataIndex: "endTime",
       key: "endTime",
