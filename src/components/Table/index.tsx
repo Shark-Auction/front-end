@@ -73,7 +73,6 @@ const TableComponent = ({
         () => {
           client.subscribe("user/queue/auctions/my", (message: any) => {
             const receivedMsg = JSON.parse(message.body);
-            console.log(receivedMsg)
             setDataSource((prev) => {
               return prev.map((auction) => {
                 if(auction.id === receivedMsg.id) {
@@ -88,9 +87,7 @@ const TableComponent = ({
             });
           });
         },
-        (error: any) => {
-          console.log(error);
-        }
+        () => {}
       );
     }
   }, [typeTable]);

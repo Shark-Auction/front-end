@@ -33,7 +33,7 @@ const AppLayout = () => {
       >
         <AppHeader />
       </Header>
-      <Content style={{ marginTop: headerHeight }} className="mb-10">
+      <Content style={{ marginTop: headerHeight }}>
         <Outlet />
       </Content>
       <Footer className="!w-full">

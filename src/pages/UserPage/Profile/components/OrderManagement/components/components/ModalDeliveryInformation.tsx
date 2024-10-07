@@ -27,7 +27,7 @@ const ModalDeliveryInformation = ({
 }: ModalDeliveryInformationProp) => {
   const [form] = Form.useForm();
   const [order, setOrder] = useState<OrderInformation>();
-  const [dataDelivery, setDataDelivery] = useState<Delivery>();
+  const [dataDelivery, setDataDelivery] = useState<Delivery[]>([]);
   const handleCancel = () => {
     setOpen(false);
     setOrder(undefined);
@@ -53,7 +53,7 @@ const ModalDeliveryInformation = ({
     }
   };
 
-  const handleFinishSeller = (values: any) => {
+  const handleFinishSeller = async (values: any) => {
     const formItem: DeliveryDetailSeller = {
       from_address: values.address,
       from_district_name: values.district.label,
@@ -68,7 +68,16 @@ const ModalDeliveryInformation = ({
       weight: values.weight,
       width: values.width,
     };
-    console.log(formItem);
+    try {
+      await deliveryApi.sellerDelivery(
+        dataDelivery && dataDelivery.length > 0 ? dataDelivery[0].id : 0,
+        formItem
+      );
+      toast.success("Cảm ơn quý khách đã điền thông tin!");
+      handleCancel();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
   const fetchDelivery = async (id: number) => {
     try {
@@ -82,8 +91,9 @@ const ModalDeliveryInformation = ({
     if (open && data) {
       setOrder(data);
       fetchDelivery(data.id);
+      form.resetFields();
     }
-  }, [data, open]);
+  }, [data, form, open]);
   return (
     <Modal
       title={"Nhập thông tin"}
@@ -91,48 +101,106 @@ const ModalDeliveryInformation = ({
       open={open}
       onCancel={handleCancel}
       footer={[
-        type === "buyer" && (
-          <ButtonPrimary onClick={() => form.submit()}>
+        type === "buyer" && dataDelivery && dataDelivery.length === 0 && (
+          <ButtonPrimary key={"submit"} onClick={() => form.submit()}>
             Gửi thông tin
           </ButtonPrimary>
         ),
         type === "seller" && (
-          <ButtonPrimary onClick={() => form.submit()}>
+          <ButtonPrimary key={"submit"} onClick={() => form.submit()}>
             Gửi thông tin
           </ButtonPrimary>
         ),
       ]}
     >
       {type === "buyer" ? (
-        <Form form={form} onFinish={handleFinishBuyer} labelCol={{ span: 24 }}>
-          <Form.Item
-            name={"name"}
-            label={<LabelForm>Tên người nhận:</LabelForm>}
-            rules={[{ required: true, message: "Không được để trống" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={"phoneNumber"}
-            label={<LabelForm>Số điện thoại:</LabelForm>}
-            rules={[
-              {
-                required: true,
-                message: "Không được để trống",
-              },
-              {
-                pattern: /^\d{10}$/,
-                message: "Tối thiểu 10 số",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <SelectAddress />
-          <Form.Item hidden name={"productID"} />
-          <Form.Item hidden name={"payment_type_id"} />
-          <Form.Item hidden name={"serviceID"} />
-        </Form>
+        <>
+          {dataDelivery && dataDelivery.length === 0 ? (
+            <Form
+              form={form}
+              onFinish={handleFinishBuyer}
+              labelCol={{ span: 24 }}
+            >
+              <Form.Item
+                name={"name"}
+                label={<LabelForm>Tên người nhận:</LabelForm>}
+                rules={[{ required: true, message: "Không được để trống" }]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name={"phoneNumber"}
+                label={<LabelForm>Số điện thoại:</LabelForm>}
+                rules={[
+                  {
+                    required: true,
+                    message: "Không được để trống",
+                  },
+                  {
+                    pattern: /^\d{10}$/,
+                    message: "Tối thiểu 10 số",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <SelectAddress />
+              <Form.Item hidden name={"productID"} />
+              <Form.Item hidden name={"payment_type_id"} />
+              <Form.Item hidden name={"serviceID"} />
+            </Form>
+          ) : (
+            <Form
+              form={form}
+              labelCol={{ span: 24 }}
+              initialValues={{
+                name: dataDelivery[0].toName,
+                phoneNumber: dataDelivery[0].toPhone,
+                address: dataDelivery[0].toAddress,
+              }}
+            >
+              <Form.Item
+                name={"name"}
+                label={<LabelForm>Tên người nhận:</LabelForm>}
+                rules={[{ required: true, message: "Không được để trống" }]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name={"phoneNumber"}
+                label={<LabelForm>Số điện thoại:</LabelForm>}
+                rules={[
+                  {
+                    required: true,
+                    message: "Không được để trống",
+                  },
+                  {
+                    pattern: /^\d{10}$/,
+                    message: "Tối thiểu 10 số",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name={"address"}
+                label={<LabelForm>Địa chỉ:</LabelForm>}
+                rules={[
+                  {
+                    required: true,
+                    message: "Không được để trống",
+                  },
+                  {
+                    pattern: /^\d{10}$/,
+                    message: "Tối thiểu 10 số",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Form>
+          )}
+        </>
       ) : (
         <Form
           disabled={dataDelivery && dataDelivery.length === 0 ? true : false}

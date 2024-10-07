@@ -72,7 +72,7 @@ const AppHeader = () => {
     },
   ];
   return (
-    <div className="relative w-full py-3 md:px-[10%] flex justify-between">
+    <div className="relative w-full py-3 md:container md:mx-auto flex justify-between">
       <div className="flex items-center gap-10 md:w-2/3">
         <Image
           preview={false}
@@ -103,7 +103,7 @@ const AppHeader = () => {
         {userLogin ? (
           <Dropdown
             menu={{ items: itemsUser }}
-            placement="bottomCenter"
+            placement="bottom"
             arrow
             trigger={["click"]}
             className="cursor-pointer hover:opacity-80 hover:transition-opacity duration-300"

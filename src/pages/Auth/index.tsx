@@ -1,25 +1,30 @@
 import { Image, Layout } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const AuthPage = () => {
+  const navigate = useNavigate();
   return (
     <Layout className="min-h-screen">
       <Header
         className="w-full z-[10] text-black flex items-center 
-      bg-primaryColor md:h-[90px] shadow-xl"
+      bg-gradient-header md:h-fit md:rounded-es-md md:rounded-ee-md shadow-xl"
       >
-        <div className="relative w-full md:px-[10%] flex justify-between">
+        <div className="relative w-full py-3 md:container md:mx-auto">
           <div className="flex items-center gap-10">
             <Image
               preview={false}
-              className="!relative !w-[50px] md:!w-[70px] !object-contain"
+              className="!relative !w-10 md:!w-20 !object-cover rounded-full p-2 bg-white shadow-shadowLight"
               src="/src/assets/logo_exe.png"
               alt="logo"
             />
-            <Link to={'/'} className="text-2xl md:text-3xl hover:!text-black">
+            <p
+              onClick={() => navigate("/")}
+              className="hidden md:block md:text-3xl cursor-pointer 
+          text-white drop-shadow-xl"
+            >
               <strong>Shark Auction</strong>
-            </Link>
+            </p>
           </div>
         </div>
       </Header>

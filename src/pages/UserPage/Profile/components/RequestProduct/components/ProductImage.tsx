@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Form, Image, Upload } from "antd";
 import type { GetProp, UploadFile, UploadProps } from "antd";
+import { Form, Image, Upload } from "antd";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import LabelForm from "../../../../../../components/LabelForm";
 
@@ -55,10 +55,6 @@ const ProductImage: React.FC = () => {
     }
     return false
   };
-
-  useEffect(() => {
-    console.log(fileList);
-  }, [fileList]);
 
   return (
     <>

@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../../../core/store/slice/userSlice";
 import LabelForm from "../../../components/LabelForm";
 import ButtonPrimary from "../../../components/Button";
+import Underline from "../../../components/UI/underline";
 
 interface ForgotPassword {
   email: string;
@@ -18,6 +19,7 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [loadingForgot, setLoadingForgot] = useState(false);
   const [open, setOpen] = useState(false);
+  const [messageError, setMessageError] = useState<string>("");
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const handleOpenChange = (newOpen: boolean) => {
@@ -36,7 +38,7 @@ const LoginPage = () => {
         navigate("/Admin");
       }
     } catch (error: any) {
-      toast.error(error.message);
+      setMessageError(error.message);
     } finally {
       setLoading(false);
     }
@@ -98,9 +100,10 @@ const LoginPage = () => {
           Không có tài khoản?{" "}
           <Link
             to={"/auth/register"}
-            className="text-primaryColor hover:text-primaryColor font-bold"
+            className="text-primaryColor hover:text-black font-bold relative group"
           >
             Đăng ký ngay
+            <Underline />
           </Link>
         </p>
       </div>
@@ -136,6 +139,21 @@ const LoginPage = () => {
             >
               <Input.Password />
             </Form.Item>
+            {messageError && (
+              <>
+                <p className="text-red-500 text-base">{messageError}</p>
+                <p className="text-base">
+                  Nếu chưa có tài khoản.{" "}
+                  <Link
+                    to={"/auth/register"}
+                    className="text-primaryColor hover:text-black font-bold relative group"
+                  >
+                    Đăng ký ngay
+                    <Underline />
+                  </Link>
+                </p>
+              </>
+            )}
             <Popover
               placement="topLeft"
               content={forgotPasswordContext}

@@ -1,4 +1,4 @@
-import { Form, TreeSelect, TreeSelectProps } from 'antd'
+import { Form, TreeSelect } from 'antd'
 import { useEffect, useState } from 'react'
 import LabelForm from '../../../../../../../../../components/LabelForm'
 import { categoryApi } from '../../../../../../../../../service/api/categoryApi';
@@ -6,10 +6,6 @@ import { toast } from 'react-toastify';
 
 const ItemCategory = () => {
   const [category, setCategory] = useState<any[]>([]);
-  const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {
-    console.log("onPopupScroll", e);
-  };
-
   const transformData = (data: any) => {
     const map = new Map();
     const tree: any[] = [];
@@ -69,7 +65,6 @@ const ItemCategory = () => {
           allowClear
           treeDefaultExpandAll
           treeData={category}
-          onPopupScroll={onPopupScroll}
         />
       </Form.Item>
   )

@@ -1,23 +1,20 @@
+import { Skeleton } from "antd";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
-import { GeneralAuction } from "./components/GeneralAuction";
-import { AuctionInformation } from "./components/AuctionInformation";
-import { Skeleton } from "antd";
+import ImageSlide from "../../../../components/ImageSlide/ImageSlide";
+import { useWebSocket } from "../../../../hooks/useWebSocket";
 import { Auction } from "../../../../model/auction";
 import { auctionApi } from "../../../../service/api/auctionApi";
-import { useWebSocket } from "../../../../hooks/useWebSocket";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../core/store/store";
-import ImageSlide from "../../../../components/ImageSlide/ImageSlide";
 import ActionAuction from "./components/ActionAuction";
+import { AuctionInformation } from "./components/AuctionInformation";
+import { GeneralAuction } from "./components/GeneralAuction";
 
 const AuctionDetail = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<Auction | null>(null);
   const { client } = useWebSocket();
-  const userLoginned = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const fetchDetailData = async () => {
@@ -44,13 +41,10 @@ const AuctionDetail = () => {
       },
       (error: any) => {
         toast.error("WebSocket connection failed: " + error);
-        console.error("WebSocket error: ", error);
       }
     );
     fetchDetailData();
   }, [id]);
-
-  console.log(userLoginned);
 
   return (
     <Skeleton loading={loading}>
