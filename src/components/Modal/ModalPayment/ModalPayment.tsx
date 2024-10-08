@@ -1,16 +1,17 @@
-import { Auction } from "../../../../../../model/auction";
 import { Button, Divider, Form, Input, Modal, Select } from "antd";
-import LabelForm from "../../../../../../components/LabelForm";
-import { formatVND } from "../../../../../../utils/format";
-import { RootState } from "../../../../../../core/store/store";
-import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import Underline from "../../../../../../components/UI/underline";
-import ButtonPrimary from "../../../../../../components/Button";
-import { Order, OrderRequestData } from "../../../../../../model/order";
-import { toast } from "react-toastify";
-import { orderApi } from "../../../../../../service/api/orderApi";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import ButtonPrimary from "../../Button";
+import LabelForm from "../../LabelForm";
+import Underline from "../../UI/underline";
+import { RootState } from "../../../core/store/store";
+import { Auction } from "../../../model/auction";
+import { Order, OrderRequestData } from "../../../model/order";
+import { orderApi } from "../../../service/api/orderApi";
+import { paymentApi } from "../../../service/api/paymentApi";
+import { formatVND } from "../../../utils/format";
 
 interface ModalBuyNowProps {
   open: boolean;
@@ -18,7 +19,7 @@ interface ModalBuyNowProps {
   data: Auction;
 }
 
-const ModalBuyNow = ({ open, setOpen, data }: ModalBuyNowProps) => {
+const ModalPayment = ({ open, setOpen, data }: ModalBuyNowProps) => {
   const [form] = Form.useForm();
   const userLoginned = useSelector((state: RootState) => state.user);
   const [province, setProvince] = useState([]);
@@ -27,7 +28,6 @@ const ModalBuyNow = ({ open, setOpen, data }: ModalBuyNowProps) => {
   const [isDistrict, setIsDisctrict] = useState(false);
   const [isWard, setIsWard] = useState(false);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const handleCancel = () => {
     setOpen(false);
     form.resetFields();
@@ -42,18 +42,18 @@ const ModalBuyNow = ({ open, setOpen, data }: ModalBuyNowProps) => {
       const toAddress = `${values.address}, ${values.ward.label}, ${values.district.label}, ${values.province.label}.`;
       const dataForm: Order = {
         toAddress: toAddress,
-        fullName: values.fullName,
+        toFullName: values.fullName,
         note: values.note || "Người dùng để trống",
-        phoneNumber: values.phoneNumber,
-        product_id: values.product_id,
+        toPhoneNumber: values.phoneNumber,
+        productId: values.product_id,
         type: values.type,
+        voucherCode: values.voucherCode,
+        senderTransaction: true,
       };
       setLoading(true);
-      await orderApi.orderAuction(dataForm);
-      toast.success("Mua ngay thành công! Hãy kiểm tra đơn hàng của bạn");
+      const response = await paymentApi.payment(dataForm);
+      window.location.href = response.data.checkoutUrl;
       handleCancel();
-      localStorage.setItem("key", "order-mangement");
-      navigate("/u/profile/order-management");
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -276,6 +276,12 @@ const ModalBuyNow = ({ open, setOpen, data }: ModalBuyNowProps) => {
             >
               <Input />
             </Form.Item>
+            <Form.Item
+              name={"voucherCode"}
+              label={<LabelForm>Voucher</LabelForm>}
+            >
+              <Input />
+            </Form.Item>
             <Form.Item name={"note"} label={<LabelForm>Ghi chú</LabelForm>}>
               <Input.TextArea />
             </Form.Item>
@@ -311,4 +317,4 @@ const ModalBuyNow = ({ open, setOpen, data }: ModalBuyNowProps) => {
   );
 };
 
-export default ModalBuyNow;
+export default ModalPayment;

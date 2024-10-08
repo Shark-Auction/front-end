@@ -54,22 +54,15 @@ const MyPayment = ({ activeKey }: MyPaymentProps) => {
       ),
     },
     {
-      dataIndex: "orderEntity",
-      key: "orderEntity",
-      title: "Người nhận",
-      render: (record) => (
-        <Tag className="!text-base" color="blue">
-          {record.product.seller.full_name}
-        </Tag>
-      ),
-    },
-    {
       dataIndex: "status",
       key: "orderEntity",
       title: "Trạng thái",
       render: (record) => (
         <>
           {record === "PAID" && <Tag color="green-inverse">Đã thanh toán</Tag>}
+          {record === "PENDING" && (
+            <Tag color="blue-inverse">Chưa thanh toán</Tag>
+          )}
           {record === "CANCELLED" && (
             <Tag color="red-inverse">Thanh toán thất bại</Tag>
           )}
@@ -84,6 +77,17 @@ const MyPayment = ({ activeKey }: MyPaymentProps) => {
   }, [activeKey]);
   return (
     <TableComponent
+      onRow={(record: any) => {
+        return record.status === "PENDING"
+          ? {
+              onClick: () => window.open(record.checkoutUrl),
+              style: {
+                cursor: "pointer",
+              },
+              title: "Thanh toán lại",
+            }
+          : {};
+      }}
       expandX={"inherit"}
       render={render}
       setRender={setRender}

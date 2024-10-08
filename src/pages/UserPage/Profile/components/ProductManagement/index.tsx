@@ -22,11 +22,6 @@ const ProductManagement = () => {
       children: <MyAuction activeKey={activeKey} />
     },
     {
-      key: '3',
-      label: 'My Bidding',
-      children: 'My Bidding'
-    },
-    {
       key: '4',
       label: 'Đấu giá thắng',
       children: <MyWinning activeKey={activeKey} />
