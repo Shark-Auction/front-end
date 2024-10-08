@@ -1,8 +1,8 @@
 import api from "../../config/axios/api";
-import { PaymentRequest } from "../../model/payment";
+import { Order } from "../../model/order";
 
 export const paymentApi = {
-  payment: async (data: PaymentRequest) => {
+  payment: async (data: Order) => {
     try {
       const response = await api.post("payment", data);
       return response.data;

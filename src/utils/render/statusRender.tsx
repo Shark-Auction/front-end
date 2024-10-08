@@ -176,6 +176,13 @@ export const badgeRibbonStatus: any = {
 };
 
 export const orderStatus: any = {
+  pending: () => {
+    return (
+      <Tag className={textStyle} color="volcano-inverse">
+        Chưa thanh toán
+      </Tag>
+    );
+  },
   paid: () => {
     return (
       <Tag className={textStyle} color="volcano-inverse">

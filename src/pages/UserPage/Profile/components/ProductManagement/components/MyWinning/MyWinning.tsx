@@ -1,21 +1,13 @@
 import { useEffect, useState } from "react";
+import ButtonPrimary from "../../../../../../../components/Button";
 import ImageComponent from "../../../../../../../components/Image";
+import ModalPayment from "../../../../../../../components/Modal/ModalPayment/ModalPayment";
 import TableComponent, {
   ColumnsTable,
 } from "../../../../../../../components/Table";
+import { Auction } from "../../../../../../../model/auction";
 import { formatDateHour, formatVND } from "../../../../../../../utils/format";
 import { getImageProduct } from "../../../../../../../utils/getImage";
-import ButtonPrimary from "../../../../../../../components/Button";
-import {
-  PaymentRequest,
-  PaymentResponse,
-} from "../../../../../../../model/payment";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../../../../core/store/store";
-import { toast } from "react-toastify";
-import { paymentApi } from "../../../../../../../service/api/paymentApi";
-import { Auction } from "../../../../../../../model/auction";
-import { Skeleton } from "antd";
 
 interface MyWinningProps {
   activeKey: string;
@@ -23,24 +15,11 @@ interface MyWinningProps {
 
 const MyWinning = ({ activeKey }: MyWinningProps) => {
   const [render, setRender] = useState(false);
-  const userLoginned = useSelector((state: RootState) => state.user);
-  const [loading, setLoading] = useState(false);
-  const handlePayment = async (data: Auction) => {
-    const formItem: PaymentRequest = {
-      orderId: data.product.id,
-      userId: userLoginned ? userLoginned["userId"] : 0,
-      senderTransaction: true,
-    };
-    try {
-      setLoading(true);
-      const response = await paymentApi.payment(formItem);
-      const data: PaymentResponse = response.data;
-      window.open(data.checkoutUrl);
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
+  const [open, setOpen] = useState(false);
+  const [data, setData] = useState<Auction>();
+  const handleOpen = (record: Auction) => {
+    setOpen(true);
+    setData(record);
   };
   const column: ColumnsTable[] = [
     {
@@ -94,10 +73,10 @@ const MyWinning = ({ activeKey }: MyWinningProps) => {
       ),
     },
     {
-      title: 'Người đăng',
-      dataIndex: 'product',
-      key: 'seller',
-      render: (data) => data.seller.full_name
+      title: "Người đăng",
+      dataIndex: "product",
+      key: "seller",
+      render: (data) => data.seller.full_name,
     },
     {
       title: "Ngày kết thúc",
@@ -111,7 +90,7 @@ const MyWinning = ({ activeKey }: MyWinningProps) => {
       key: "action",
       align: "center",
       render: (_, record: any) => (
-        <ButtonPrimary onClick={() => handlePayment(record as Auction)}>
+        <ButtonPrimary onClick={() => handleOpen(record)}>
           Thanh toán
         </ButtonPrimary>
       ),
@@ -123,7 +102,7 @@ const MyWinning = ({ activeKey }: MyWinningProps) => {
     }
   }, [activeKey]);
   return (
-    <Skeleton loading={loading}>
+    <>
       <TableComponent
         expandX={1700}
         render={render}
@@ -131,7 +110,10 @@ const MyWinning = ({ activeKey }: MyWinningProps) => {
         columns={column}
         apiUri="auction/win"
       />
-    </Skeleton>
+      {open && (
+        <ModalPayment data={data as Auction} open={open} setOpen={setOpen} />
+      )}
+    </>
   );
 };
 

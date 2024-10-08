@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Modal } from "antd";
+import { Form, Input, InputNumber, Modal, Skeleton } from "antd";
 import SelectAddress from "./SelectAddress";
 import ButtonPrimary from "../../../../../../../components/Button";
 import { OrderInformation } from "../../../../../../../model/order";
@@ -28,6 +28,7 @@ const ModalDeliveryInformation = ({
   const [form] = Form.useForm();
   const [order, setOrder] = useState<OrderInformation>();
   const [dataDelivery, setDataDelivery] = useState<Delivery[]>([]);
+  const [loading, setLoading] = useState(false);
   const handleCancel = () => {
     setOpen(false);
     setOrder(undefined);
@@ -45,11 +46,14 @@ const ModalDeliveryInformation = ({
       to_ward_code: values.ward.label,
     };
     try {
+      setLoading(true);
       await deliveryApi.receiverDelivery(formItem);
       toast.success("Cảm ơn quý khách đã điền thông tin!");
       handleCancel();
     } catch (error: any) {
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,6 +73,7 @@ const ModalDeliveryInformation = ({
       width: values.width,
     };
     try {
+      setLoading(true);
       await deliveryApi.sellerDelivery(
         dataDelivery && dataDelivery.length > 0 ? dataDelivery[0].id : 0,
         formItem
@@ -77,21 +82,30 @@ const ModalDeliveryInformation = ({
       handleCancel();
     } catch (error: any) {
       toast.error(error.message);
-    }
-  };
-  const fetchDelivery = async (id: number) => {
-    try {
-      const response = await deliveryApi.getDeliveryByOrder(id);
-      setDataDelivery(response.data);
-    } catch (error: any) {
-      toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
+    const fetchDelivery = async (id: number) => {
+      try {
+        setLoading(true);
+        const response = await deliveryApi.getDeliveryByOrder(id);
+        form.setFieldsValue({
+          nameData: response.data[0].toName,
+          phoneNumberData: response.data[0].toPhone,
+          addressData: response.data[0].toAddress,
+        });
+        setDataDelivery(response.data);
+      } catch (error: any) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
     if (open && data) {
       setOrder(data);
       fetchDelivery(data.id);
-      form.resetFields();
     }
   }, [data, form, open]);
   return (
@@ -113,163 +127,157 @@ const ModalDeliveryInformation = ({
         ),
       ]}
     >
-      {type === "buyer" ? (
-        <>
-          {dataDelivery && dataDelivery.length === 0 ? (
-            <Form
-              form={form}
-              onFinish={handleFinishBuyer}
-              labelCol={{ span: 24 }}
-            >
-              <Form.Item
-                name={"name"}
-                label={<LabelForm>Tên người nhận:</LabelForm>}
-                rules={[{ required: true, message: "Không được để trống" }]}
+      <Skeleton loading={loading}>
+        {type === "buyer" ? (
+          <>
+            {dataDelivery && dataDelivery.length === 0 ? (
+              <Form
+                form={form}
+                onFinish={handleFinishBuyer}
+                labelCol={{ span: 24 }}
               >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                name={"phoneNumber"}
-                label={<LabelForm>Số điện thoại:</LabelForm>}
-                rules={[
-                  {
-                    required: true,
-                    message: "Không được để trống",
-                  },
-                  {
-                    pattern: /^\d{10}$/,
-                    message: "Tối thiểu 10 số",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              <SelectAddress />
-              <Form.Item hidden name={"productID"} />
-              <Form.Item hidden name={"payment_type_id"} />
-              <Form.Item hidden name={"serviceID"} />
-            </Form>
-          ) : (
-            <Form
-              form={form}
-              labelCol={{ span: 24 }}
-              initialValues={{
-                name: dataDelivery[0].toName,
-                phoneNumber: dataDelivery[0].toPhone,
-                address: dataDelivery[0].toAddress,
-              }}
-            >
-              <Form.Item
-                name={"name"}
-                label={<LabelForm>Tên người nhận:</LabelForm>}
-                rules={[{ required: true, message: "Không được để trống" }]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                name={"phoneNumber"}
-                label={<LabelForm>Số điện thoại:</LabelForm>}
-                rules={[
-                  {
-                    required: true,
-                    message: "Không được để trống",
-                  },
-                  {
-                    pattern: /^\d{10}$/,
-                    message: "Tối thiểu 10 số",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                name={"address"}
-                label={<LabelForm>Địa chỉ:</LabelForm>}
-                rules={[
-                  {
-                    required: true,
-                    message: "Không được để trống",
-                  },
-                  {
-                    pattern: /^\d{10}$/,
-                    message: "Tối thiểu 10 số",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Form>
-          )}
-        </>
-      ) : (
-        <Form
-          disabled={dataDelivery && dataDelivery.length === 0 ? true : false}
-          form={form}
-          onFinish={handleFinishSeller}
-          labelCol={{ span: 24 }}
-        >
-          <Form.Item
-            name={"name"}
-            label={<LabelForm>Tên người nhận:</LabelForm>}
-            rules={[{ required: true, message: "Không được để trống" }]}
+                <Form.Item
+                  name={"name"}
+                  label={<LabelForm>Tên người nhận:</LabelForm>}
+                  rules={[{ required: true, message: "Không được để trống" }]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  name={"phoneNumber"}
+                  label={<LabelForm>Số điện thoại:</LabelForm>}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Không được để trống",
+                    },
+                    {
+                      pattern: /^\d{10}$/,
+                      message: "Tối thiểu 10 số",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <SelectAddress />
+                <Form.Item hidden name={"productID"} />
+                <Form.Item hidden name={"payment_type_id"} />
+                <Form.Item hidden name={"serviceID"} />
+              </Form>
+            ) : (
+              <Form form={form} labelCol={{ span: 24 }}>
+                <Form.Item
+                  name={"nameData"}
+                  label={<LabelForm>Tên người nhận:</LabelForm>}
+                  rules={[{ required: true, message: "Không được để trống" }]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  name={"phoneNumberData"}
+                  label={<LabelForm>Số điện thoại:</LabelForm>}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Không được để trống",
+                    },
+                    {
+                      pattern: /^\d{10}$/,
+                      message: "Tối thiểu 10 số",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  name={"addressData"}
+                  label={<LabelForm>Địa chỉ:</LabelForm>}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Không được để trống",
+                    },
+                    {
+                      pattern: /^\d{10}$/,
+                      message: "Tối thiểu 10 số",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Form>
+            )}
+          </>
+        ) : (
+          <Form
+            disabled={dataDelivery && dataDelivery.length === 0 ? true : false}
+            form={form}
+            onFinish={handleFinishSeller}
+            labelCol={{ span: 24 }}
           >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={"phoneNumber"}
-            label={<LabelForm>Số điện thoại:</LabelForm>}
-            rules={[
-              {
-                required: true,
-                message: "Không được để trống",
-              },
-              {
-                pattern: /^\d{10}$/,
-                message: "Tối thiểu 10 số",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <div className="grid grid-cols-3 gap-3">
             <Form.Item
+              name={"name"}
+              label={<LabelForm>Tên người nhận:</LabelForm>}
               rules={[{ required: true, message: "Không được để trống" }]}
-              name={"weight"}
-              label={<LabelForm>Cân nặng (g): </LabelForm>}
             >
-              <InputNumber className="!w-full" controls={false} />
+              <Input />
             </Form.Item>
             <Form.Item
-              rules={[{ required: true, message: "Không được để trống" }]}
-              name={"length"}
-              label={<LabelForm>Độ dài (cm): </LabelForm>}
+              name={"phoneNumber"}
+              label={<LabelForm>Số điện thoại:</LabelForm>}
+              rules={[
+                {
+                  required: true,
+                  message: "Không được để trống",
+                },
+                {
+                  pattern: /^\d{10}$/,
+                  message: "Tối thiểu 10 số",
+                },
+              ]}
             >
-              <InputNumber className="!w-full" controls={false} />
+              <Input />
             </Form.Item>
-          </div>
-          <div className="grid grid-cols-3 gap-3">
-            <Form.Item
-              rules={[{ required: true, message: "Không được để trống" }]}
-              name={"width"}
-              label={<LabelForm>Chiều dài (cm): </LabelForm>}
-            >
-              <InputNumber className="!w-full" controls={false} />
+            <div className="grid grid-cols-3 gap-3">
+              <Form.Item
+                rules={[{ required: true, message: "Không được để trống" }]}
+                name={"weight"}
+                label={<LabelForm>Cân nặng (g): </LabelForm>}
+              >
+                <InputNumber className="!w-full" controls={false} />
+              </Form.Item>
+              <Form.Item
+                rules={[{ required: true, message: "Không được để trống" }]}
+                name={"length"}
+                label={<LabelForm>Độ dài (cm): </LabelForm>}
+              >
+                <InputNumber className="!w-full" controls={false} />
+              </Form.Item>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              <Form.Item
+                rules={[{ required: true, message: "Không được để trống" }]}
+                name={"width"}
+                label={<LabelForm>Chiều dài (cm): </LabelForm>}
+              >
+                <InputNumber className="!w-full" controls={false} />
+              </Form.Item>
+              <Form.Item
+                rules={[{ required: true, message: "Không được để trống" }]}
+                name={"height"}
+                label={<LabelForm>Chiều cao (cm): </LabelForm>}
+              >
+                <InputNumber className="!w-full" controls={false} />
+              </Form.Item>
+            </div>
+            <SelectAddress />
+            <Form.Item name={"note"} label={<LabelForm>Ghi chú</LabelForm>}>
+              <Input.TextArea></Input.TextArea>
             </Form.Item>
-            <Form.Item
-              rules={[{ required: true, message: "Không được để trống" }]}
-              name={"height"}
-              label={<LabelForm>Chiều cao (cm): </LabelForm>}
-            >
-              <InputNumber className="!w-full" controls={false} />
-            </Form.Item>
-          </div>
-          <SelectAddress />
-          <Form.Item name={"note"} label={<LabelForm>Ghi chú</LabelForm>}>
-            <Input.TextArea></Input.TextArea>
-          </Form.Item>
-          <Form.Item hidden name={"productID"} />
-        </Form>
-      )}
+            <Form.Item hidden name={"productID"} />
+          </Form>
+        )}
+      </Skeleton>
     </Modal>
   );
 };

@@ -6,8 +6,8 @@ import { ModalBidding } from "./Modal/ModalBidding";
 import { SellerAuction } from "./SellerAuction";
 import ButtonPrimary from "../../../../../components/Button";
 import { formatVND } from "../../../../../utils/format";
-import ModalBuyNow from "./Modal/ModalBuyNow";
 import { Divider } from "antd";
+import ModalPayment from "../../../../../components/Modal/ModalPayment/ModalPayment";
 
 interface ActionAuctionProps {
   data: Auction;
@@ -56,7 +56,7 @@ const ActionAuction = ({ data }: ActionAuctionProps) => {
           <p className="text-lg">Bạn đăng phiên này</p>
         </div>
       )}
-      <ModalBuyNow data={data} open={openBuyNow} setOpen={setOpenBuyNow} />
+      <ModalPayment data={data} open={openBuyNow} setOpen={setOpenBuyNow} />
     </div>
   );
 };

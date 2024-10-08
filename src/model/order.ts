@@ -1,10 +1,12 @@
 export interface Order {
-  fullName: string;
-  phoneNumber: string;
+  toFullName: string;
+  toPhoneNumber: string;
   note: string;
-  product_id: number;
+  productId: number;
   toAddress: string;
-  type: string
+  type: string;
+  voucherCode: string;
+  senderTransaction: boolean;
 }
 
 export interface OrderRequestData {
@@ -16,7 +18,8 @@ export interface OrderRequestData {
   ward: any;
   province: any;
   address: string;
-  type: string
+  type: string;
+  voucherCode: string;
 }
 
 // Role interface for both Buyer and Seller
@@ -101,8 +104,14 @@ export interface OrderInformation {
   phoneNumber: string;
   note: string;
   orderDate: string;
-  status: 'paid' | 'processing' | 'shipping' | 'delivered' | 'received' | 'cancelled';
-  type: 'BuyNow' | 'Auction';
+  status:
+    | "paid"
+    | "processing"
+    | "shipping"
+    | "delivered"
+    | "received"
+    | "cancelled";
+  type: "BuyNow" | "Auction";
   price: number;
   product: Product;
   toAddress: string;
