@@ -69,26 +69,33 @@ const CardOrder = ({
               Trạng thái giao hàng: {data.status && orderStatus[data?.status]()}
             </p>
           </div>
-          {data.buyer.user_name ===
-          (userLoginned && userLoginned["userName"]) ? (
+          {data.buyer &&
+          data.buyer?.full_name ===
+            (userLoginned && userLoginned["userName"]) ? (
             <p className="text-lg">
               Người bán:{" "}
               <Link
                 className="underline underline-offset-2 text-blue-600 hover:underline hover:!text-blue-600"
                 to={`/u/seller/${data.product.seller.id}`}
               >
-                {data.product.seller.full_name}
+                {data?.product?.seller?.full_name}
               </Link>
             </p>
           ) : (
             <p className="text-lg">
               Người mua:{" "}
-              <Link
-                className="underline underline-offset-2 text-blue-600 hover:underline hover:!text-blue-600"
-                to={`/u/seller/${data.buyer.id}`}
-              >
-                {data.buyer.full_name}
-              </Link>
+              {data.buyer ? (
+                <Link
+                  className="underline underline-offset-2 text-blue-600 hover:underline hover:!text-blue-600"
+                  to={`/u/seller/${data.buyer.id}`}
+                >
+                  {data?.buyer?.full_name}
+                </Link>
+              ) : (
+                <span className="text-black font-medium">
+                  Người mua không xác định
+                </span>
+              )}
             </p>
           )}
         </div>
@@ -107,7 +114,7 @@ const CardOrder = ({
                 Giao hàng
               </Button>
             )}
-          {data.status === "processing" &&
+          {data.status === "paid" &&
             userLoginned &&
             userLoginned["userName"] === data.product.seller.user_name && (
               <>
@@ -128,16 +135,19 @@ const CardOrder = ({
                 )}
               </>
             )}
-          {data.status === "paid" && (
-            <ButtonPrimary
-              onClick={onClickPayment}
-              hover="!bg-gradient-orange"
-              className="!text-base !bg-gradient-orange"
-            >
-              Nhập thông tin giao hàng
-            </ButtonPrimary>
-          )}
-          {data.status === "processing" &&
+          {data.buyer &&
+            data.buyer?.full_name ===
+              (userLoginned && userLoginned["userName"]) &&
+            data.status === "paid" && (
+              <ButtonPrimary
+                onClick={onClickPayment}
+                hover="!bg-gradient-orange"
+                className="!text-base !bg-gradient-orange"
+              >
+                Nhập thông tin giao hàng
+              </ButtonPrimary>
+            )}
+          {data.status === "paid" &&
             userLoginned &&
             userLoginned["userName"] !== data.product.seller.user_name &&
             data.product.deliveryMethod !== "self_shipping" && (

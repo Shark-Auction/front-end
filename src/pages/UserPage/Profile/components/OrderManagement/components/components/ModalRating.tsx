@@ -1,16 +1,11 @@
 import {
   Button,
   Form,
-  GetProp,
-  Image,
   Input,
   Modal,
-  Rate,
-  Upload,
-  UploadFile,
-  UploadProps,
+  Rate
 } from "antd";
-import LabelForm from "../../../../../../../components/LabelForm";
+import { useEffect, useState } from "react";
 import {
   RiEmotionHappyLine,
   RiEmotionLaughLine,
@@ -18,12 +13,11 @@ import {
   RiEmotionSadLine,
   RiEmotionUnhappyLine,
 } from "react-icons/ri";
-import { PlusOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import ButtonPrimary from "../../../../../../../components/Button";
-import { RatingRequest } from "../../../../../../../model/rating";
+import LabelForm from "../../../../../../../components/LabelForm";
 import { OrderInformation } from "../../../../../../../model/order";
+import { RatingRequest } from "../../../../../../../model/rating";
 import { ratingApi } from "../../../../../../../service/api/ratingApi";
 
 interface ModalRatingProps {
@@ -31,16 +25,6 @@ interface ModalRatingProps {
   setOpen?: any;
   data?: OrderInformation;
 }
-
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
-
-const getBase64 = (file: FileType): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
 
 const customIcons: Record<number, React.ReactNode> = {
   1: <RiEmotionSadLine className="text-red-500" />,
@@ -54,45 +38,7 @@ const ModalRating = ({ open, setOpen, data }: ModalRatingProps) => {
   const [selected, setSelected] = useState<number>();
   const [form] = Form.useForm();
   const [order, setOrder] = useState<OrderInformation>();
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const normFile = (e: any) => {
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e?.fileList;
-  };
-  const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as FileType);
-    }
-
-    setPreviewImage(file.url || (file.preview as string));
-    setPreviewOpen(true);
-  };
-
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
-
-  const uploadButton = (
-    <button style={{ border: 0, background: "none" }} type="button">
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </button>
-  );
-
-  const beforeUpload = (file: FileType) => {
-    const isJpgOrPng =
-      file.type === "image/jpeg" ||
-      file.type === "image/png" ||
-      file.type === "image/jpg";
-    if (!isJpgOrPng) {
-      toast.error("Chỉ nhận file jpg/png/jpeg");
-    }
-    return isJpgOrPng || Upload.LIST_IGNORE; // Return false to prevent upload
-  };
 
   const handleCancel = () => {
     setOpen(false);
@@ -193,35 +139,7 @@ const ModalRating = ({ open, setOpen, data }: ModalRatingProps) => {
         <Form.Item name={"review"} label={<LabelForm>Nhận xét:</LabelForm>}>
           <Input.TextArea size="large"></Input.TextArea>
         </Form.Item>
-        <Form.Item
-          label={<LabelForm>Ảnh sản phẩm:</LabelForm>}
-          name={"imagesFile"}
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-        >
-          <Upload
-            listType="picture-card"
-            fileList={fileList}
-            onPreview={handlePreview}
-            onChange={handleChange}
-            beforeUpload={beforeUpload}
-            accept="image/png, image/jpeg, image/jpg"
-          >
-            {fileList.length >= 8 ? null : uploadButton}
-          </Upload>
-        </Form.Item>
       </Form>
-      {previewImage && (
-        <Image
-          wrapperStyle={{ display: "none" }}
-          preview={{
-            visible: previewOpen,
-            onVisibleChange: (visible) => setPreviewOpen(visible),
-            afterOpenChange: (visible) => !visible && setPreviewImage(""),
-          }}
-          src={previewImage}
-        />
-      )}
     </Modal>
   );
 };

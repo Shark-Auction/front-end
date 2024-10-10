@@ -4,7 +4,9 @@ import AppHeader from "./AppHeader";
 import { Outlet, useNavigate } from "react-router-dom";
 import AppFooter from "./AppFooter";
 import { RootState } from "../store/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { walletApi } from "../../service/api/walletApi";
+import { setWalletUser } from "../store/slice/walletSlice";
 
 const { Header, Footer, Content } = Layout;
 
@@ -12,7 +14,7 @@ const AppLayout = () => {
   const [headerHeight, setHeaderHeight] = useState(0);
   const navigate = useNavigate();
   const userLogin = useSelector((state: RootState) => state.user);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     if (userLogin && userLogin["roleName"] === "admin") {
       navigate("/admin");
@@ -25,6 +27,17 @@ const AppLayout = () => {
       setHeaderHeight(headerElement.clientHeight);
     }
   }, []);
+  useEffect(() => {
+    const fetchWallet = async () => {
+      const response = await walletApi.getMyWallet();
+      const money: number =
+        response.data !== undefined ? response.data.money : 0;
+      dispatch(setWalletUser(money));
+    };
+    if (userLogin) {
+      fetchWallet();
+    }
+  }, [dispatch, userLogin]);
   return (
     <Layout className="min-h-screen">
       <Header

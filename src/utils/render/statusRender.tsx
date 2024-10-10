@@ -149,6 +149,13 @@ export const statusAuction: any = {
       </Tag>
     );
   },
+  WaitingConfirm: () => {
+    return (
+      <Tag className={textStyle} color="default">
+        Chờ xác nhận
+      </Tag>
+    );
+  },
   NaN: () => {
     return "NaN";
   },
@@ -169,6 +176,9 @@ export const badgeRibbonStatus: any = {
   },
   Cancel: () => {
     return <Badge.Ribbon text="Hủy" color="red" />;
+  },
+  WaitingConfirm: () => {
+    return <Badge.Ribbon text="Chờ xác nhận" color="lime" />;
   },
   Fail: () => {
     return <Badge.Ribbon text="Thất bại" color="red-inverse" />;
