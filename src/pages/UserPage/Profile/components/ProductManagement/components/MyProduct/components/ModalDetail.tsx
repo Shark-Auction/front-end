@@ -85,7 +85,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
       setLoading(true);
       await productApi.editProduct(dataItem?.id, values);
       toast.success("Cập nhật thành công");
-      setRender(true)
+      setRender(true);
       setRenderDetail(true);
     } catch (error: any) {
       toast.error(error.message);
@@ -144,17 +144,22 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
     {
       title: "Đăng đấu giá",
       content: (
-        <Form
-          onFinish={handleAddAuction}
-          initialValues={{
-            step: dataItem?.startingPrice && dataItem?.startingPrice,
-          }}
-          labelCol={{ span: 24 }}
-          className="grid grid-cols-2 gap-x-5"
-          form={form}
-        >
-          <DateRangeAuction data={dataItem} />
-        </Form>
+        <>
+          <p className="text-lg text-red-500 my-4 font-bold">
+            (* Hoa hồng cho mỗi phiên đấu giá là 10% *)
+          </p>
+          <Form
+            onFinish={handleAddAuction}
+            initialValues={{
+              step: dataItem?.startingPrice && dataItem?.startingPrice,
+            }}
+            labelCol={{ span: 24 }}
+            className="grid grid-cols-2 gap-x-5"
+            form={form}
+          >
+            <DateRangeAuction data={dataItem} />
+          </Form>
+        </>
       ),
     },
   ];
@@ -194,7 +199,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
     }
     if (renderDetail) {
       fetchData();
-      setRenderDetail(false)
+      setRenderDetail(false);
     }
   }, [checkedDelete, data?.id, open, renderDetail]);
 
@@ -208,8 +213,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
             className="text-blue-500 underline underline-offset-2 cursor-pointer"
           >
             (Hướng dẫn chỉnh sửa)
-          </span>
-          {" "}
+          </span>{" "}
           {data && status[data?.status]()}
         </p>
       }

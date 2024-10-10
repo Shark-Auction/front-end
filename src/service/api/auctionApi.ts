@@ -67,4 +67,12 @@ export const auctionApi = {
       throw error.response.data;
     }
   },
+  confirmAuction: async (id: number) => {
+    try {
+      const response = await api.put(`auction/confirm/${id}`);
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
 };

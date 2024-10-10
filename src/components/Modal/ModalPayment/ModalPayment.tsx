@@ -17,9 +17,15 @@ interface ModalBuyNowProps {
   open: boolean;
   setOpen: any;
   data: Auction;
+  type?: string;
 }
 
-const ModalPayment = ({ open, setOpen, data }: ModalBuyNowProps) => {
+const ModalPayment = ({
+  open,
+  setOpen,
+  data,
+  type = "BuyNow",
+}: ModalBuyNowProps) => {
   const [form] = Form.useForm();
   const userLoginned = useSelector((state: RootState) => state.user);
   const [province, setProvince] = useState([]);
@@ -46,7 +52,7 @@ const ModalPayment = ({ open, setOpen, data }: ModalBuyNowProps) => {
         note: values.note || "Người dùng để trống",
         toPhoneNumber: values.phoneNumber,
         productId: values.product_id,
-        type: values.type,
+        type: type,
         voucherCode: values.voucherCode,
         senderTransaction: true,
       };
@@ -125,10 +131,22 @@ const ModalPayment = ({ open, setOpen, data }: ModalBuyNowProps) => {
       loading={loading}
       title={
         <p className="font-normal text-lg">
-          Mua ngay sản phẩm <strong>{data.product.name}</strong> với mức giá{" "}
-          <strong className="text-orange-600">
-            {formatVND(data.product.buyNowPrice)}
-          </strong>
+          {type === "BuyNow" ? (
+            <>
+              Mua ngay sản phẩm <strong>{data.product.name}</strong> với mức giá
+              <strong className="text-orange-600"> {" "}
+                {formatVND(data.product.buyNowPrice)}
+              </strong>
+            </>
+          ) : (
+            <>
+              Sản phẩm <strong>{data.product.name}</strong> đấu giá thắng với
+              mức giá {" "}
+              <strong className="text-orange-600">
+                {formatVND(data.currentPrice)}
+              </strong>
+            </>
+          )}
         </p>
       }
       open={open}
@@ -152,7 +170,6 @@ const ModalPayment = ({ open, setOpen, data }: ModalBuyNowProps) => {
             labelCol={{ span: 24 }}
             initialValues={{
               product_id: data?.product?.id,
-              type: "BuyNow",
               fullName: userLoginned && userLoginned["fullName"],
             }}
           >
