@@ -123,6 +123,7 @@ const MyBuyTab = ({ activeKey }: MyBuyTabProps) => {
                 data={element}
                 onClickDeliveredInformation={() => handleOpenDeliveryInformation(element)}
                 onClickDetail={() => handleNavigate(element.id)}
+                key={element.id}
               />
             ))
           ) : (

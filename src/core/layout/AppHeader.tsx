@@ -1,18 +1,20 @@
 import { Avatar, Button, Dropdown, Image, MenuProps } from "antd";
+import { FaUser } from "react-icons/fa";
+import { IoIosArrowDown } from "react-icons/io";
 import { IoMenuSharp } from "react-icons/io5";
+import { TbLogout } from "react-icons/tb";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Underline from "../../components/UI/underline";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/store";
 import { logout } from "../store/slice/userSlice";
-import { IoIosArrowDown } from "react-icons/io";
-import { FaUser } from "react-icons/fa";
-import { TbLogout } from "react-icons/tb";
+import { RootState } from "../store/store";
+import { formatVND } from "../../utils/format";
 
 const AppHeader = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userLogin = useSelector((state: RootState) => state.user);
+  const moneyWallet = useSelector((state: RootState) => state.wallet);
   const itemsLink = [
     {
       title: "Trang chủ",
@@ -39,15 +41,23 @@ const AppHeader = () => {
     {
       key: "0",
       label: (
-        <p className="text-base font-medium drop-shadow-xl text-black">
-          {userLogin && userLogin["fullName"]}
-        </p>
+        <div>
+          <p className="text-base font-medium drop-shadow-xl text-black">
+            {userLogin && userLogin["fullName"]}
+          </p>
+          <p className="text-base drop-shadow-xl text-black">
+            Tài khoản:{" "}
+            <span className="text-orange-600 font-black text-lg">
+              {formatVND(moneyWallet ? moneyWallet : 0)}
+            </span>
+          </p>
+        </div>
       ),
       disabled: true,
       className: "!cursor-default",
     },
     {
-      type: 'divider'
+      type: "divider",
     },
     {
       key: "1",
@@ -59,7 +69,7 @@ const AppHeader = () => {
       icon: <FaUser size={15} />,
     },
     {
-      type: 'divider'
+      type: "divider",
     },
     {
       key: "2",
@@ -107,7 +117,7 @@ const AppHeader = () => {
             arrow
             trigger={["click"]}
             className="cursor-pointer hover:opacity-80 hover:transition-opacity duration-300"
-            overlayStyle={{width: '250px'}}
+            overlayStyle={{ width: "250px" }}
           >
             <div className="flex items-center gap-4 py-2 px-5 rounded-lg">
               <Avatar className="!w-10 !h-10" />

@@ -1,7 +1,9 @@
-import { Form, Input } from "antd";
-import ButtonPrimary from "../../../../../../components/Button";
-import { User } from "../../../../../../model/user";
+import { Form, Input, InputNumber, Space } from "antd";
+import { useSelector } from "react-redux";
 import LabelForm from "../../../../../../components/LabelForm";
+import { RootState } from "../../../../../../core/store/store";
+import { User } from "../../../../../../model/user";
+import ModalCashOut from "./ModalCashOut";
 
 interface ProfileInformationProps {
   data?: User;
@@ -9,6 +11,7 @@ interface ProfileInformationProps {
 
 const ProfileInformation = ({ data }: ProfileInformationProps) => {
   const [form] = Form.useForm();
+  const wallet = useSelector((state: RootState) => state.wallet);
   const handleFinish = (values: any) => {
     console.log(values);
   };
@@ -22,34 +25,43 @@ const ProfileInformation = ({ data }: ProfileInformationProps) => {
         address: data?.address,
         email: data?.email,
       }}
-      className="w-full md:w-3/5"
       labelCol={{ span: 6 }}
       wrapperCol={{ span: 24 }}
       labelAlign="left"
       layout="horizontal"
     >
       <Form.Item name={"email"} label={<LabelForm>Email</LabelForm>}>
-        <Input />
+        <Input readOnly />
       </Form.Item>
       <Form.Item label={<LabelForm>Tên</LabelForm>} name="username">
-        <Input />
+        <Input readOnly />
       </Form.Item>
       <Form.Item
         label={<LabelForm>Số điện thoại</LabelForm>}
         name="phoneNumber"
       >
-        <Input />
+        <Input readOnly />
       </Form.Item>
       <Form.Item label={<LabelForm>Địa chỉ</LabelForm>} name={"address"}>
-        <Input />
+        <Input readOnly />
       </Form.Item>
-      <Form.Item className="w-full flex justify-center">
-        <ButtonPrimary
-          htmlType="submit"
-          className="!text-base !px-10 !py-4 font-bold"
-        >
-          Chỉnh sửa
-        </ButtonPrimary>
+      <Form.Item label={<LabelForm>Số tiền</LabelForm>}>
+        <Space.Compact className="w-full">
+          <InputNumber<number>
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) =>
+              value?.replace(/\$\s?|(,*)/g, "") as unknown as number
+            }
+            className="w-1/2"
+            min={0}
+            readOnly
+            controls={false}
+            value={wallet ? wallet : 0}
+          />
+          <ModalCashOut />
+        </Space.Compact>
       </Form.Item>
     </Form>
   );

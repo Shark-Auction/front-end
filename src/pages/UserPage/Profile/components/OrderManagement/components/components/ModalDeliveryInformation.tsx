@@ -91,11 +91,6 @@ const ModalDeliveryInformation = ({
       try {
         setLoading(true);
         const response = await deliveryApi.getDeliveryByOrder(id);
-        form.setFieldsValue({
-          nameData: response.data[0].toName,
-          phoneNumberData: response.data[0].toPhone,
-          addressData: response.data[0].toAddress,
-        });
         setDataDelivery(response.data);
       } catch (error: any) {
         toast.error(error.message);
@@ -108,6 +103,15 @@ const ModalDeliveryInformation = ({
       fetchDelivery(data.id);
     }
   }, [data, form, open]);
+  useEffect(() => {
+    if (open && dataDelivery.length > 0) {
+      form.setFieldsValue({
+        nameData: dataDelivery[0].toName,
+        phoneNumberData: dataDelivery[0].toPhone,
+        addressData: dataDelivery[0].toAddress,
+      });
+    }
+  }, [dataDelivery, form, open]);
   return (
     <Modal
       title={"Nhập thông tin"}
@@ -138,7 +142,7 @@ const ModalDeliveryInformation = ({
               >
                 <Form.Item
                   name={"name"}
-                  label={<LabelForm>Tên người nhận:</LabelForm>}
+                  label={<LabelForm>Tên:</LabelForm>}
                   rules={[{ required: true, message: "Không được để trống" }]}
                 >
                   <Input />
@@ -215,9 +219,14 @@ const ModalDeliveryInformation = ({
             onFinish={handleFinishSeller}
             labelCol={{ span: 24 }}
           >
+            <p className="text-red-600 font-bold text-lg">
+              {dataDelivery &&
+                dataDelivery.length === 0 &&
+                "(*Người mua chưa nhập địa chỉ nhận! Hãy đợi*)"}
+            </p>
             <Form.Item
               name={"name"}
-              label={<LabelForm>Tên người nhận:</LabelForm>}
+              label={<LabelForm>Tên:</LabelForm>}
               rules={[{ required: true, message: "Không được để trống" }]}
             >
               <Input />
