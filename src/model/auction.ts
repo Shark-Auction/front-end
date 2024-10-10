@@ -72,5 +72,5 @@ export interface Auction {
   totalBids: number;
   currentPrice: number;
   winner: UserAuction;
-  status: 'Waiting' | 'InProgress' | 'Completed' | 'Cancel' | 'WaitingPay' | 'Fail';
+  status: 'Waiting' | 'InProgress' | 'Completed' | 'Cancel' | 'WaitingPay' | 'Fail' | 'WaitingConfirm';
 }

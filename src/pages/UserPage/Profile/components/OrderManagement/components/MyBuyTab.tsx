@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { OrderInformation } from "../../../../../../model/order";
-import { Select } from "antd";
+import { GetProps, Input, Select } from "antd";
 import { orderApi } from "../../../../../../service/api/orderApi";
 import { toast } from "react-toastify";
 import CardOrder from "../../../../../../components/CardOrder";
@@ -9,6 +9,8 @@ import ModalRating from "./components/ModalRating";
 import LoadingComponent from "../../../../../../components/Loading";
 import ModalDeliveryInformation from "./components/ModalDeliveryInformation";
 import { useNavigate } from "react-router-dom";
+import Search from "antd/es/input/Search";
+type SearchProps = GetProps<typeof Input.Search>;
 const optionFilter = [
   {
     value: "",
@@ -38,6 +40,7 @@ const MyBuyTab = ({ activeKey }: MyBuyTabProps) => {
   const [dataBuy, setDataBuy] = useState<OrderInformation[]>([]);
   const [filteredData, setFilteredData] = useState<OrderInformation[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [openDelivery, setOpenDelivery] = useState<boolean>(false);
@@ -98,20 +101,32 @@ const MyBuyTab = ({ activeKey }: MyBuyTabProps) => {
     } else {
       filtered = filtered.filter((element) => element.status === filterStatus);
     }
+    if (searchTerm !== "") {
+      filtered = filtered.filter((element) =>
+        element.product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
     setFilteredData(filtered);
     return () => {};
-  }, [dataBuy, filterStatus]);
+  }, [dataBuy, filterStatus, searchTerm]);
+  const onSearch: SearchProps["onSearch"] = (value) => {
+    setSearchTerm(value);
+  };
   return (
     <>
       {!loading ? (
         <div className="flex flex-col gap-5">
           <div className="flex items-center gap-3 text-lg">
-            <p className="w-fit">Lọc sản phẩm: </p>
             <Select
               options={optionFilter}
               value={filterStatus}
               onChange={handleChange}
-              className="flex-1"
+              className="w-1/5"
+            />
+            <Search
+              placeholder="Nhập từ khóa"
+              onSearch={onSearch}
+              enterButton
             />
           </div>
           {filteredData.length > 0 ? (

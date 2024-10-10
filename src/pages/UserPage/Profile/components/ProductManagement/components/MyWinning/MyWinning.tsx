@@ -8,6 +8,8 @@ import TableComponent, {
 import { Auction } from "../../../../../../../model/auction";
 import { formatDateHour, formatVND } from "../../../../../../../utils/format";
 import { getImageProduct } from "../../../../../../../utils/getImage";
+import { Tag } from "antd";
+import { statusAuction } from "../../../../../../../utils/render/statusRender";
 
 interface MyWinningProps {
   activeKey: string;
@@ -63,9 +65,9 @@ const MyWinning = ({ activeKey }: MyWinningProps) => {
       render: (data) => data.brand.name,
     },
     {
-      title: "Giá chót",
+      title: "Giá",
       dataIndex: "product",
-      key: "finalPrice",
+      key: "currentPrice",
       render: (_, record) => (
         <p className="font-bold text-base text-orange-600">
           {formatVND(record.currentPrice)}
@@ -85,14 +87,35 @@ const MyWinning = ({ activeKey }: MyWinningProps) => {
       render: (data) => formatDateHour(data),
     },
     {
-      title: "Thanh toán",
+      title: "Trạng thái đấu giá",
+      dataIndex: "status",
+      key: "statusProduct",
+      render: (data) => statusAuction[data](),
+    },
+    {
+      title: "Hành động",
       dataIndex: "id",
       key: "action",
       align: "center",
       render: (_, record: any) => (
-        <ButtonPrimary onClick={() => handleOpen(record)}>
-          Thanh toán
-        </ButtonPrimary>
+        <>
+          {(record.status === "WaitingPay" ||
+            record.status === "WaitingConfirm") && (
+            <ButtonPrimary onClick={() => handleOpen(record)}>
+              Thanh toán
+            </ButtonPrimary>
+          )}
+          {(record.status === "Cancel" || record.status === "Fail") && (
+            <Tag className="!text-base" color="red-inverse">
+              Đã hết hạn thanh toán
+            </Tag>
+          )}
+          {record.status === "Completed" && (
+            <Tag className="!text-base" color="green-inverse">
+              Đã thanh toán
+            </Tag>
+          )}
+        </>
       ),
     },
   ];
@@ -103,6 +126,10 @@ const MyWinning = ({ activeKey }: MyWinningProps) => {
   }, [activeKey]);
   return (
     <>
+      <p className="text-lg text-red-500 my-4 font-bold">
+        (* Thời hạn thanh toán cho mỗi đơn hàng là 7 ngày kể từ khi phiên kết
+        thúc *)
+      </p>
       <TableComponent
         expandX={1700}
         render={render}
@@ -111,7 +138,12 @@ const MyWinning = ({ activeKey }: MyWinningProps) => {
         apiUri="auction/win"
       />
       {open && (
-        <ModalPayment data={data as Auction} open={open} setOpen={setOpen} />
+        <ModalPayment
+          data={data as Auction}
+          open={open}
+          setOpen={setOpen}
+          type="Auction"
+        />
       )}
     </>
   );

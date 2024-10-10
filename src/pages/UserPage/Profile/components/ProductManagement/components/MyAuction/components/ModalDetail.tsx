@@ -3,6 +3,7 @@ import {
   Descriptions,
   DescriptionsProps,
   Form,
+  List,
   Modal,
   Popconfirm,
   Tag,
@@ -24,6 +25,7 @@ import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { auctionApi } from "../../../../../../../../service/api/auctionApi";
 import { useNavigate } from "react-router-dom";
+import { Auction } from "../../../../../../../../model/auction";
 interface ModalDetailProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,7 +33,7 @@ interface ModalDetailProps {
   setRender?: any;
 }
 const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
-  const [dataItem, setDataItem] = useState<MyAuctionProfile>();
+  const [dataItem, setDataItem] = useState<Auction>();
   const [loading, setLoading] = useState(false);
   const [renderDetail, setRenderDetail] = useState(false);
   const navigate = useNavigate();
@@ -52,9 +54,22 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
         await auctionApi.updateAuction(dataItem?.id, formattedDate);
       }
       toast.success("Cập nhật ngày cho phiên đấu giá thành công");
-      await auctionApi.getAuctionById(data?.id)
+      await auctionApi.getAuctionById(data?.id);
       setRender(true);
-      setRenderDetail(true)
+      setRenderDetail(true);
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleConfirm = async () => {
+    try {
+      setLoading(true);
+      await auctionApi.confirmAuction(dataItem?.id as number);
+      setRender(true);
+      setRenderDetail(true);
+      toast.success("Xác nhận thành công");
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -66,15 +81,31 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
       setLoading(true);
       await auctionApi.cancelAuction(dataItem?.id);
       toast.success("Hủy phiên thành công");
-      await auctionApi.getAuctionById(data?.id)
+      await auctionApi.getAuctionById(data?.id);
       setRender(true);
-      setRenderDetail(true)
+      setRenderDetail(true);
     } catch (error: any) {
       toast.error(error.message);
     } finally {
       setLoading(false);
     }
   };
+  const itemsList = [
+    dataItem?.status === "WaitingConfirm" &&
+    dataItem.product.desiredPrice !== dataItem.currentPrice ? (
+      <p className="text-orange-600 text-lg">
+        Giá hiện tại không bằng giá mong đợi của bạn{" "}
+        {formatVND(dataItem ? dataItem?.product?.desiredPrice : 0)}
+      </p>
+    ) : (
+      <p className="text-orange-600 text-lg">
+        Nếu giá trị mong đợi không bằng giá hiện tại, bạn phải xác nhận có bán hay không
+      </p>
+    ),
+    <p className="text-orange-600 text-lg">
+      Thời gian xác nhận là 3 ngày kể từ ngày kết thúc
+    </p>,
+  ];
   const itemsProduct: DescriptionsProps["items"] = [
     {
       key: "name",
@@ -135,7 +166,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
     },
     {
       key: "startingPrice",
-      label: "Giá khởi điển",
+      label: "Giá khởi điểm",
       children: (
         <p className="text-base text-orange-600">
           {formatVND(dataItem?.product?.startingPrice || 0)}
@@ -173,7 +204,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
     if (open) {
       fetchData();
     }
-    if(renderDetail) {
+    if (renderDetail) {
       fetchData();
     }
   }, [data?.id, open, renderDetail]);
@@ -220,6 +251,25 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
             {dataItem?.status === "Waiting" && <>Chỉnh sửa ngày đấu giá</>}
           </Button>
         ),
+        dataItem?.status === "WaitingConfirm" &&
+          dataItem.product.desiredPrice !== dataItem.currentPrice && (
+            <Popconfirm
+              title="Xác nhận phiên"
+              description={
+                <p>
+                  Bạn có chắc muốn xác nhận phiên không khi <br />
+                  giá hiện tại không bằng giá mong đợi?
+                </p>
+              }
+              onConfirm={handleConfirm}
+              okText="Có"
+              cancelText="Không"
+            >
+              <ButtonPrimary key={"confirm"} className="!bg-gradient-orange">
+                Xác nhận phiên đấu giá
+              </ButtonPrimary>
+            </Popconfirm>
+          ),
         <ButtonPrimary
           onClick={() => navigate(`/u/auction/${data?.id}`)}
           className="!text-base"
@@ -229,6 +279,13 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
         </ButtonPrimary>,
       ]}
     >
+      <List
+        size="small"
+        header={<p className="text-lg font-black">Chính sách</p>}
+        bordered
+        dataSource={itemsList}
+        renderItem={(item) => <List.Item>{item}</List.Item>}
+      />
       <Descriptions
         items={itemsProduct}
         title={
@@ -238,6 +295,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
         }
         bordered
         layout="vertical"
+        className="mt-5"
       />
       <Descriptions
         items={itemsAuction}
@@ -248,6 +306,7 @@ const ModalDetail = ({ open, setOpen, data, setRender }: ModalDetailProps) => {
         }
         bordered
         layout="vertical"
+        className="mt-5"
       />
     </Modal>
   );
