@@ -1,13 +1,14 @@
-import React, { useState } from "react";
 import type { MenuProps } from "antd";
 import { Avatar, Dropdown, Layout, Menu, theme } from "antd";
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import { MdCategory, MdDashboard } from "react-icons/md";
+import React, { useState } from "react";
 import { AiFillProduct } from "react-icons/ai";
+import { MdCategory, MdDashboard } from "react-icons/md";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
-import { RootState } from "../store/store";
+import { TfiStatsUp } from "react-icons/tfi";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/slice/userSlice";
+import { RootState } from "../store/store";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -28,7 +29,14 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem("Dashboard", "", <MdDashboard />),
+  {
+    key: '',
+    label: 'Dashboard',
+    icon: <MdDashboard />,
+    children: [
+      getItem("Statistics", "statistic", <TfiStatsUp />),
+    ],
+  },
   {
     key: 'menu',
     label: 'Account Management',

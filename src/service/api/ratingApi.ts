@@ -13,4 +13,12 @@ export const ratingApi = {
       throw error.response.data;
     }
   },
+  getAllRating: async () => {
+    try {
+      const response = await api.get("rating");
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  }
 };

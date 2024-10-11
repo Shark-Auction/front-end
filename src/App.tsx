@@ -43,6 +43,7 @@ import BlogList from "./pages/UserPage/Blog/BlogList";
 import BlogDetail from "./pages/UserPage/Blog/BlogDetail";
 import OrderDetail from "./pages/UserPage/Profile/components/OrderManagement/components/OrderDetail";
 import VoucherManagement from "./pages/AdminPage/VoucherManagement";
+import StatisticManagement from "./pages/AdminPage/Statistic";
 
 const ProductManagement = React.lazy(
   () => import("./pages/UserPage/Profile/components/ProductManagement")
@@ -238,6 +239,7 @@ function App() {
         { path: "blog-management", element: <BlogManagement /> },
         { path: "violate-management", element: <ViolateManagement /> },
         { path: "voucher-management", element: <VoucherManagement /> },
+        { path: "statistic", element: <StatisticManagement /> },
       ],
     },
     {
