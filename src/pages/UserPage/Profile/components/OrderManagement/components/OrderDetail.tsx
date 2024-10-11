@@ -1,17 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import { OrderInformation } from "../../../../../../model/order";
-import { orderApi } from "../../../../../../service/api/orderApi";
 import { Divider, Skeleton, Steps, Tag } from "antd";
-import ImageSlide from "../../../../../../components/ImageSlide/ImageSlide";
-import { formatDateHour, formatVND } from "../../../../../../utils/format";
-import {
-  condition,
-  orderStatus,
-} from "../../../../../../utils/render/statusRender";
-import { Delivery } from "../../../../../../model/delivery";
-import { deliveryApi } from "../../../../../../service/api/deliveryApi";
+import { useEffect, useState } from "react";
 import {
   FaBox,
   FaDropbox,
@@ -19,6 +7,19 @@ import {
   FaTruckLoading,
 } from "react-icons/fa";
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import ImageSlide from "../../../../../../components/ImageSlide/ImageSlide";
+import { Delivery } from "../../../../../../model/delivery";
+import { OrderInformation } from "../../../../../../model/order";
+import { deliveryApi } from "../../../../../../service/api/deliveryApi";
+import { orderApi } from "../../../../../../service/api/orderApi";
+import { formatDateHour, formatVND } from "../../../../../../utils/format";
+import {
+  condition,
+  orderStatus,
+} from "../../../../../../utils/render/statusRender";
+import ButtonActionDetail from "./components/ButtonActionDetail";
 
 type DeliveryStatus = "processing" | "shipping" | "delivered" | "received";
 
@@ -27,7 +28,6 @@ const OrderDetail = () => {
   const [data, setData] = useState<OrderInformation>();
   const [dataDelivery, setDataDelivery] = useState<Delivery>();
   const [loading, setLoading] = useState<boolean>(false);
-
   const items = [
     {
       title: "Đang xử lý",
@@ -246,6 +246,7 @@ const OrderDetail = () => {
               }
             />
           </div>
+          <ButtonActionDetail data={data} />
         </div>
       </Skeleton>
     )

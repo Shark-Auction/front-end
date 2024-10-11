@@ -5,6 +5,14 @@ import { Order } from "../../model/order";
 const TokenGHN = "43a8eec9-7b4c-11ef-b441-069be3e54cb9";
 
 export const orderApi = {
+  getAllOrder: async () => {
+    try {
+      const response = await api.get("order");
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
   orderAuction: async (data: Order) => {
     try {
       const response = await api.post("order", data);

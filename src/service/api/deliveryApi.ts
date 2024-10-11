@@ -29,4 +29,12 @@ export const deliveryApi = {
       throw error.response.data;
     }
   },
+  getAllDelivery: async () => {
+    try {
+      const response = await api.get(`delivery`);
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
 };

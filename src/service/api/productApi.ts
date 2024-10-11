@@ -45,5 +45,13 @@ export const productApi = {
     } catch (error: any) {
       throw error.response.data;
     }
-  }
+  },
+  getAllProduct: async () => {
+    try {
+      const response = await api.get(`product`);
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
 };
