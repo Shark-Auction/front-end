@@ -1,22 +1,27 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
   "compilerOptions": {
-    "baseUrl": "./src",
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node",
+    "types": ["node"],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "baseUrl": "./", 
     "paths": {
-      "@/*": ["./*"],
-      "@components/*": ["./components/*"],
-      "@axios/*": ["./config/axios/*"],
-      "@layout/*": ["./core/layout/*"],
-      "@store/*": ["./core/store/*"],
-      "@hooks/*": ["./hooks/*"],
-      "@model/*": ["./model/*"],
-      "@pages/*": ["./pages/*"],
-      "@service/*": ["./service/*"],
-      "@utils/*": ["./utils/*"]
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@axios/*": ["src/config/axios/*"],
+      "@layout/*": ["src/core/layout/*"],
+      "@store/*": ["src/core/store/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@model/*": ["src/model/*"],
+      "@pages/*": ["src/pages/*"],
+      "@service/*": ["src/service/*"],
+      "@utils/*": ["src/utils/*"]
     }
   },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
