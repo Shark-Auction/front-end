@@ -71,8 +71,6 @@ const StaffManagement = () => {
             key: "is_active",
             render: (text) => (text ? "true" : "false"),
         },
-
-
     ];
 
     return (

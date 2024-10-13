@@ -47,7 +47,7 @@ export const staffApi = {
     },
     addStaff: async (data:any) => {
         try {
-          const response = await api.post('account/users/staffs',data)
+          const response = await api.post('account/users/staff',data)
           return response.data
         } catch (error: any) {
           throw error.response.data
