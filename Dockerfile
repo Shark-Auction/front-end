@@ -1,23 +1,13 @@
-# Use the official Node.js image as the base image
-FROM node:18.17.1
+FROM node:20-alpine as build
 
-# Set the working directory inside the container
-WORKDIR /front-end
-
-# Copy package.json and package-lock.json to the working directory
+WORKDIR /app
 COPY package*.json ./
-
-# Install the dependencies
 RUN npm install
-
-# Copy the rest of the project files to the working directory
 COPY . .
+RUN npm run build
 
-# Set environment variable for port
-ENV PORT=5173
-
-# Expose the port the app runs on
-EXPOSE 5173
-
-# Start the app in development mode with the specified port
-CMD ["npm", "run", "dev"]
+FROM nginx:stable-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
