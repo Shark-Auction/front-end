@@ -1,30 +1,13 @@
-FROM node:14-alpine AS builder
+FROM node:20-alpine as build
 
-# Add a work directory
 WORKDIR /app
-
-# Cache and Install dependencies
-COPY package.json .
-COPY yarn.lock .
-RUN npm i
-
-# Copy app files
+COPY package*.json ./
+RUN npm install
 COPY . .
-
-# Build the app
 RUN npm run build
 
-# Bundle static assets with nginx
-FROM nginx:1.21.0-alpine as production
-
-# Copy built assets from builder
-COPY --from=builder /app/build /usr/share/nginx/html
-
-# Add your nginx.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port
+FROM nginx:stable-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
-
-# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
