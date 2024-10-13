@@ -10,7 +10,7 @@ export const categoryApi = {
     }
   }
 ,
-deleteCategory: async (id:any) => {
+deleteCategory: async (id:number) => {
   try {
     const response = await api.delete(`category/${id}`)
     return response.data
@@ -18,7 +18,7 @@ deleteCategory: async (id:any) => {
     throw error.response.data
   }
 },
-  getCategoryChildren: async(parentId:any) => {
+  getCategoryChildren: async(parentId:number) => {
     try {
       const response = await api.get(`category/children/${parentId}`)
       return response.data

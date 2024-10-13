@@ -9,6 +9,7 @@ import {
   MdManageAccounts,
   MdNoAccounts,
   MdOutlineAccountCircle,
+
 } from "react-icons/md";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
@@ -22,7 +23,7 @@ import { TfiStatsUp } from "react-icons/tfi";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/slice/userSlice";
 import { RootState } from "../store/store";
-
+import { MoneyCollectOutlined } from "@ant-design/icons";
 const { Header, Content, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -89,6 +90,12 @@ const items: MenuItem[] = [
     "voucher Management",
     "voucher-management",
     <BiSolidDiscount size={20} />
+  ),
+  getItem(
+    "Cashout Management",
+    "cashout-management",
+    <MoneyCollectOutlined />
+
   ),
 ];
 
