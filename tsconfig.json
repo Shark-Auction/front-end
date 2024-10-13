@@ -5,7 +5,15 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "baseUrl": "./src",
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node",
+    "types": ["node"],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "baseUrl": "./",
     "paths": {
       "@/*": ["./*"],
       "@components/*": ["./components/*"],
@@ -18,5 +26,5 @@
       "@service/*": ["./service/*"],
       "@utils/*": ["./utils/*"]
     }
-  },
+  }
 }
