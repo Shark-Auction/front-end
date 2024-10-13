@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Button, message, Table, Tag } from 'antd';
+import { Button, message, Tag } from 'antd';
+import { useState } from 'react';
 import Dashboard, { Column } from "../../../components/Dashboard";
-import { formatDateHour } from "../../../utils/format";
-import { productApi } from "../../../service/api/productApi";
 import ImageComponent from "../../../components/Image";
+import { productApi } from "../../../service/api/productApi";
+import { formatDateHour } from "../../../utils/format";
 import { getImageProduct } from "../../../utils/getImage";
-import ProductDetailModal from './ProductDetailModal';  // Import the modal
+import ProductDetailModal from './ProductDetailModal'; // Import the modal
 
 
 const AdminProductManagement = () => {

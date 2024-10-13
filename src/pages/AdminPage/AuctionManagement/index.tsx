@@ -1,4 +1,4 @@
-import { Form, Image, Input } from "antd";
+import { Form, Input } from "antd";
 import Dashboard, { Column } from "../../../components/Dashboard";
 import ImageComponent from "../../../components/Image";
 import { getImageProduct } from "../../../utils/getImage";

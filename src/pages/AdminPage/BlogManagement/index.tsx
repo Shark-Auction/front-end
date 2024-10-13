@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
 import { Button, Modal } from "antd";
+import { useState } from "react";
+import "react-quill/dist/quill.snow.css";
 import Dashboard, { Column } from "../../../components/Dashboard";
 import ImageComponent from "../../../components/Image";
 import { getImageBlog } from "../../../utils/getImage";
 import AddBlog from "./AddBlog";
-import "react-quill/dist/quill.snow.css";
 
 
 const BlogManagement = () => {

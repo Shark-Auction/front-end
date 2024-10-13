@@ -1,19 +1,9 @@
-import { Button, Form, Input, message, Modal, Popconfirm } from "antd";
+import { useState } from "react";
 import Dashboard, { Column } from "../../../components/Dashboard";
-import { managerApi } from "../../../service/api/admin/accountAPI";
-import { useRef, useState } from "react";
 
 
 const ManagerManagement = () => {
-    const [isModalVisible, setIsModalVisible] = useState(false); // State to manage modal visibility
-    const [refetch, setRefetch] = useState(false); // State để quản lý refetch
-    const [form] = Form.useForm(); // Ant Design Form instance
-    const refreshData = () => {
-        setRefetch(true); // Đặt refetch thành true khi cần fetch lại
-    };
-
-
-
+    const [refetch, setRefetch] = useState(false);
     const columns: Column[] = [
         {
             title: "#",
@@ -67,9 +57,6 @@ const ManagerManagement = () => {
 
     return (
         <>
-            <Button type="primary" onClick={() => setIsModalVisible(true)} style={{ marginBottom: 16 }}>
-                Add Staff
-            </Button>
             <Dashboard columns={columns} apiUri="account/managers" action={false} refetch={refetch} setRefetch={setRefetch} />
         </>
     );

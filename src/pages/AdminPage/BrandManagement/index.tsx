@@ -1,7 +1,5 @@
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
 import Dashboard, { Column } from "../../../components/Dashboard";
-import ButtonPrimary from "../../../components/Button";
-import ImageComponent from "../../../components/Image";
 import { formatDateHour } from "../../../utils/format";
 
 const BrandManagement = () => {
