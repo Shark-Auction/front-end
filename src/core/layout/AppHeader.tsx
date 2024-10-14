@@ -9,6 +9,7 @@ import Underline from "../../components/UI/underline";
 import { logout } from "../store/slice/userSlice";
 import { RootState } from "../store/store";
 import { formatVND } from "../../utils/format";
+import { getImageFE } from "../../utils/getImage";
 
 const AppHeader = () => {
   const navigate = useNavigate();
@@ -67,18 +68,16 @@ const AppHeader = () => {
         </Link>
       ),
       icon: <FaUser size={15} />,
+      onClick: () => navigate("/u/profile"),
     },
     {
       type: "divider",
     },
     {
       key: "2",
-      label: (
-        <div onClick={handleLogout} className="text-base text-red-600">
-          Đăng xuất
-        </div>
-      ),
+      label: <div className="text-base text-red-600">Đăng xuất</div>,
       icon: <TbLogout size={20} color="red" />,
+      onClick: handleLogout,
     },
   ];
   return (
@@ -87,7 +86,7 @@ const AppHeader = () => {
         <Image
           preview={false}
           className="!relative !w-10 md:!w-20 !object-cover rounded-full p-2 bg-white shadow-shadowLight"
-          src="/src/assets/logo_exe.png"
+          src={getImageFE("logo_exe.png")}
           alt="logo"
         />
         <p

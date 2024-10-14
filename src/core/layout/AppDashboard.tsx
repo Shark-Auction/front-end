@@ -107,7 +107,7 @@ const AppDashboard: React.FC = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-  const handleLogin = () => {
+  const handleLogout = () => {
     dispatch(logout());
     navigate("/auth/login");
   };
@@ -131,11 +131,12 @@ const AppDashboard: React.FC = () => {
     {
       key: "Logout",
       label: (
-        <div className="text-red-500 text-base" onClick={handleLogin}>
+        <div className="text-red-500 text-base">
           Logout
         </div>
       ),
       icon: <IoLogOutSharp className="text-red-500" size={20} />,
+      onClick: handleLogout
     },
   ];
   return (

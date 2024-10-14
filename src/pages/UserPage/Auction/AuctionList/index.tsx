@@ -8,6 +8,7 @@ import { categoryApi } from "../../../../service/api/categoryApi";
 import { GetProp, MenuProps, Skeleton } from "antd";
 import { Auction } from "../../../../model/auction";
 import { auctionApi } from "../../../../service/api/auctionApi";
+import { getImageFE } from "../../../../utils/getImage";
 type MenuItem = GetProp<MenuProps, "items">[number];
 
 const AuctionPage = () => {
@@ -143,7 +144,7 @@ const AuctionPage = () => {
       <div className="w-full h-[500px] hidden md:block shadow-shadowLight">
         <img
           className="w-full h-full object-cover"
-          src="/src/assets/background_home.jpeg"
+          src={getImageFE("background_home.jpeg")}
         />
       </div>
       <div className="flex flex-col md:flex-row gap-10">

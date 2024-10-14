@@ -18,27 +18,38 @@ const CardBlog = ({ data }: CardBlogProps) => {
     >
       <div className="w-full">
         <ImageComponent
-          width={'100%'}
+          width={"100%"}
           height={300}
           className="object-contain rounded-xl"
           src={getImageBlog(data.blogImages[0]?.url)}
         />
       </div>
-      <div className="p-5">
+      <div className="p-5 flex flex-col justify-between gap-2">
         <p
           className="text-2xl"
           style={{
             display: "-webkit-box",
-            WebkitLineClamp: 3,
+            WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
             textOverflow: "ellipsis",
+            wordBreak: "break-word",
+            maxHeight: "3em",
           }}
         >
           <strong>{data.title}</strong>
         </p>
-        <p className="text-base italic">Ngày tạo: <span className="text-gray-500">{formatDateHour(data.createdAt)}</span></p>
-        <p className="text-base italic">Bởi: <span className="text-gray-500">{data.user.full_name}</span></p>
+        <div>
+          <p className="text-base italic">
+            Ngày tạo:{" "}
+            <span className="text-gray-500">
+              {formatDateHour(data.createdAt)}
+            </span>
+          </p>
+          <p className="text-base italic">
+            Bởi: <span className="text-gray-500">{data.user.full_name}</span>
+          </p>
+        </div>
         <Link
           to={`${data.id}`}
           className="text-base text-blue-500 underline flex justify-center !mt-5"
