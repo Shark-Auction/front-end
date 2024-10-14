@@ -1,4 +1,4 @@
-import { Avatar, Button, Dropdown, Image, MenuProps } from "antd";
+import { Button, Dropdown, Image, MenuProps } from "antd";
 import { FaUser } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoMenuSharp } from "react-icons/io5";
@@ -6,9 +6,10 @@ import { TbLogout } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Underline from "../../components/UI/underline";
+import { formatVND } from "../../utils/format";
+import { getImageFE } from "../../utils/getImage";
 import { logout } from "../store/slice/userSlice";
 import { RootState } from "../store/store";
-import { formatVND } from "../../utils/format";
 
 const AppHeader = () => {
   const navigate = useNavigate();
@@ -67,18 +68,16 @@ const AppHeader = () => {
         </Link>
       ),
       icon: <FaUser size={15} />,
+      onClick: () => navigate("/u/profile"),
     },
     {
       type: "divider",
     },
     {
       key: "2",
-      label: (
-        <div onClick={handleLogout} className="text-base text-red-600">
-          Đăng xuất
-        </div>
-      ),
+      label: <div className="text-base text-red-600">Đăng xuất</div>,
       icon: <TbLogout size={20} color="red" />,
+      onClick: handleLogout,
     },
   ];
   return (
@@ -87,7 +86,7 @@ const AppHeader = () => {
         <Image
           preview={false}
           className="!relative !w-10 md:!w-20 !object-cover rounded-full p-2 bg-white shadow-shadowLight"
-          src="/src/assets/logo_exe.png"
+          src={getImageFE("logo_exe.png")}
           alt="logo"
         />
         <p
@@ -119,9 +118,23 @@ const AppHeader = () => {
             className="cursor-pointer hover:opacity-80 hover:transition-opacity duration-300"
             overlayStyle={{ width: "250px" }}
           >
-            <div className="flex items-center gap-4 py-2 px-5 rounded-lg">
-              <Avatar className="!w-10 !h-10" />
-              <IoIosArrowDown size={20} color="black" />
+            <div className="relative flex items-center gap-4 py-2 px-5 rounded-lg">
+              <div className="relative w-14 h-14">
+                {/* Avatar Image */}
+                <img
+                  className="w-14 h-14 rounded-full object-cover"
+                  src={getImageFE("default.jpg")}
+                  style={{ clipPath: "circle(50% at 50% 50%)" }}
+                />
+
+                {/* Circular Icon Button on the Edge */}
+                <div
+                  className="absolute bottom-0 right-0 bg-white rounded-full flex items-center justify-center border border-gray-300"
+                  style={{ clipPath: "circle(50%)" }}
+                >
+                  <IoIosArrowDown size={20} color="black" />
+                </div>
+              </div>
             </div>
           </Dropdown>
         ) : (

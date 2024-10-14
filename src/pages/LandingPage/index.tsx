@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { GiScales } from "react-icons/gi";
 import { FaInfoCircle } from "react-icons/fa";
+import { getImageFE } from "../../utils/getImage";
 
 interface CardContentProps {
   icon: React.ReactElement;
@@ -50,7 +51,7 @@ const LandingPage = () => {
     <>
       <div className="relative w-full h-[30vh] md:h-[80vh] overflow-hidden">
         <img
-          src="src/assets/background.jpg"
+          src={getImageFE('background.jpg')}
           alt="Background"
           className="hidden md:block absolute object-cover inset-0 w-full h-full"
         />
@@ -158,7 +159,7 @@ const LandingPage = () => {
           <div className="flex flex-col lg:flex-row justify-between w-full gap-32 hidden-on-scroll fade-left">
             <div className="relative h-[300px] lg:w-1/2 overflow-hidden rounded-xl bg-center">
               <img
-                src="src/assets/about.png"
+                src={getImageFE('about.png')}
                 alt="Background"
                 className="block absolute object-cover inset-0 w-full h-full"
               />
