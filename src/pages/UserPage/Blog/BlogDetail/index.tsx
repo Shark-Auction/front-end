@@ -1,4 +1,4 @@
-import { Skeleton } from "antd";
+import { Divider, Skeleton } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -12,46 +12,53 @@ const BlogDetail = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<Blog>();
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const response = await blogApiUser.getDetailBlog(Number(id));
-      setData(response.data);
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await blogApiUser.getDetailBlog(Number(id));
+        setData(response.data);
+      } catch (error: any) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchData();
   }, [id]);
   return (
     <Skeleton loading={loading}>
       {data && (
-        <div className="w-full bg-white shadow-shadowLight rounded-2xl p-10">
-          <p className="text-2xl">
-            <strong>{data.title}</strong>
-          </p>
-          <p className="text-base italic">
-            Ngày tạo:{" "}
-            <span className="text-gray-500">
-              {formatDateHour(data.createdAt)}
-            </span>
-          </p>
-          <p className="text-base italic">
-            Bởi: <span className="text-gray-500">{data.user.full_name}</span>
-          </p>
+        <div className="w-full bg-white shadow-shadowLight rounded-2xl p-10 flex flex-col gap-10">
+          <div className="flex flex-col gap-2">
+            <p className="text-2xl">
+              <strong>{data.title}</strong>
+            </p>
+            <div className="flex gap-2 w-fit items-center flex-wrap">
+              <p className="text-base">
+                Ngày tạo:{" "}
+                <span className="font-bold">
+                  {formatDateHour(data.createdAt)}
+                </span>
+              </p>
+              <Divider type="vertical" className=" border-black h-5" />
+              <p className="text-base">
+                Bởi: <span className="font-bold">{data.user.full_name}</span>
+              </p>
+            </div>
+          </div>
           <div className="flex justify-center">
             <ImageComponent
               width={"fit"}
-              height={700}
-              className="object-cover !w-fit !rounded-2xl shadow-shadowLight"
+              height={500}
+              className="object-cover "
               preview={false}
               src={getImageBlog(data?.blogImages[0]?.url)}
             />
           </div>
-          <div dangerouslySetInnerHTML={{ __html: data.content }} />
+          <div className="xl:container">
+            <div dangerouslySetInnerHTML={{ __html: data.content }} />
+          </div>
         </div>
       )}
     </Skeleton>

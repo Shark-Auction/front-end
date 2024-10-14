@@ -4,6 +4,7 @@ import { Blog } from "../../../../model/blog";
 import { toast } from "react-toastify";
 import { blogApiUser } from "../../../../service/api/blogApiUser";
 import { Pagination, Skeleton } from "antd";
+import EmptyComponent from "../../../../components/Empty";
 
 const BlogList = () => {
   const [data, setData] = useState<Blog[]>([]);
@@ -40,21 +41,27 @@ const BlogList = () => {
   }, []);
   return (
     <Skeleton loading={loading}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        {paginatedData.map((element: Blog) => (
-          <CardBlog data={element} />
-        ))}
-      </div>
-      <div className="flex justify-center mt-5">
-        <Pagination
-          current={currentPage}
-          pageSize={pageSize}
-          total={data.length}
-          onChange={handlePageChange}
-          showSizeChanger
-          pageSizeOptions={["8", "16", "24", "32"]}
-        />
-      </div>
+      {paginatedData.length > 0 ? (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            {paginatedData.map((element: Blog) => (
+              <CardBlog data={element} />
+            ))}
+          </div>
+          <div className="flex justify-center mt-5">
+            <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={data.length}
+              onChange={handlePageChange}
+              showSizeChanger
+              pageSizeOptions={["8", "16", "24", "32"]}
+            />
+          </div>
+        </>
+      ) : (
+        <EmptyComponent />
+      )}
     </Skeleton>
   );
 };

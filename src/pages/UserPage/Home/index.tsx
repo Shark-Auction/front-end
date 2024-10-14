@@ -12,6 +12,7 @@ import EmptyComponent from "../../../components/Empty";
 import { auctionApi } from "../../../service/api/auctionApi";
 import { Auction } from "../../../model/auction";
 import { statusAuction } from "../../../utils/render/statusRender";
+import { getImageFE } from "../../../utils/getImage";
 
 const HomePage = () => {
   const [dataProduct, setDataProduct] = useState<Auction[]>([]);
@@ -80,7 +81,7 @@ const HomePage = () => {
       <div className="w-full h-[500px] hidden md:block shadow-shadowLight">
         <img
           className="w-full h-full object-cover"
-          src="/src/assets/background_home.jpeg"
+          src={getImageFE("background_home.jpeg")}
         />
       </div>
       <div className="border shadow-shadowLight flex flex-col gap-5 pt-5 ">
