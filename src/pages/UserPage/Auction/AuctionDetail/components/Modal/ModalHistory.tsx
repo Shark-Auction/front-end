@@ -22,12 +22,6 @@ export const ModalHistory = ({ id }: BidHistoryProps) => {
   };
   const column: TableProps["columns"] = [
     {
-      title: "#",
-      dataIndex: "id",
-      key: "id",
-      className: "md:!text-base",
-    },
-    {
       title: "Người đấu giá",
       dataIndex: "customer",
       key: "name",
@@ -58,7 +52,11 @@ export const ModalHistory = ({ id }: BidHistoryProps) => {
       try {
         setLoading(true);
         const response = await auctionApi.getBidding(String(id));
-        setBiddingData(response.data);
+        const filteredData = response.data.sort(
+          (a: AuctionBiddingDetail, b: AuctionBiddingDetail) =>
+            new Date(b.bidTime).getTime() - new Date(a.bidTime).getTime()
+        );
+        setBiddingData(filteredData);
       } catch (error: any) {
         toast.error(error.message);
       } finally {

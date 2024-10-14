@@ -1,6 +1,7 @@
 import { Image, Layout } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import { Outlet, useNavigate } from "react-router-dom";
+import { getImageFE } from "../../utils/getImage";
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const AuthPage = () => {
             <Image
               preview={false}
               className="!relative !w-10 md:!w-20 !object-cover rounded-full p-2 bg-white shadow-shadowLight"
-              src="/src/assets/logo_exe.png"
+              src={getImageFE('logo_exe.png')}
               alt="logo"
             />
             <p

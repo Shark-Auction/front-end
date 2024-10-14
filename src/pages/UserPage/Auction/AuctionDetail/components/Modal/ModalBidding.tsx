@@ -35,8 +35,10 @@ export const ModalBidding = ({
     setCurrent(current - 1);
   };
 
-  const handleBidAmount = (e: any) => {
-    setAmount(e.target.value);
+  const handleBidAmount = (value: number | null) => {
+    if (value !== null && value >= currentPrice + step) {
+      setAmount(value);
+    }
   };
 
   const increaseBidding = () => {
@@ -74,6 +76,13 @@ export const ModalBidding = ({
     }
   };
 
+  const preventNonNumericInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const regex = /[^\d]/;
+    if (regex.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   useEffect(() => {
     setAmount(currentPrice + step);
   }, [currentPrice, step]);
@@ -95,13 +104,14 @@ export const ModalBidding = ({
               -
             </Button>
             <InputNumber
-              controls={false}
+              onKeyPress={preventNonNumericInput} // Prevent non-numeric input
+              min={currentPrice + step} // Ensures the minimum bid is maintained
               className="w-full !rounded-none"
               value={amount}
               onChange={handleBidAmount}
               placeholder="Đang đấu thầu..."
               formatter={(value) =>
-                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VND"
+                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
               }
               parser={(value) => parseInt(value?.replace(/\D/g, "") || "0", 10)}
             />

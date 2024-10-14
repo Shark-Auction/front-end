@@ -16,10 +16,11 @@ interface ActionAuctionProps {
 const ActionAuction = ({ data }: ActionAuctionProps) => {
   const [openBuyNow, setOpenBuyNow] = useState<boolean>(false);
   const userLoginned = useSelector((state: RootState) => state.user);
+  console.log(userLoginned && data.product.seller.id !== userLoginned["userId"])
   return (
     <div className="flex flex-col gap-5 bg-white p-5 shadow-shadowHeavy rounded-lg lg:sticky lg:top-[100px]">
       <SellerAuction seller={data.product.seller} />
-      {userLoginned && data.product.seller.id !== userLoginned["userId"] ? (
+      {(data.product.seller.id !== (userLoginned && userLoginned["userId"]) ? (
         data.status === "InProgress" && (
           <div>
             <div className="flex w-full">
@@ -55,7 +56,7 @@ const ActionAuction = ({ data }: ActionAuctionProps) => {
         <div className="bg-gradient-orange text-white !px-4 !w-full text-center rounded-md">
           <p className="text-lg">Bạn đăng phiên này</p>
         </div>
-      )}
+      ))}
       <ModalPayment data={data} open={openBuyNow} setOpen={setOpenBuyNow} />
     </div>
   );
