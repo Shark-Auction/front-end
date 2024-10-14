@@ -1,4 +1,7 @@
 .menu-component .ant-menu-submenu-title{
-  padding: 0 !important;
+  border: none !important;
+}
+
+.menu-component .ant-menu-item-only-child{
   border: none !important;
 }

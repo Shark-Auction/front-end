@@ -2,8 +2,8 @@ import { Button, Image } from "antd";
 import { CgMail } from "react-icons/cg";
 import { FaFacebook, FaInstagram, FaTiktok } from "react-icons/fa";
 import { MdPlace } from "react-icons/md";
-import { RiPhoneFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import { getImageFE } from "../../utils/getImage";
 
 const AppFooter = () => {
   const address = "FPT University HCM, Vietnam";
@@ -13,7 +13,7 @@ const AppFooter = () => {
   const itemsAboutUs = [
     {
       link: "/about",
-      title: "About Us",
+      title: "Về chúng tôi",
     },
     {
       link: "/u/blog",
@@ -27,19 +27,15 @@ const AppFooter = () => {
       title: "FAQ",
     },
     {
-      link: "/qna",
-      title: "QnA",
-    },
-    {
       link: "/services",
-      title: "Services",
+      title: "Dịch vụ",
     },
   ];
 
   const itemsContact = [
     {
       link: "/contact",
-      title: "Contact",
+      title: "Cộng tác",
     },
   ];
 
@@ -50,7 +46,7 @@ const AppFooter = () => {
           <Image
             preview={false}
             className="!relative !w-10 md:!w-20 !object-cover rounded-full p-2 bg-white shadow-shadowLight"
-            src="/src/assets/logo_exe.png"
+            src={getImageFE('logo_exe.png')}
             alt="logo"
           />
           <p className="text-3xl">
@@ -58,10 +54,6 @@ const AppFooter = () => {
           </p>
         </div>
         <div className="flex items-center gap-5 text-lg">
-          <div className="border-2 border-black rounded-full p-1">
-            <RiPhoneFill />
-          </div>
-          <p>+0123456789</p>
         </div>
         <div className="flex items-center gap-5 text-lg">
           <div className="border-2 border-black rounded-full p-1">
@@ -84,7 +76,7 @@ const AppFooter = () => {
           <p className="font-semibold text-2xl">VỀ CHÚNG TÔI</p>
           <div className="flex flex-col gap-2">
             {itemsAboutUs.map((e) => (
-              <Link key={e.link} to={e.link} className="hover:text-black">
+              <Link key={e.link} to={e.link} className="hover:text-black !w-fit">
                 {e.title}
               </Link>
             ))}
@@ -95,7 +87,7 @@ const AppFooter = () => {
           <p className="font-semibold text-2xl">HỖ TRỢ</p>
           <div className="flex flex-col gap-2">
             {itemsSupport.map((e) => (
-              <Link key={e.link} to={e.link} className="hover:text-black">
+              <Link key={e.link} to={e.link} className="hover:text-black !w-fit">
                 {e.title}
               </Link>
             ))}
@@ -106,7 +98,7 @@ const AppFooter = () => {
           <p className="font-semibold text-2xl">CỘNG TÁC</p>
           <div className="flex flex-col gap-2">
             {itemsContact.map((e) => (
-              <Link key={e.link} to={e.link} className="hover:text-black">
+              <Link key={e.link} to={e.link} className="hover:text-black !w-fit">
                 {e.title}
               </Link>
             ))}
