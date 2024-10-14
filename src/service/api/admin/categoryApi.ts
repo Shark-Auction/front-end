@@ -10,6 +10,14 @@ export const categoryApi = {
     }
   }
 ,
+deleteCategory: async (id:number) => {
+  try {
+    const response = await api.delete(`category/${id}`)
+    return response.data
+  } catch (error: any) {
+    throw error.response.data
+  }
+},
   getCategoryChildren: async(parentId:number) => {
     try {
       const response = await api.get(`category/children/${parentId}`)
@@ -18,5 +26,19 @@ export const categoryApi = {
     catch (error:any) { 
       throw error.response.data
     }
-  }
+  },
+  addCategory: async (data: any) => {
+    try {
+      console.log('api')
+      const response = await api.post('category', data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+      )
+      return response.data
+    } catch (error: any) {
+      throw error.response.data
+    }
+  },
 }
