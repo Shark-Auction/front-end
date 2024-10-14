@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import Dashboard, { Column } from "../../../components/Dashboard";
 import { cashOutApi } from "../../../service/api/admin/cashoutApi";
 
-
 const CashoutManagement = () => {
 
     const [refetch, setRefetch] = useState(false); // State để quản lý refetch
