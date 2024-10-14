@@ -1,18 +1,26 @@
 import { Button, Divider, Input } from "antd";
 import MenuComponent from "../../../../../components/Menu";
+import { useRef } from "react";
 
 interface FilterSideTabProps {
   items: any[];
   setSelectedkey: any;
   setSearchText: any;
-  searchText: any
+  searchText: any;
 }
 
-const FilterSideTab = ({ items = [], setSelectedkey, setSearchText, searchText }: FilterSideTabProps) => {
+const FilterSideTab = ({
+  items = [],
+  setSelectedkey,
+  setSearchText,
+  searchText,
+}: FilterSideTabProps) => {
+  const menuRef = useRef<{ resetFilters: () => void }>(null);
 
   const handleReset = () => {
     setSelectedkey(null);
-    setSearchText(null)
+    setSearchText(null);
+    menuRef.current?.resetFilters();
   };
 
   return (
@@ -38,7 +46,7 @@ const FilterSideTab = ({ items = [], setSelectedkey, setSearchText, searchText }
       <Divider className="border-black py-1" />
       <p className="text-xl font-semibold">Danh mục</p>
       <div>
-        <MenuComponent items={items} className="!bg-inherit !border-none" />
+        <MenuComponent ref={menuRef} items={items} className="!bg-inherit !border-none" />
       </div>
     </div>
   );

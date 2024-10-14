@@ -5,10 +5,10 @@ import { SortingAuction } from "./components/SortingAuction";
 import { Category } from "../../../../model/category";
 import { toast } from "react-toastify";
 import { categoryApi } from "../../../../service/api/categoryApi";
-import { GetProp, MenuProps, Skeleton } from "antd";
+import { GetProp, Image, MenuProps, Skeleton } from "antd";
 import { Auction } from "../../../../model/auction";
 import { auctionApi } from "../../../../service/api/auctionApi";
-import { getImageFE } from "../../../../utils/getImage";
+import { getImageCategory, getImageFE } from "../../../../utils/getImage";
 type MenuItem = GetProp<MenuProps, "items">[number];
 
 const AuctionPage = () => {
@@ -34,10 +34,18 @@ const AuctionPage = () => {
           .map((childCategory: Category) => ({
             key: childCategory.id.toString(),
             label: (
-              <div>
-                <p onClick={() => handleMenuClick(childCategory.id)}>
-                  {childCategory.name}
-                </p>
+              <div
+                className="flex gap-5 items-center"
+                onClick={() => handleMenuClick(childCategory.id)}
+              >
+                <Image
+                  className="rounded-lg"
+                  width={40}
+                  height={40}
+                  preview={false}
+                  src={getImageCategory(childCategory.imageUrl)}
+                />
+                <p className="text-base font-medium">{childCategory.name}</p>
               </div>
             ),
           }));
@@ -45,9 +53,19 @@ const AuctionPage = () => {
         menuItems.push({
           key: category.id.toString(),
           label: (
-            <p className="w-fit" onClick={() => handleMenuClick(category.id)}>
-              {category.name}
-            </p>
+            <div
+              className="flex gap-5 items-center"
+              onClick={() => handleMenuClick(category.id)}
+            >
+              <Image
+                className="rounded-lg"
+                width={40}
+                height={40}
+                preview={false}
+                src={getImageCategory(category.imageUrl)}
+              />
+              <p className="text-base font-medium">{category.name}</p>
+            </div>
           ),
           children: children.length > 0 ? children : undefined,
         });
