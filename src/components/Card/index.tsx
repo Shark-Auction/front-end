@@ -1,9 +1,11 @@
-import { Card, Tag } from "antd";
-import ButtonPrimary from "../Button";
+import { Card, Popover, Tag } from "antd";
 import { useEffect, useState } from "react";
-import ImageComponent from "../Image";
+import { GiHammerDrop } from "react-icons/gi";
+import { VscDebugStepOver } from "react-icons/vsc";
+import { Auction } from "../../model/auction";
 import { formatVND } from "../../utils/format";
 import { getImageProduct } from "../../utils/getImage";
+import ImageComponent from "../Image";
 
 interface CardElementProps {
   name: string;
@@ -13,6 +15,7 @@ interface CardElementProps {
   id: number;
   image: string;
   onClick?: any;
+  data?: Auction;
 }
 
 const calculateTimeRemaining = (remainDay: string) => {
@@ -36,6 +39,7 @@ const CardElement = ({
   id,
   image,
   onClick,
+  data,
 }: CardElementProps) => {
   const [timeRemaining, setTimeRemaining] = useState(
     calculateTimeRemaining(remainDay)
@@ -48,34 +52,56 @@ const CardElement = ({
     return () => clearInterval(intervalId);
   }, [remainDay]);
 
-  return (
-    <Card
-      onClick={onClick}
-      hoverable={true}
-      key={id}
-      cover={<ImageComponent width={'100%'} height={'100%'} preview={false} src={getImageProduct(image)} />}
-      actions={[
-        <ButtonPrimary hover="!bg-gradient-red" className="!text-base !font-normal !bg-gradient-red">
-          Đấu giá
-        </ButtonPrimary>,
-      ]}
-      className="shadow-shadowHeavy max-w-full md:max-w-sm lg:max-w-xs !overflow-hidden"
-    >
-      <div className="flex flex-col gap-2">
-        <div className="overflow-hidden">
-          <p className="text-base text-ellipsis overflow-hidden whitespace-nowrap">
-            {name}
-          </p>
-        </div>
-        <p className="text-orange-500 text-base">{formatVND(currentPrice)}</p>
-        <div className="flex justify-between flex-col sm:flex-col md:flex-col lg:flex-col gap-3">
-          <Tag color="blue" className="text-sm text-ellipsis overflow-hidden whitespace-nowrap w-fit">
-            {timeRemaining}
-          </Tag>
-          <div>{status}</div>
-        </div>
+  const content = (
+    <div className="flex md:flex-row gap-5 md:gap-10">
+      <div className="flex items-center gap-4">
+        <GiHammerDrop className="text-3xl" />
+        <p className="md:text-base font-semibold">{data?.totalBids}</p>
       </div>
-    </Card>
+      <div className="flex items-center gap-4">
+        <VscDebugStepOver className="text-3xl" />
+        <p className="md:text-base font-semibold text-orange-600">
+          {formatVND(data?.step ? data.step : 0)}
+        </p>
+      </div>
+    </div>
+  );
+
+  return (
+    <Popover content={content} color="#7DF9FF" arrow={true} placement="right" title={<p className="text-lg">Tóm tắt phiên</p>}>
+      <Card
+        onClick={onClick}
+        hoverable={true}
+        key={id}
+        cover={
+          <ImageComponent
+            width={"100%"}
+            height={"100%"}
+            preview={false}
+            src={getImageProduct(image)}
+          />
+        }
+        className="shadow-shadowHeavy max-w-full md:max-w-sm lg:max-w-xs !overflow-hidden"
+      >
+        <div className="flex flex-col gap-2">
+          <div className="overflow-hidden">
+            <p className="text-base text-ellipsis overflow-hidden whitespace-nowrap font-bold">
+              {name}
+            </p>
+          </div>
+          <p className="text-orange-500 text-base">{formatVND(currentPrice)}</p>
+          <div className="flex justify-between flex-col sm:flex-col md:flex-col lg:flex-col gap-3">
+            <Tag
+              color="blue"
+              className="text-sm text-ellipsis overflow-hidden whitespace-nowrap w-fit"
+            >
+              {timeRemaining}
+            </Tag>
+            <div>{status}</div>
+          </div>
+        </div>
+      </Card>
+    </Popover>
   );
 };
 

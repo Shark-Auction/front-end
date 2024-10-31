@@ -1,23 +1,26 @@
 import { Card } from "antd";
+import { useNavigate } from "react-router-dom";
 import ImageComponent from "../../../../../components/Image";
 import { Blog } from "../../../../../model/blog";
-import { getImageBlog } from "../../../../../utils/getImage";
-import { Link } from "react-router-dom";
 import { formatDateHour } from "../../../../../utils/format";
+import { getImageBlog } from "../../../../../utils/getImage";
 
 interface CardBlogProps {
   data: Blog;
 }
 
 const CardBlog = ({ data }: CardBlogProps) => {
+  const navigate = useNavigate();
   return (
     <Card
+      onClick={() => navigate(`${data.id}`)}
       hoverable
       className="shadow-shadowLight !overflow-hidden"
       bodyStyle={{ padding: 0 }}
     >
       <div className="w-full">
         <ImageComponent
+          preview={false}
           width={"100%"}
           height={300}
           className="object-contain rounded-xl"
@@ -50,12 +53,6 @@ const CardBlog = ({ data }: CardBlogProps) => {
             Bởi: <span className="text-gray-500">{data.user.full_name}</span>
           </p>
         </div>
-        <Link
-          to={`${data.id}`}
-          className="text-base text-blue-500 underline flex justify-center !mt-5"
-        >
-          Xem chi tiết
-        </Link>
       </div>
     </Card>
   );

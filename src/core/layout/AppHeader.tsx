@@ -10,6 +10,7 @@ import { formatVND } from "../../utils/format";
 import { getImageFE } from "../../utils/getImage";
 import { logout } from "../store/slice/userSlice";
 import { RootState } from "../store/store";
+import TitleLayout from "./components/TitleLayout";
 
 const AppHeader = () => {
   const navigate = useNavigate();
@@ -89,25 +90,25 @@ const AppHeader = () => {
           src={getImageFE("logo_exe.png")}
           alt="logo"
         />
-        <p
+        <TitleLayout
           onClick={() => navigate("/")}
           className="hidden md:block md:text-3xl cursor-pointer 
           text-white drop-shadow-xl"
         >
           <strong>Shark Auction</strong>
-        </p>
+        </TitleLayout>
       </div>
       {/*Desktop */}
       <div className="hidden md:flex items-center justify-end md:w-full gap-10">
         {itemsLink.map((element) => (
-          <Link
+          <TitleLayout
             key={element.title}
-            to={element.link}
-            className="text-base md:text-lg text-white drop-shadow-xl lg:text-2xl font-normal relative group hover:text-black"
+            onClick={() => navigate(element.link)}
+            className="text-base md:text-lg cursor-pointer lg:text-2xl font-normal relative group hover:text-black"
           >
             {element.title}
             <Underline />
-          </Link>
+          </TitleLayout>
         ))}
         {userLogin ? (
           <Dropdown

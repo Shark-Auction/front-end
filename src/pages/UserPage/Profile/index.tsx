@@ -139,7 +139,7 @@ const UserProfile = () => {
           items={itemsMenu}
         />
       </Drawer>
-      <div className="w-full md:w-3/4 border rounded-md shadow-shadowLight p-5">
+      <div className="w-full md:w-3/4 border rounded-md shadow-shadowLight p-5 !bg-white">
         <Outlet />
       </div>
     </div>
