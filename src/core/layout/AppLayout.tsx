@@ -42,14 +42,14 @@ const AppLayout = () => {
     <Layout className="min-h-screen">
       <Header
         className="fixed w-full z-[10] text-black flex items-center 
-      bg-gradient-header md:h-fit md:rounded-es-md md:rounded-ee-md shadow-xl"
+      bg-gradient-header md:h-fit md:rounded-es-lg md:rounded-ee-lg shadow-shadowLight"
       >
         <AppHeader />
       </Header>
       <Content style={{ marginTop: headerHeight }}>
         <Outlet />
       </Content>
-      <Footer className="!w-full">
+      <Footer className="!w-full !p-0">
         <AppFooter />
       </Footer>
     </Layout>

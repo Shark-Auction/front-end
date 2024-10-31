@@ -99,11 +99,12 @@ const MyWinning = ({ activeKey }: MyWinningProps) => {
       align: "center",
       render: (_, record: any) => (
         <>
-          {(record.status === "WaitingPay" ||
-            record.status === "WaitingConfirm") && (
+          {(record.status === "WaitingPay")? (
             <ButtonPrimary onClick={() => handleOpen(record)}>
               Thanh toán
             </ButtonPrimary>
+          ) : (
+            <Tag color="blue-inverse">Đang chờ người bán xác nhận</Tag>
           )}
           {(record.status === "Cancel" || record.status === "Fail") && (
             <Tag className="!text-base" color="red-inverse">
@@ -131,7 +132,7 @@ const MyWinning = ({ activeKey }: MyWinningProps) => {
         thúc *)
       </p>
       <TableComponent
-        expandX={1700}
+        expandX={2000}
         render={render}
         setRender={setRender}
         columns={column}
