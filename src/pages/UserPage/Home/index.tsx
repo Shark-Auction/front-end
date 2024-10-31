@@ -78,13 +78,13 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="w-full h-[500px] hidden md:block shadow-shadowLight">
+      <div className="w-full h-[500px] hidden md:block shadow-shadowLight rounded-xl">
         <img
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover rounded-xl"
           src={getImageFE("background_home.jpeg")}
         />
       </div>
-      <div className="border shadow-shadowLight flex flex-col gap-5 pt-5 ">
+      <div className="border shadow-shadowLight flex flex-col gap-5 pt-5 rounded-xl bg-white">
         <Skeleton loading={loading}>
           <div className="">
             <p className="text-2xl text-gray-500 px-5">Danh mục</p>
@@ -105,8 +105,8 @@ const HomePage = () => {
           )}
         </Skeleton>
       </div>
-      <div className="border-b-4 shadow-shadowLight flex justify-center py-2 border-b-primaryColor">
-        <p className="text-2xl text-primaryColor">Đề xuất</p>
+      <div className="border-b-4 shadow-shadowLight bg-white flex justify-center py-2 border-b-primaryColor rounded-xl">
+        <p className="text-3xl text-primaryColor font-semibold">Đề xuất</p>
       </div>
       <Skeleton loading={loading}>
         {dataProduct.length > 0 ? (
@@ -114,6 +114,7 @@ const HomePage = () => {
             <div className="grid grid-cols-2 md:grid-cols-5 gap-5">
               {dataProduct.slice(0, pageSize).map((element) => (
                 <CardElement
+                  data={element}
                   image={element.product.thumbnail}
                   id={element.id}
                   name={element.product.name}
@@ -127,7 +128,7 @@ const HomePage = () => {
             <div className="flex justify-center">
               <Link
                 to={"/u/auction"}
-                className="text-xl text-primaryColor relative group"
+                className="text-2xl text-primaryColor relative group font-normal hover:font-bold duration-300"
               >
                 Xem thêm <Underline color="primaryColor" />
               </Link>

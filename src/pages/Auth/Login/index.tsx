@@ -166,13 +166,13 @@ const LoginPage = () => {
               </Button>
             </Popover>
             <Form.Item>
-              <Button
+              <ButtonPrimary
                 loading={loading}
                 htmlType="submit"
-                className="bg-black w-full py-4 text-lg text-white px-10 hover:!bg-black hover:!border-black hover:!text-white mt-2"
+                className="bg-gradient-primary w-full py-4 text-lg text-white px-10 hover:!text-white mt-2 !w-full"
               >
                 Đăng nhập
-              </Button>
+              </ButtonPrimary>
             </Form.Item>
           </Form>
         </div>

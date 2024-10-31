@@ -48,6 +48,7 @@ const SellerAuction = ({ dataProduct }: SellerAuctionProps) => {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-5">
             {paginatedData.slice(0, pageSize).map((element) => (
               <CardElement
+                data={element}
                 image={element.product.thumbnail}
                 id={element.id}
                 name={element.product.name}
