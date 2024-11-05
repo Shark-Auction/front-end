@@ -53,20 +53,7 @@ const ModalRating = ({ open, setOpen, data }: ModalRatingProps) => {
   const handleFinish = async (values: RatingRequest) => {
     try {
       setLoading(true);
-      const formData = new FormData();
-      if (values.customerId)
-        formData.append("customerId", values.customerId.toString());
-      if (values.productId)
-        formData.append("productId", values.productId.toString());
-      if (values.ratingValue)
-        formData.append("ratingValue", values.ratingValue.toString());
-      if (values.review) formData.append("review", values.review);
-      if (values.imagesFile && values.imagesFile.length > 0) {
-        values.imagesFile.forEach((file: any) => {
-          formData.append(`imagesFile`, file.originFileObj);
-        });
-      }
-      await ratingApi.addRating(formData);
+      await ratingApi.addRating(values);
       toast.success("Cảm ơn đã đánh giá sản phẩm");
       handleCancel();
     } catch (error: any) {
@@ -80,7 +67,6 @@ const ModalRating = ({ open, setOpen, data }: ModalRatingProps) => {
     if (open) {
       setOrder(data);
       form.setFieldsValue({
-        customerId: order?.buyer?.id,
         productId: order?.product?.id,
       });
     }
